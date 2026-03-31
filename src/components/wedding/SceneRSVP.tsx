@@ -54,9 +54,8 @@ const inputStyle = {
   color: "hsl(0 60% 20%)",
 };
 
-const SceneRSVP = () => {
+const SceneRSVP = ({ guestName }: { guestName: string }) => {
   const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState("");
   const [hoveredContact, setHoveredContact] = useState<string | null>(null);
 
   return (

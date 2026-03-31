@@ -6,6 +6,8 @@ import SectionBackground from "./SectionBackground";
 
 interface Props {
   onNext: () => void;
+  guestName: string;
+  onGuestNameChange: (name: string) => void;
 }
 
 /* Floating sparkle particle */
