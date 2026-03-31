@@ -5,7 +5,7 @@ import SectionBackground from "./SectionBackground";
 import brideFamilyImg from "@/assets/bride-family.jpg";
 import groomFamilyImg from "@/assets/groom-family.jpg";
 
-interface Props { onNext: () => void; }
+interface Props { onNext?: () => void; }
 
 const brideFamily = [
   { relation: "Father", name: "Shri Ramesh Sharma", icon: "👨‍💼" },
