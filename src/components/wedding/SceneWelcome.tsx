@@ -305,6 +305,11 @@ const SceneWelcome = ({ onNext }: Props) => {
         >
           वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
         </motion.p>
+      </motion.div>
+    );
+  // Force single line for shloka
+  // Already single line in JSX - handled via CSS below
+        </motion.p>
 
         {/* Divider */}
         <motion.div
