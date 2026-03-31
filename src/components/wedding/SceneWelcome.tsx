@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import ganeshImg from "@/assets/ganesh.png";
-import welcomeBg from "@/assets/welcome-bg.jpg";
+import SectionBackground from "./SectionBackground";
 
 interface Props {
   onNext: () => void;

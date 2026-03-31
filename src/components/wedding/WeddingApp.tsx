@@ -74,7 +74,7 @@ const WeddingApp = () => {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentScene}
-          className="h-screen overflow-hidden"
+          className={currentScene === "welcome" ? "h-screen overflow-hidden" : "h-screen overflow-y-auto"}
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
