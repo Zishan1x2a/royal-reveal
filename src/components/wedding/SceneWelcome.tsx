@@ -230,39 +230,7 @@ const SceneWelcome = ({ onNext }: Props) => {
   };
 
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden">
-      {/* Background image - full clarity */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 2.5, ease: "easeOut" }}
-      >
-        <motion.img
-          src={welcomeBg}
-          alt=""
-          className="w-full h-full object-cover"
-          style={{ filter: "brightness(1.05) contrast(1.08) saturate(1.2)" }}
-          animate={{ scale: [1, 1.03, 1] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-        />
-        {/* Light overlay for text readability */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.15) 0%, hsl(0 0% 0% / 0.05) 40%, hsl(0 0% 0% / 0.05) 60%, hsl(0 0% 0% / 0.2) 100%)" }} />
-        {/* Animated red/golden spotlight */}
-        <motion.div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 50% 40%, hsl(0 60% 50% / 0.08) 0%, transparent 50%)" }}
-          animate={{ opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 50% 50%, hsl(43 72% 55% / 0.05) 0%, transparent 60%)" }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
-
+    <SectionBackground className="relative flex h-screen flex-col items-center justify-center">
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {sparkles.map((s) => (
