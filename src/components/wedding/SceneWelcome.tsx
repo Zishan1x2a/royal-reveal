@@ -200,7 +200,7 @@ const MandalaRays = () => (
   </motion.div>
 );
 
-const SceneWelcome = ({ onNext }: Props) => {
+const SceneWelcome = ({ onNext, guestName, onGuestNameChange }: Props) => {
   const sparkles = useMemo(
     () =>
       Array.from({ length: 40 }, (_, i) => ({
