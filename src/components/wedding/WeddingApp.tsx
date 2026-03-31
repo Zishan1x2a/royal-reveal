@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SceneOpeningAnimation from "./SceneOpeningAnimation";
 import SceneWelcome from "./SceneWelcome";
-import SceneEntrance from "./SceneEntrance";
 import SceneHero from "./SceneHero";
 import SceneEvents from "./SceneEvents";
 import SceneFamily from "./SceneFamily";
@@ -14,7 +13,6 @@ import PetalOverlay from "./PetalOverlay";
 
 const SCENES = [
   "welcome",
-  "entrance",
   "hero",
   "events",
   "family",
@@ -30,17 +28,27 @@ const WeddingApp = () => {
   const [currentScene, setCurrentScene] = useState<Scene>("welcome");
   const [doorsClosed, setDoorsClosed] = useState(false);
   const [showPetals, setShowPetals] = useState(false);
+  const [useDoor, setUseDoor] = useState(false);
 
   const goToNext = useCallback(() => {
     const idx = SCENES.indexOf(currentScene);
     if (idx < SCENES.length - 1) {
-      setDoorsClosed(true);
-      setShowPetals(true);
-      setTimeout(() => {
+      const isWelcome = currentScene === "welcome";
+      setUseDoor(isWelcome);
+
+      if (isWelcome) {
+        // Door transition only for welcome -> hero
+        setDoorsClosed(true);
+        setTimeout(() => {
+          setCurrentScene(SCENES[idx + 1]);
+          setDoorsClosed(false);
+        }, 600);
+      } else {
+        // Petal shower for all other transitions
+        setShowPetals(true);
         setCurrentScene(SCENES[idx + 1]);
-        setDoorsClosed(false);
-      }, 600);
-      setTimeout(() => setShowPetals(false), 3000);
+        setTimeout(() => setShowPetals(false), 3000);
+      }
     }
   }, [currentScene]);
 
@@ -50,7 +58,6 @@ const WeddingApp = () => {
     const props = { onNext: goToNext };
     switch (currentScene) {
       case "welcome": return <SceneWelcome {...props} />;
-      case "entrance": return <SceneEntrance {...props} />;
       case "hero": return <SceneHero {...props} />;
       case "events": return <SceneEvents {...props} />;
       case "family": return <SceneFamily {...props} />;
@@ -61,12 +68,13 @@ const WeddingApp = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="h-screen overflow-hidden">
       {showOpening && <SceneOpeningAnimation onComplete={handleOpeningComplete} />}
 
       <AnimatePresence mode="wait">
         <motion.div
           key={currentScene}
+          className="h-screen overflow-hidden"
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
@@ -76,8 +84,8 @@ const WeddingApp = () => {
         </motion.div>
       </AnimatePresence>
 
-      <DoorTransition isOpen={!doorsClosed} />
-      {showPetals && <PetalOverlay count={20} />}
+      {useDoor && <DoorTransition isOpen={!doorsClosed} />}
+      {showPetals && <PetalOverlay count={25} />}
     </div>
   );
 };
