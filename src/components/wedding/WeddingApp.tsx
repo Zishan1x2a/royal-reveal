@@ -29,6 +29,7 @@ const WeddingApp = () => {
   const [doorsClosed, setDoorsClosed] = useState(false);
   const [showPetals, setShowPetals] = useState(false);
   const [useDoor, setUseDoor] = useState(false);
+  const [guestName, setGuestName] = useState("Guest");
 
   const goToNext = useCallback(() => {
     const idx = SCENES.indexOf(currentScene);
@@ -57,13 +58,13 @@ const WeddingApp = () => {
   const renderScene = () => {
     const props = { onNext: goToNext };
     switch (currentScene) {
-      case "welcome": return <SceneWelcome {...props} />;
+      case "welcome": return <SceneWelcome {...props} guestName={guestName} onGuestNameChange={setGuestName} />;
       case "hero": return <SceneHero {...props} />;
       case "events": return <SceneEvents {...props} />;
       case "family": return <SceneFamily {...props} />;
       case "gallery": return <SceneGallery {...props} />;
       case "countdown": return <SceneCountdown {...props} />;
-      case "rsvp": return <SceneRSVP />;
+      case "rsvp": return <SceneRSVP guestName={guestName} />;
     }
   };
 

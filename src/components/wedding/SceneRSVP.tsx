@@ -54,9 +54,8 @@ const inputStyle = {
   color: "hsl(0 60% 20%)",
 };
 
-const SceneRSVP = () => {
+const SceneRSVP = ({ guestName }: { guestName: string }) => {
   const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState("");
   const [hoveredContact, setHoveredContact] = useState<string | null>(null);
 
   return (
@@ -81,7 +80,7 @@ const SceneRSVP = () => {
             animate={{ textShadow: ["0 0 10px hsl(43 72% 55% / 0)", "0 0 20px hsl(43 72% 55% / 0.3)", "0 0 10px hsl(43 72% 55% / 0)"] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            {submitted ? `Thank You, ${name || "Guest"}! 🙏` : "RSVP & Contact"}
+            {submitted ? `Thank You, ${guestName}! 🙏` : `Dear ${guestName}, RSVP & Contact`}
           </motion.h2>
           <motion.div className="h-px w-24" style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 50%), transparent)" }} variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }} />
           <motion.p
@@ -100,14 +99,13 @@ const SceneRSVP = () => {
               onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
             >
               <p className="font-body text-xs uppercase tracking-[0.2em] mb-1" style={{ color: "hsl(0 25% 45%)" }}>
-                Your Details
+                Your Details, {guestName}
               </p>
               <motion.input
                 type="text"
                 placeholder="Your Name"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                defaultValue={guestName}
                 className={inputClasses}
                 style={{ ...inputStyle, focusRingColor: "hsl(43 72% 55%)" } as any}
                 whileFocus={{ boxShadow: "0 0 0 2px hsl(43 72% 55% / 0.4), 0 4px 12px hsl(43 72% 55% / 0.15)" }}
@@ -171,7 +169,7 @@ const SceneRSVP = () => {
                 🎉
               </motion.div>
               <p className="font-display text-2xl" style={{ color: "hsl(0 60% 25%)" }}>
-                We're thrilled, {name}!
+                We're thrilled, {guestName}!
               </p>
               <p className="font-decorative text-lg italic" style={{ color: "hsl(0 40% 35%)" }}>
                 We look forward to celebrating with you
