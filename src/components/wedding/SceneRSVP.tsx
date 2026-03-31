@@ -99,14 +99,13 @@ const SceneRSVP = ({ guestName }: { guestName: string }) => {
               onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
             >
               <p className="font-body text-xs uppercase tracking-[0.2em] mb-1" style={{ color: "hsl(0 25% 45%)" }}>
-                Your Details
+                Your Details, {guestName}
               </p>
               <motion.input
                 type="text"
                 placeholder="Your Name"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                defaultValue={guestName}
                 className={inputClasses}
                 style={{ ...inputStyle, focusRingColor: "hsl(43 72% 55%)" } as any}
                 whileFocus={{ boxShadow: "0 0 0 2px hsl(43 72% 55% / 0.4), 0 4px 12px hsl(43 72% 55% / 0.15)" }}
