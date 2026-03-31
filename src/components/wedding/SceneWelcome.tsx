@@ -441,7 +441,7 @@ const SceneWelcome = ({ onNext }: Props) => {
         className="absolute inset-0 pointer-events-none z-30"
         style={{ background: "radial-gradient(ellipse at center, transparent 55%, hsl(0 0% 0% / 0.3) 100%)" }}
       />
-    </SectionBackground>
+    </div>
   );
 };
 
