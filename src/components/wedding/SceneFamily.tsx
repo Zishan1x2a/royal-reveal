@@ -278,7 +278,7 @@ const FamilyFlipCard = ({
             </AnimatePresence>
           </div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
