@@ -389,7 +389,7 @@ const SceneWelcome = ({ onNext }: Props) => {
           style={{ color: "hsl(40 30% 85%)" }}
           variants={fadeUp}
         >
-          Rahul <span className="font-decorative italic text-4xl md:text-6xl" style={{ color: "hsl(43 72% 60%)" }}>&</span> Priya
+          Arjun <span className="font-decorative italic text-4xl md:text-6xl" style={{ color: "hsl(43 72% 60%)" }}>&</span> Ananya
         </motion.h1>
 
         {/* Tagline */}
