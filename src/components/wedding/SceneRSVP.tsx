@@ -121,7 +121,7 @@ const SceneRSVP = ({ guestName }: { guestName: string }) => {
             animate={{ textShadow: ["0 0 10px hsl(43 72% 55% / 0)", "0 0 20px hsl(43 72% 55% / 0.3)", "0 0 10px hsl(43 72% 55% / 0)"] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            {submitted ? `Thank You, ${guestName}! 🙏` : `Dear ${guestName}`}
+            Get In Touch
           </motion.h2>
           <motion.div className="h-px w-24" style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 50%), transparent)" }}
             variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
@@ -132,62 +132,6 @@ const SceneRSVP = ({ guestName }: { guestName: string }) => {
             We would be honoured by your presence
           </motion.p>
         </motion.div>
-
-        {!submitted ? (
-          <GlowCard className="w-full" delay={0.2}>
-            <motion.form className="flex flex-col gap-4 w-full"
-              onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
-            >
-              <p className="font-body text-xs uppercase tracking-[0.2em] mb-1" style={{ color: "hsl(0 25% 45%)" }}>
-                Your Blessings, {guestName}
-              </p>
-              <motion.textarea
-                placeholder="Your Blessings & Wishes (optional)"
-                className="w-full px-4 py-3 rounded-lg font-body text-sm focus:outline-none transition-all duration-300 focus:ring-2 min-h-[100px] resize-none"
-                style={{
-                  border: "1px solid hsl(43 72% 50% / 0.3)",
-                  background: "hsl(0 30% 97% / 0.8)",
-                  color: "hsl(0 60% 20%)",
-                }}
-                whileFocus={{ boxShadow: "0 0 0 2px hsl(43 72% 55% / 0.4), 0 4px 12px hsl(43 72% 55% / 0.15)" }}
-              />
-              <motion.button
-                type="submit"
-                className="font-decorative text-lg tracking-widest uppercase px-10 py-4 rounded-lg border-2 transition-all duration-500 mt-2 relative overflow-hidden"
-                style={{ borderColor: "hsl(43 72% 50%)", color: "hsl(43 72% 45%)", background: "transparent" }}
-                whileHover={{
-                  scale: 1.03,
-                  background: "linear-gradient(135deg, hsl(43 72% 55%), hsl(43 80% 65%))",
-                  color: "hsl(0 60% 15%)",
-                  boxShadow: "0 8px 30px hsl(43 72% 55% / 0.4)",
-                }}
-                whileTap={{ scale: 0.97 }}
-              >
-                Send Blessings ✉
-              </motion.button>
-            </motion.form>
-          </GlowCard>
-        ) : (
-          <GlowCard className="w-full" delay={0}>
-            <motion.div className="flex flex-col items-center gap-4 py-4"
-              initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", damping: 15 }}
-            >
-              <motion.div className="text-5xl"
-                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.2, 1] }}
-                transition={{ duration: 1.5, repeat: 2 }}
-              >🎉</motion.div>
-              <p className="font-display text-2xl" style={{ color: "hsl(0 60% 25%)" }}>We're thrilled, {guestName}!</p>
-              <p className="font-decorative text-lg italic" style={{ color: "hsl(0 40% 35%)" }}>We look forward to celebrating with you</p>
-              <motion.div className="flex gap-2 mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-                {["🌸", "✨", "💐", "✨", "🌸"].map((emoji, i) => (
-                  <motion.span key={i} className="text-2xl" animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 1.5, delay: i * 0.15, repeat: Infinity }}>{emoji}</motion.span>
-                ))}
-              </motion.div>
-            </motion.div>
-          </GlowCard>
-        )}
 
         {/* Contact Cards */}
         <motion.div className="mt-4 w-full grid grid-cols-1 sm:grid-cols-3 gap-5"
