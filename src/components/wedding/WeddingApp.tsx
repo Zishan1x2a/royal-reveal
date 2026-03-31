@@ -48,7 +48,7 @@ const WeddingApp = () => {
         // Petal shower for all other transitions
         setShowPetals(true);
         setCurrentScene(SCENES[idx + 1]);
-        setTimeout(() => setShowPetals(false), 3000);
+        setTimeout(() => setShowPetals(false), 8000);
       }
     }
   }, [currentScene]);
