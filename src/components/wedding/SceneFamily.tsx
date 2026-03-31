@@ -80,7 +80,7 @@ const FamilyFlipCard = ({
 }: {
   title: string;
   image: string;
-  members: { relation: string; name: string }[];
+  members: { relation: string; name: string; icon: string }[];
   delay: number;
 }) => {
   const [flipped, setFlipped] = useState(false);
