@@ -312,162 +312,69 @@ const SceneCountdown = ({ onNext, guestName }: Props) => {
           </p>
         </motion.div>
 
+        {/* Wishing & Blessing Heading */}
+        <motion.div className="relative"
+          variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          transition={{ delay: 0.7 }}
+        >
+          <motion.h3 className="font-display text-2xl md:text-3xl"
+            style={{ color: "hsl(0 60% 25%)", textShadow: "0 2px 12px hsl(0 40% 30% / 0.2)" }}>
+            Wishing & Blessing
+          </motion.h3>
+          <motion.div className="absolute -bottom-2 left-1/2 h-[2px] rounded-full"
+            style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
+            initial={{ width: 0, x: "-50%" }} animate={{ width: "80%", x: "-50%" }}
+            transition={{ duration: 1.5, delay: 0.8 }}
+          />
+        </motion.div>
+
         {/* Blessing Form */}
-        <motion.div className="w-full max-w-lg"
+        <motion.div className="w-full max-w-xl"
           variants={{ hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0 } }}
           transition={{ delay: 0.8 }}
-          whileHover={{ scale: 1.02, y: -4 }}
         >
           {!submitted ? (
             <motion.div
-              className="relative rounded-3xl p-8 md:p-10 backdrop-blur-sm overflow-hidden group"
+              className="relative rounded-xl p-6 backdrop-blur-sm overflow-hidden"
               style={{
-                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.75), hsl(0 35% 87% / 0.55))",
-                backdropFilter: "blur(16px)",
-                border: "1px solid hsl(43 72% 55% / 0.4)",
-                boxShadow: "0 8px 40px hsl(43 72% 55% / 0.15), inset 0 1px 0 hsl(43 72% 70% / 0.3), 0 0 80px hsl(43 72% 55% / 0.08)",
+                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.7), hsl(0 35% 87% / 0.5))",
+                backdropFilter: "blur(12px)",
+                border: "1px solid hsl(43 72% 55% / 0.35)",
+                boxShadow: "0 6px 30px hsl(43 72% 55% / 0.12), inset 0 1px 0 hsl(43 72% 70% / 0.25)",
               }}
             >
-              {/* Animated gradient border glow */}
-              <motion.div className="absolute -inset-[2px] rounded-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 -z-10"
-                style={{
-                  background: "linear-gradient(270deg, hsl(43 72% 55%), hsl(340 50% 65%), hsl(43 72% 55%), hsl(0 60% 45%))",
-                  backgroundSize: "300% 300%",
-                }}
-                animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              />
-
-              {/* Outer glow pulse */}
-              <motion.div className="absolute -inset-6 rounded-3xl pointer-events-none"
-                style={{ background: "radial-gradient(circle, hsl(43 72% 55% / 0.12), transparent)" }}
-                animate={{ opacity: [0.3, 0.7, 0.3], scale: [0.95, 1.05, 0.95] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              />
-
-              {/* Stars inside card */}
-              {Array.from({ length: 8 }, (_, i) => (
-                <motion.div key={`star-${i}`}
-                  className="absolute rounded-full pointer-events-none"
-                  style={{
-                    left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
-                    width: 2 + Math.random() * 3, height: 2 + Math.random() * 3,
-                    background: "radial-gradient(circle, hsl(43 72% 70%), hsl(43 72% 55% / 0.4))",
-                    boxShadow: `0 0 ${8 + Math.random() * 6}px hsl(43 72% 55% / 0.6)`,
-                  }}
-                  animate={{ opacity: [0, 1, 0.3, 1, 0], scale: [0.3, 1.5, 0.6, 1.4, 0.3] }}
-                  transition={{ duration: 2.5 + Math.random() * 2, delay: Math.random() * 4, repeat: Infinity, ease: "easeInOut" }}
-                />
-              ))}
-
-              {/* Bubbles rising */}
-              {Array.from({ length: 5 }, (_, i) => (
-                <motion.div key={`bubble-${i}`}
-                  className="absolute rounded-full pointer-events-none"
-                  style={{
-                    left: `${10 + Math.random() * 80}%`, bottom: "-10%",
-                    width: 6 + Math.random() * 10, height: 6 + Math.random() * 10,
-                    border: "1px solid hsl(43 72% 55% / 0.3)",
-                    background: "radial-gradient(circle at 30% 30%, hsl(43 72% 65% / 0.2), transparent)",
-                  }}
-                  animate={{ y: [0, -300], x: [0, Math.sin(i * 2) * 20, 0], opacity: [0, 0.7, 0.4, 0] }}
-                  transition={{ duration: 4 + Math.random() * 3, delay: Math.random() * 5, repeat: Infinity, ease: "easeOut" }}
-                />
-              ))}
-
-              {/* Corner ornaments */}
-              {(["top-left", "top-right", "bottom-left", "bottom-right"] as const).map((pos) => {
-                const r = { "top-left": 0, "top-right": 90, "bottom-right": 180, "bottom-left": 270 }[pos];
-                const c = { "top-left": "top-0 left-0", "top-right": "top-0 right-0", "bottom-left": "bottom-0 left-0", "bottom-right": "bottom-0 right-0" }[pos];
-                return (
-                  <motion.div key={pos} className={`absolute ${c} w-8 h-8 md:w-10 md:h-10 pointer-events-none z-20`}
-                    style={{ transform: `rotate(${r}deg)` }}
-                  >
-                    <svg viewBox="0 0 40 40" className="w-full h-full">
-                      <motion.path d="M0,0 Q0,18 15,28" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="1.5"
-                        animate={{ pathLength: [0, 1, 0.5, 1], opacity: [0.4, 1, 0.5, 1] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                      />
-                      <motion.path d="M0,0 Q0,12 10,18" fill="none" stroke="hsl(43 72% 65% / 0.5)" strokeWidth="1"
-                        animate={{ pathLength: [0, 1], opacity: [0.3, 0.8, 0.3] }}
-                        transition={{ duration: 2.5, delay: 0.3, repeat: Infinity, ease: "easeInOut" }}
-                      />
-                      <motion.circle cx="13" cy="24" r="1.5" fill="hsl(43 72% 65%)"
-                        animate={{ scale: [0, 1.8, 0], opacity: [0, 1, 0] }}
-                        transition={{ duration: 2, delay: 0.5, repeat: Infinity }}
-                      />
-                      <motion.circle cx="8" cy="15" r="1" fill="hsl(43 72% 60%)"
-                        animate={{ scale: [0, 1.5, 0], opacity: [0, 0.8, 0] }}
-                        transition={{ duration: 1.8, delay: 1, repeat: Infinity }}
-                      />
-                    </svg>
-                  </motion.div>
-                );
-              })}
-
               {/* Shimmer sweep */}
-              <motion.div className="absolute inset-0 pointer-events-none rounded-3xl"
-                style={{ background: "linear-gradient(105deg, transparent 35%, hsl(43 72% 70% / 0.2) 50%, transparent 65%)" }}
+              <motion.div className="absolute inset-0 pointer-events-none"
+                style={{ background: "linear-gradient(105deg, transparent 40%, hsl(43 72% 70% / 0.15) 50%, transparent 60%)" }}
                 animate={{ x: ["-100%", "200%"] }}
-                transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
+                transition={{ duration: 3, repeat: Infinity, repeatDelay: 4 }}
               />
-
-              {/* Floating ring decorations */}
-              {Array.from({ length: 4 }, (_, i) => (
-                <motion.div key={`ring-${i}`}
-                  className="absolute rounded-full pointer-events-none"
-                  style={{
-                    left: `${20 + Math.random() * 60}%`, top: `${10 + Math.random() * 80}%`,
-                    width: 15 + Math.random() * 20, height: 15 + Math.random() * 20,
-                    border: "1px solid hsl(43 72% 55% / 0.15)",
-                  }}
-                  animate={{ scale: [0.5, 1.5, 0.5], opacity: [0, 0.4, 0], rotate: [0, 180, 360] }}
-                  transition={{ duration: 5 + Math.random() * 3, delay: Math.random() * 4, repeat: Infinity, ease: "easeInOut" }}
-                />
-              ))}
-
-              <form className="flex flex-col gap-5 relative z-10" onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
-                <motion.p className="font-decorative text-lg italic text-center"
-                  style={{ color: "hsl(43 72% 42%)", textShadow: "0 0 15px hsl(43 72% 55% / 0.3)" }}
-                  animate={{ opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  ✨ Your Blessings, {guestName} ✨
-                </motion.p>
+              <form className="flex flex-col gap-4 relative z-10" onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+                <p className="font-body text-xs uppercase tracking-[0.2em]" style={{ color: "hsl(0 25% 45%)" }}>
+                  Your Blessings, {guestName}
+                </p>
                 <motion.textarea
                   placeholder="Share your blessings & wishes..."
-                  className="w-full px-5 py-4 rounded-2xl font-body text-sm focus:outline-none transition-all duration-300 min-h-[130px] resize-none"
+                  className="w-full px-4 py-3 rounded-lg font-body text-sm focus:outline-none transition-all duration-300 focus:ring-2 min-h-[130px] resize-none"
                   style={{
-                    border: "1px solid hsl(43 72% 50% / 0.35)",
-                    background: "hsl(0 30% 97% / 0.85)",
+                    border: "1px solid hsl(43 72% 50% / 0.3)",
+                    background: "hsl(0 30% 97% / 0.8)",
                     color: "hsl(0 60% 20%)",
-                    boxShadow: "inset 0 2px 8px hsl(0 30% 50% / 0.05)",
                   }}
-                  whileFocus={{ boxShadow: "0 0 0 3px hsl(43 72% 55% / 0.4), 0 6px 20px hsl(43 72% 55% / 0.15), inset 0 2px 8px hsl(0 30% 50% / 0.05)" }}
+                  whileFocus={{ boxShadow: "0 0 0 2px hsl(43 72% 55% / 0.4), 0 4px 12px hsl(43 72% 55% / 0.15)" }}
                 />
                 <motion.button
                   type="submit"
-                  className="font-decorative text-lg tracking-widest uppercase px-10 py-5 rounded-full border-2 transition-all duration-500 relative overflow-hidden mx-auto"
-                  style={{
-                    borderColor: "hsl(43 72% 50%)",
-                    color: "hsl(43 72% 42%)",
-                    background: "transparent",
-                    boxShadow: "0 0 20px hsl(43 72% 55% / 0.1)",
-                  }}
+                  className="font-decorative text-lg tracking-widest uppercase px-10 py-4 rounded-full border-2 transition-all duration-500 relative overflow-hidden mx-auto"
+                  style={{ borderColor: "hsl(43 72% 50%)", color: "hsl(43 72% 45%)", background: "transparent" }}
                   whileHover={{
-                    scale: 1.06,
+                    scale: 1.03,
                     background: "linear-gradient(135deg, hsl(43 72% 55%), hsl(43 80% 65%))",
                     color: "hsl(0 60% 15%)",
-                    boxShadow: "0 8px 35px hsl(43 72% 55% / 0.5), 0 0 60px hsl(43 72% 55% / 0.2)",
+                    boxShadow: "0 8px 30px hsl(43 72% 55% / 0.4)",
                   }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.97 }}
                 >
-                  {/* Button shimmer */}
-                  <motion.div className="absolute inset-0 pointer-events-none rounded-full"
-                    style={{ background: "linear-gradient(105deg, transparent 30%, hsl(43 72% 80% / 0.3) 50%, transparent 70%)" }}
-                    animate={{ x: ["-150%", "250%"] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                  />
                   <span className="relative z-10">Send Blessings ✉</span>
                 </motion.button>
               </form>
