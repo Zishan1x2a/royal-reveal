@@ -80,7 +80,7 @@ const SceneRSVP = ({ guestName }: { guestName: string }) => {
             animate={{ textShadow: ["0 0 10px hsl(43 72% 55% / 0)", "0 0 20px hsl(43 72% 55% / 0.3)", "0 0 10px hsl(43 72% 55% / 0)"] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            {submitted ? `Thank You, ${name || "Guest"}! 🙏` : "RSVP & Contact"}
+            {submitted ? `Thank You, ${guestName}! 🙏` : `Dear ${guestName}, RSVP & Contact`}
           </motion.h2>
           <motion.div className="h-px w-24" style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 50%), transparent)" }} variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }} />
           <motion.p
