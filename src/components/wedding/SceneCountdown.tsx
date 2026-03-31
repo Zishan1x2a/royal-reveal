@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import GoldButton from "./GoldButton";
 import SectionBackground from "./SectionBackground";
 
-interface Props { onNext: () => void; }
+interface Props { onNext: () => void; guestName: string; }
 
 const WEDDING_DATE = new Date("2026-12-15T19:00:00");
 
