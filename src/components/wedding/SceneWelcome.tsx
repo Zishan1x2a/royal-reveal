@@ -201,10 +201,25 @@ const SceneWelcome = ({ onNext }: Props) => {
           src={welcomeBg}
           alt=""
           className="w-full h-full object-cover"
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          style={{ imageRendering: "auto", filter: "brightness(1.1) contrast(1.05) saturate(1.15)" }}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.5) 0%, hsl(0 0% 0% / 0.3) 40%, hsl(0 0% 0% / 0.6) 100%)" }} />
+        {/* Lighter overlay to keep image vivid */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.25) 0%, hsl(0 0% 0% / 0.1) 30%, hsl(0 0% 0% / 0.15) 60%, hsl(0 0% 0% / 0.4) 100%)" }} />
+        {/* Animated spotlight glow effects */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: "radial-gradient(ellipse at 30% 40%, hsl(43 72% 55% / 0.08) 0%, transparent 60%)" }}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: "radial-gradient(ellipse at 70% 60%, hsl(0 70% 45% / 0.06) 0%, transparent 50%)" }}
+          animate={{ opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        />
       </motion.div>
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -322,14 +337,42 @@ const SceneWelcome = ({ onNext }: Props) => {
           Dear
         </motion.p>
 
-        {/* Guest Name */}
-        <motion.p
-          className="font-decorative text-2xl md:text-3xl italic"
-          style={{ color: "hsl(43 72% 65%)" }}
-          variants={fadeUp}
-        >
-          {"{Guest Name}"}
-        </motion.p>
+        {/* Guest Name with shimmer animation */}
+        <motion.div className="relative" variants={fadeUp}>
+          <motion.p
+            className="font-decorative text-3xl md:text-4xl italic relative"
+            style={{ color: "hsl(43 72% 65%)" }}
+            animate={{
+              textShadow: [
+                "0 0 8px hsl(43 72% 55% / 0.3)",
+                "0 0 25px hsl(43 72% 55% / 0.6), 0 0 50px hsl(43 72% 55% / 0.3)",
+                "0 0 8px hsl(43 72% 55% / 0.3)",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <motion.span
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              ✦{" "}
+            </motion.span>
+            {"{Guest Name}"}
+            <motion.span
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            >
+              {" "}✦
+            </motion.span>
+          </motion.p>
+          {/* Underline glow */}
+          <motion.div
+            className="mx-auto mt-2 h-px w-32 rounded-full"
+            style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55% / 0.6), transparent)" }}
+            animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
 
         {/* Invitation text */}
         <motion.p
@@ -346,7 +389,7 @@ const SceneWelcome = ({ onNext }: Props) => {
           style={{ color: "hsl(40 30% 85%)" }}
           variants={fadeUp}
         >
-          Rahul <span className="font-decorative italic text-4xl md:text-6xl" style={{ color: "hsl(43 72% 60%)" }}>&</span> Priya
+          Arjun <span className="font-decorative italic text-4xl md:text-6xl" style={{ color: "hsl(43 72% 60%)" }}>&</span> Ananya
         </motion.h1>
 
         {/* Tagline */}
@@ -367,23 +410,64 @@ const SceneWelcome = ({ onNext }: Props) => {
           12 December 2026
         </motion.p>
 
-        {/* CTA Button */}
-        <motion.div className="mt-4" variants={fadeUp}>
+        {/* CTA Button - Premium redesign */}
+        <motion.div className="mt-6" variants={fadeUp}>
           <motion.button
             onClick={onNext}
-            className="font-body text-sm uppercase tracking-[0.3em] px-12 py-4 rounded-full border border-gold/40 relative overflow-hidden"
+            className="group relative font-decorative text-lg md:text-xl tracking-[0.25em] uppercase px-14 py-5 overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, hsl(220 25% 18%) 0%, hsl(220 20% 22%) 50%, hsl(220 25% 18%) 100%)",
               color: "hsl(43 72% 65%)",
-              boxShadow: "0 0 30px hsl(43 72% 55% / 0.15), inset 0 1px 0 hsl(43 72% 55% / 0.1)",
+              border: "none",
+              background: "transparent",
             }}
-            whileHover={{
-              scale: 1.03,
-              boxShadow: "0 0 40px hsl(43 72% 55% / 0.3), inset 0 1px 0 hsl(43 72% 55% / 0.2)",
-            }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Open Invitation
+            {/* Animated border frame */}
+            <motion.span
+              className="absolute inset-0 rounded-sm"
+              style={{
+                border: "1.5px solid hsl(43 72% 55% / 0.5)",
+              }}
+              animate={{
+                boxShadow: [
+                  "0 0 15px hsl(43 72% 55% / 0.1), inset 0 0 15px hsl(43 72% 55% / 0.05)",
+                  "0 0 30px hsl(43 72% 55% / 0.25), inset 0 0 30px hsl(43 72% 55% / 0.1)",
+                  "0 0 15px hsl(43 72% 55% / 0.1), inset 0 0 15px hsl(43 72% 55% / 0.05)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Corner accents */}
+            {["top-0 left-0", "top-0 right-0 rotate-90", "bottom-0 right-0 rotate-180", "bottom-0 left-0 -rotate-90"].map((pos, i) => (
+              <span key={i} className={`absolute ${pos} w-4 h-4 pointer-events-none`}>
+                <span className="absolute top-0 left-0 w-full h-px" style={{ background: "hsl(43 72% 55%)" }} />
+                <span className="absolute top-0 left-0 h-full w-px" style={{ background: "hsl(43 72% 55%)" }} />
+              </span>
+            ))}
+            {/* Shimmer sweep */}
+            <motion.span
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "linear-gradient(105deg, transparent 40%, hsl(43 72% 55% / 0.15) 50%, transparent 60%)",
+              }}
+              animate={{ x: ["-100%", "200%"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }}
+            />
+            {/* Text */}
+            <span className="relative z-10 flex items-center gap-3">
+              <motion.span
+                className="text-xs"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              >✦</motion.span>
+              Open Invitation
+              <motion.span
+                className="text-xs"
+                animate={{ rotate: [360, 0] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              >✦</motion.span>
+            </span>
           </motion.button>
         </motion.div>
       </motion.div>
@@ -401,11 +485,11 @@ const SceneWelcome = ({ onNext }: Props) => {
         </svg>
       </motion.div>
 
-      {/* Vignette overlay */}
+      {/* Lighter vignette overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-30"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 50%, hsl(220 25% 8% / 0.6) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 60%, hsl(0 0% 0% / 0.35) 100%)",
         }}
       />
     </div>
