@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
 import SectionBackground from "./SectionBackground";
 import floralCorner from "@/assets/floral-corner.png";
