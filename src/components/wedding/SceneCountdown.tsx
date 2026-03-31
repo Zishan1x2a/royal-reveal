@@ -158,6 +158,32 @@ const CountUnit = ({ value, label }: { value: number; label: string }) => {
           boxShadow: "0 6px 30px hsl(43 72% 55% / 0.12), inset 0 1px 0 hsl(43 72% 70% / 0.25), 0 0 60px hsl(43 72% 55% / 0.06)",
         }}
       >
+        {/* Card corner ornaments */}
+        {(["top-left","top-right","bottom-left","bottom-right"] as const).map((p) => {
+          const r = { "top-left": 0, "top-right": 90, "bottom-right": 180, "bottom-left": 270 }[p];
+          const c = { "top-left": "top-0 left-0", "top-right": "top-0 right-0", "bottom-left": "bottom-0 left-0", "bottom-right": "bottom-0 right-0" }[p];
+          return (
+            <motion.div key={p} className={`absolute ${c} w-5 h-5 md:w-7 md:h-7 pointer-events-none z-20`}
+              style={{ transform: `rotate(${r}deg)` }}
+            >
+              <svg viewBox="0 0 30 30" className="w-full h-full">
+                <motion.path d="M0,0 Q0,15 12,22" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="1.5"
+                  animate={{ pathLength: [0, 1, 0.6, 1], opacity: [0.4, 1, 0.5, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.path d="M0,0 Q0,10 8,15" fill="none" stroke="hsl(43 72% 65% / 0.5)" strokeWidth="1"
+                  animate={{ pathLength: [0, 1], opacity: [0.3, 0.7, 0.3] }}
+                  transition={{ duration: 2.5, delay: 0.3, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.circle cx="10" cy="18" r="1.2" fill="hsl(43 72% 65%)"
+                  animate={{ scale: [0, 1.5, 0], opacity: [0, 1, 0] }}
+                  transition={{ duration: 2, delay: 0.5, repeat: Infinity }}
+                />
+              </svg>
+            </motion.div>
+          );
+        })}
+
         {/* Stars inside card */}
         {stars.map(s => <CardStar key={s.id} x={s.x} y={s.y} size={s.size} delay={s.delay} />)}
         {/* Bubbles inside card */}
