@@ -337,14 +337,42 @@ const SceneWelcome = ({ onNext }: Props) => {
           Dear
         </motion.p>
 
-        {/* Guest Name */}
-        <motion.p
-          className="font-decorative text-2xl md:text-3xl italic"
-          style={{ color: "hsl(43 72% 65%)" }}
-          variants={fadeUp}
-        >
-          {"{Guest Name}"}
-        </motion.p>
+        {/* Guest Name with shimmer animation */}
+        <motion.div className="relative" variants={fadeUp}>
+          <motion.p
+            className="font-decorative text-3xl md:text-4xl italic relative"
+            style={{ color: "hsl(43 72% 65%)" }}
+            animate={{
+              textShadow: [
+                "0 0 8px hsl(43 72% 55% / 0.3)",
+                "0 0 25px hsl(43 72% 55% / 0.6), 0 0 50px hsl(43 72% 55% / 0.3)",
+                "0 0 8px hsl(43 72% 55% / 0.3)",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <motion.span
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              ✦{" "}
+            </motion.span>
+            {"{Guest Name}"}
+            <motion.span
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            >
+              {" "}✦
+            </motion.span>
+          </motion.p>
+          {/* Underline glow */}
+          <motion.div
+            className="mx-auto mt-2 h-px w-32 rounded-full"
+            style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55% / 0.6), transparent)" }}
+            animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
 
         {/* Invitation text */}
         <motion.p
