@@ -155,3 +155,34 @@
 .animate-glow-pulse {
   animation: glow-pulse 3s ease-in-out infinite;
 }
+
+/* Gallery animated gradient border */
+@keyframes border-glow-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gallery-border-glow {
+  background: linear-gradient(
+    270deg,
+    hsl(43 72% 55% / 0.6),
+    hsl(340 50% 65% / 0.4),
+    hsl(280 40% 60% / 0.3),
+    hsl(43 72% 55% / 0.6)
+  );
+  background-size: 300% 300%;
+  animation: border-glow-rotate 6s ease infinite;
+}
+
+.gallery-border-glow:hover {
+  background: linear-gradient(
+    270deg,
+    hsl(43 72% 55% / 0.9),
+    hsl(340 50% 65% / 0.7),
+    hsl(280 40% 60% / 0.5),
+    hsl(43 72% 55% / 0.9)
+  );
+  background-size: 300% 300%;
+  animation: border-glow-rotate 3s ease infinite;
+}
