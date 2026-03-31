@@ -93,7 +93,6 @@ const GlowCard = ({ children, className = "", delay = 0 }: { children: React.Rea
 };
 
 const SceneRSVP = ({ guestName }: { guestName: string }) => {
-  const [submitted, setSubmitted] = useState(false);
   const [hoveredContact, setHoveredContact] = useState<string | null>(null);
 
   const contactStars = useMemo(() => Array.from({ length: 4 }, (_, i) => ({
