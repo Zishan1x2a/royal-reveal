@@ -16,7 +16,7 @@ const Sparkle = ({ delay, x, y, size }: { delay: number; x: number; y: number; s
       top: `${y}%`,
       width: size,
       height: size,
-      background: `radial-gradient(circle, hsl(var(--gold) / 0.9), transparent)`,
+      background: `radial-gradient(circle, hsl(43 72% 65% / 0.9), transparent)`,
     }}
     animate={{
       opacity: [0, 1, 0.5, 1, 0],
@@ -31,7 +31,7 @@ const Sparkle = ({ delay, x, y, size }: { delay: number; x: number; y: number; s
   />
 );
 
-/* Animated border frame */
+/* Animated border frame with ball traveling full border */
 const AnimatedBorder = () => (
   <>
     {/* Top border */}
@@ -67,7 +67,7 @@ const AnimatedBorder = () => (
       transition={{ scaleY: { duration: 2, delay: 0.8 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 } }}
     />
 
-    {/* Animated corner ornaments */}
+    {/* Corner ornaments */}
     {[
       { pos: "top-2 left-2", rotate: 0 },
       { pos: "top-2 right-2", rotate: 90 },
@@ -102,15 +102,50 @@ const AnimatedBorder = () => (
       </motion.div>
     ))}
 
-    {/* Traveling light dot on border */}
+    {/* Traveling light ball - full border path using SVG */}
+    <svg className="absolute inset-0 w-full h-full z-30 pointer-events-none" style={{ top: 0, left: 0 }}>
+      <defs>
+        <filter id="ball-glow">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      {/* Define the rectangular path along the border */}
+      <rect
+        x="12" y="12"
+        width="calc(100% - 24px)" height="calc(100% - 24px)"
+        fill="none" stroke="none"
+        id="border-path"
+      />
+    </svg>
+    {/* Ball 1 - clockwise */}
     <motion.div
-      className="absolute top-3 left-3 w-2 h-2 rounded-full z-30 pointer-events-none"
-      style={{ background: "hsl(43 72% 65%)", boxShadow: "0 0 10px hsl(43 72% 55%), 0 0 20px hsl(43 72% 55% / 0.5)" }}
-      animate={{
-        x: ["0vw", "calc(100vw - 30px)", "calc(100vw - 30px)", "0vw", "0vw"],
-        y: ["0vh", "0vh", "calc(100vh - 30px)", "calc(100vh - 30px)", "0vh"],
+      className="absolute w-3 h-3 rounded-full z-30 pointer-events-none"
+      style={{
+        background: "radial-gradient(circle, hsl(43 72% 75%), hsl(43 72% 55%))",
+        boxShadow: "0 0 12px hsl(43 72% 55%), 0 0 24px hsl(43 72% 55% / 0.6), 0 0 40px hsl(43 72% 55% / 0.3)",
       }}
-      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+      animate={{
+        left: ["12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px"],
+        top: ["12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px"],
+      }}
+      transition={{ duration: 10, repeat: Infinity, ease: "linear", times: [0, 0.25, 0.5, 0.75, 1] }}
+    />
+    {/* Ball 2 - counter-clockwise, offset */}
+    <motion.div
+      className="absolute w-2 h-2 rounded-full z-30 pointer-events-none"
+      style={{
+        background: "radial-gradient(circle, hsl(43 72% 80%), hsl(43 72% 60%))",
+        boxShadow: "0 0 8px hsl(43 72% 55%), 0 0 16px hsl(43 72% 55% / 0.4)",
+      }}
+      animate={{
+        left: ["calc(100% - 24px)", "12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)"],
+        top: ["calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px", "calc(100% - 24px)"],
+      }}
+      transition={{ duration: 10, repeat: Infinity, ease: "linear", times: [0, 0.25, 0.5, 0.75, 1] }}
     />
   </>
 );
@@ -187,7 +222,7 @@ const SceneWelcome = ({ onNext }: Props) => {
 
   return (
     <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden">
-      {/* Animated background image - full visibility */}
+      {/* Background image - full clarity */}
       <motion.div
         className="absolute inset-0 z-0"
         initial={{ scale: 1.1, opacity: 0 }}
@@ -198,16 +233,16 @@ const SceneWelcome = ({ onNext }: Props) => {
           src={welcomeBg}
           alt=""
           className="w-full h-full object-cover"
-          style={{ filter: "brightness(1.05) contrast(1.08) saturate(1.2)" }}
-          animate={{ scale: [1, 1.02, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          style={{ filter: "brightness(1.1) contrast(1.05) saturate(1.15)" }}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Very subtle overlay - keeping image highly visible */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.15) 0%, hsl(0 0% 0% / 0.05) 40%, hsl(0 0% 0% / 0.05) 60%, hsl(0 0% 0% / 0.25) 100%)" }} />
+        {/* Very light overlay to keep text readable */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.1) 0%, hsl(0 0% 0% / 0.02) 30%, hsl(0 0% 0% / 0.02) 70%, hsl(0 0% 0% / 0.15) 100%)" }} />
         {/* Animated golden spotlight */}
         <motion.div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 50% 50%, hsl(43 72% 55% / 0.06) 0%, transparent 60%)" }}
+          style={{ background: "radial-gradient(ellipse at 50% 40%, hsl(43 72% 55% / 0.06) 0%, transparent 60%)" }}
           animate={{ opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -233,7 +268,8 @@ const SceneWelcome = ({ onNext }: Props) => {
         {/* शुभ विवाह */}
         <motion.div className="flex items-center gap-3" variants={fadeIn}>
           <motion.span
-            className="text-gold text-xs"
+            className="text-xs"
+            style={{ color: "hsl(43 72% 65%)" }}
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2, repeat: Infinity }}
           >✦</motion.span>
@@ -241,7 +277,8 @@ const SceneWelcome = ({ onNext }: Props) => {
             शुभ विवाह
           </span>
           <motion.span
-            className="text-gold text-xs"
+            className="text-xs"
+            style={{ color: "hsl(43 72% 65%)" }}
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2, repeat: Infinity, delay: 1 }}
           >✦</motion.span>
@@ -260,7 +297,8 @@ const SceneWelcome = ({ onNext }: Props) => {
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div
-            className="absolute w-24 h-24 md:w-32 md:h-32 rounded-full border border-gold/30"
+            className="absolute w-24 h-24 md:w-32 md:h-32 rounded-full"
+            style={{ border: "1px solid hsl(43 72% 55% / 0.3)" }}
             animate={{ rotate: 360 }}
             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           />
@@ -306,38 +344,83 @@ const SceneWelcome = ({ onNext }: Props) => {
           Dear
         </motion.p>
 
-        {/* Guest Name with premium glow */}
+        {/* Guest Name with premium shimmer animation (from open invitation button style) */}
         <motion.div className="relative" variants={fadeUp}>
-          <motion.p
-            className="font-decorative text-3xl md:text-4xl italic relative"
-            style={{ color: "hsl(43 72% 65%)" }}
-            animate={{
-              textShadow: [
-                "0 0 8px hsl(43 72% 55% / 0.3)",
-                "0 0 30px hsl(43 72% 55% / 0.7), 0 0 60px hsl(43 72% 55% / 0.4), 0 0 90px hsl(43 72% 55% / 0.2)",
-                "0 0 8px hsl(43 72% 55% / 0.3)",
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
+          <motion.div className="relative px-10 py-3 overflow-hidden">
+            {/* Glowing border frame around guest name */}
             <motion.span
-              animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-block text-sm"
-            >✦ </motion.span>
-            {"{Guest Name}"}
+              className="absolute inset-0"
+              style={{
+                border: "1px solid hsl(43 72% 55% / 0.4)",
+                borderRadius: "50px",
+              }}
+              animate={{
+                boxShadow: [
+                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
+                  "0 0 30px hsl(43 72% 55% / 0.4), inset 0 0 30px hsl(43 72% 55% / 0.1)",
+                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
+                ],
+              }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Inner gradient fill */}
             <motion.span
-              animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="inline-block text-sm"
-            > ✦</motion.span>
-          </motion.p>
-          <motion.div
-            className="mx-auto mt-1 h-px w-32 rounded-full"
-            style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55% / 0.6), transparent)" }}
-            animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
+              className="absolute inset-[1px] rounded-[50px]"
+              style={{
+                background: "linear-gradient(135deg, hsl(43 72% 55% / 0.06), hsl(43 72% 45% / 0.12), hsl(43 72% 55% / 0.06))",
+              }}
+              animate={{
+                background: [
+                  "linear-gradient(135deg, hsl(43 72% 55% / 0.06), hsl(43 72% 45% / 0.12), hsl(43 72% 55% / 0.06))",
+                  "linear-gradient(135deg, hsl(43 72% 55% / 0.12), hsl(43 72% 45% / 0.06), hsl(43 72% 55% / 0.12))",
+                  "linear-gradient(135deg, hsl(43 72% 55% / 0.06), hsl(43 72% 45% / 0.12), hsl(43 72% 55% / 0.06))",
+                ],
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Shimmer sweep */}
+            <motion.span
+              className="absolute inset-0 rounded-[50px] pointer-events-none"
+              style={{
+                background: "linear-gradient(105deg, transparent 35%, hsl(43 72% 65% / 0.25) 50%, transparent 65%)",
+              }}
+              animate={{ x: ["-200%", "200%"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+            />
+            {/* SVG corner accents */}
+            {[
+              { cls: "top-0 left-0", rot: 0 },
+              { cls: "top-0 right-0", rot: 90 },
+              { cls: "bottom-0 right-0", rot: 180 },
+              { cls: "bottom-0 left-0", rot: 270 },
+            ].map((c, i) => (
+              <motion.svg
+                key={i}
+                className={`absolute ${c.cls} w-4 h-4`}
+                viewBox="0 0 16 16"
+                style={{ rotate: `${c.rot}deg` }}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+              >
+                <path d="M0,0 L6,0" stroke="hsl(43 72% 65%)" strokeWidth="1" fill="none" />
+                <path d="M0,0 L0,6" stroke="hsl(43 72% 65%)" strokeWidth="1" fill="none" />
+              </motion.svg>
+            ))}
+            {/* Guest name text */}
+            <span className="relative z-10 flex items-center gap-3 font-decorative text-3xl md:text-4xl italic" style={{ color: "hsl(43 72% 65%)" }}>
+              <motion.span
+                className="text-[10px]"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              >✦</motion.span>
+              {"{Guest Name}"}
+              <motion.span
+                className="text-[10px]"
+                animate={{ rotate: [360, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              >✦</motion.span>
+            </span>
+          </motion.div>
         </motion.div>
 
         {/* Invitation text */}
@@ -376,7 +459,7 @@ const SceneWelcome = ({ onNext }: Props) => {
           12 December 2026
         </motion.p>
 
-        {/* Premium Open Invitation Button */}
+        {/* Open Invitation Button - clean elegant style */}
         <motion.div className="mt-4" variants={fadeUp}>
           <motion.button
             onClick={onNext}
@@ -385,70 +468,33 @@ const SceneWelcome = ({ onNext }: Props) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {/* Outer glowing border */}
             <motion.span
-              className="absolute inset-0"
-              style={{
-                border: "1px solid hsl(43 72% 55% / 0.4)",
-                borderRadius: "50px",
-              }}
+              className="absolute inset-0 rounded-full"
+              style={{ border: "1px solid hsl(43 72% 55% / 0.5)" }}
               animate={{
                 boxShadow: [
-                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
-                  "0 0 25px hsl(43 72% 55% / 0.3), inset 0 0 25px hsl(43 72% 55% / 0.08)",
-                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
+                  "0 0 15px hsl(43 72% 55% / 0.15)",
+                  "0 0 30px hsl(43 72% 55% / 0.35)",
+                  "0 0 15px hsl(43 72% 55% / 0.15)",
                 ],
               }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
-            {/* Inner gradient fill */}
             <motion.span
-              className="absolute inset-[1px] rounded-[50px]"
-              style={{
-                background: "linear-gradient(135deg, hsl(43 72% 55% / 0.08), hsl(43 72% 45% / 0.15), hsl(43 72% 55% / 0.08))",
-              }}
-              animate={{
-                background: [
-                  "linear-gradient(135deg, hsl(43 72% 55% / 0.08), hsl(43 72% 45% / 0.15), hsl(43 72% 55% / 0.08))",
-                  "linear-gradient(135deg, hsl(43 72% 55% / 0.15), hsl(43 72% 45% / 0.08), hsl(43 72% 55% / 0.15))",
-                  "linear-gradient(135deg, hsl(43 72% 55% / 0.08), hsl(43 72% 45% / 0.15), hsl(43 72% 55% / 0.08))",
-                ],
-              }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-[1px] rounded-full"
+              style={{ background: "linear-gradient(135deg, hsl(43 72% 55% / 0.1), hsl(43 72% 45% / 0.18), hsl(43 72% 55% / 0.1))" }}
             />
-            {/* Shimmer sweep */}
-            <motion.span
-              className="absolute inset-0 rounded-[50px] pointer-events-none"
-              style={{
-                background: "linear-gradient(105deg, transparent 35%, hsl(43 72% 65% / 0.2) 50%, transparent 65%)",
-              }}
-              animate={{ x: ["-200%", "200%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.5 }}
-            />
-            {/* Text */}
-            <span className="relative z-10 flex items-center gap-3 font-decorative text-sm md:text-base tracking-[0.25em] uppercase" style={{ color: "hsl(43 72% 65%)" }}>
-              <motion.span
-                className="text-[10px]"
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              >✦</motion.span>
+            <span className="relative z-10 font-decorative text-sm md:text-base tracking-[0.25em] uppercase" style={{ color: "hsl(43 72% 65%)" }}>
               Open Invitation
-              <motion.span
-                className="text-[10px]"
-                animate={{ rotate: [360, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              >✦</motion.span>
             </span>
           </motion.button>
         </motion.div>
       </motion.div>
 
-      {/* Subtle vignette */}
+      {/* Vignette */}
       <div
         className="absolute inset-0 pointer-events-none z-30"
-        style={{
-          background: "radial-gradient(ellipse at center, transparent 55%, hsl(0 0% 0% / 0.3) 100%)",
-        }}
+        style={{ background: "radial-gradient(ellipse at center, transparent 55%, hsl(0 0% 0% / 0.3) 100%)" }}
       />
     </div>
   );
