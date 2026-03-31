@@ -4,7 +4,7 @@ import SceneOpeningAnimation from "./SceneOpeningAnimation";
 import SceneWelcome from "./SceneWelcome";
 import SceneHero from "./SceneHero";
 import SceneEvents from "./SceneEvents";
-import SceneFamily from "./SceneFamily";
+
 import SceneGallery from "./SceneGallery";
 import SceneCountdown from "./SceneCountdown";
 import SceneRSVP from "./SceneRSVP";
