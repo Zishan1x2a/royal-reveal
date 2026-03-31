@@ -169,7 +169,7 @@ const SceneRSVP = ({ guestName }: { guestName: string }) => {
                 🎉
               </motion.div>
               <p className="font-display text-2xl" style={{ color: "hsl(0 60% 25%)" }}>
-                We're thrilled, {name}!
+                We're thrilled, {guestName}!
               </p>
               <p className="font-decorative text-lg italic" style={{ color: "hsl(0 40% 35%)" }}>
                 We look forward to celebrating with you
