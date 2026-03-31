@@ -29,6 +29,7 @@ const WeddingApp = () => {
   const [doorsClosed, setDoorsClosed] = useState(false);
   const [showPetals, setShowPetals] = useState(false);
   const [useDoor, setUseDoor] = useState(false);
+  const [guestName, setGuestName] = useState("Guest");
 
   const goToNext = useCallback(() => {
     const idx = SCENES.indexOf(currentScene);
