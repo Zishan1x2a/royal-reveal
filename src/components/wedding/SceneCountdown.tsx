@@ -381,50 +381,22 @@ const SceneCountdown = ({ onNext, guestName }: Props) => {
             </motion.div>
           ) : (
             <motion.div
-              className="relative rounded-3xl p-8 md:p-10 backdrop-blur-sm overflow-hidden flex flex-col items-center gap-5"
+              className="relative rounded-xl p-6 backdrop-blur-sm overflow-hidden flex flex-col items-center gap-4"
               style={{
-                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.75), hsl(0 35% 87% / 0.55))",
-                border: "1px solid hsl(43 72% 55% / 0.4)",
-                boxShadow: "0 8px 40px hsl(43 72% 55% / 0.15), 0 0 80px hsl(43 72% 55% / 0.08)",
+                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.7), hsl(0 35% 87% / 0.5))",
+                border: "1px solid hsl(43 72% 55% / 0.35)",
+                boxShadow: "0 6px 30px hsl(43 72% 55% / 0.12)",
               }}
               initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
               transition={{ type: "spring", damping: 15 }}
             >
-              {/* Stars in thank you card */}
-              {Array.from({ length: 6 }, (_, i) => (
-                <motion.div key={`ty-star-${i}`}
-                  className="absolute rounded-full pointer-events-none"
-                  style={{
-                    left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
-                    width: 2 + Math.random() * 3, height: 2 + Math.random() * 3,
-                    background: "radial-gradient(circle, hsl(43 72% 70%), hsl(43 72% 55% / 0.4))",
-                    boxShadow: `0 0 ${8 + Math.random() * 6}px hsl(43 72% 55% / 0.6)`,
-                  }}
-                  animate={{ opacity: [0, 1, 0.3, 1, 0], scale: [0.3, 1.5, 0.6, 1.4, 0.3] }}
-                  transition={{ duration: 2.5 + Math.random() * 2, delay: Math.random() * 3, repeat: Infinity, ease: "easeInOut" }}
-                />
-              ))}
-              {/* Bubbles in thank you card */}
-              {Array.from({ length: 4 }, (_, i) => (
-                <motion.div key={`ty-bubble-${i}`}
-                  className="absolute rounded-full pointer-events-none"
-                  style={{
-                    left: `${15 + Math.random() * 70}%`, bottom: "-8%",
-                    width: 5 + Math.random() * 8, height: 5 + Math.random() * 8,
-                    border: "1px solid hsl(43 72% 55% / 0.25)",
-                    background: "radial-gradient(circle at 30% 30%, hsl(43 72% 65% / 0.15), transparent)",
-                  }}
-                  animate={{ y: [0, -250], opacity: [0, 0.6, 0.3, 0] }}
-                  transition={{ duration: 4 + Math.random() * 3, delay: Math.random() * 4, repeat: Infinity, ease: "easeOut" }}
-                />
-              ))}
               <motion.div className="text-5xl"
-                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.3, 1] }}
+                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.2, 1] }}
                 transition={{ duration: 1.5, repeat: 2 }}
               >🎉</motion.div>
-              <p className="font-display text-2xl relative z-10" style={{ color: "hsl(0 60% 25%)" }}>Thank You, {guestName}! 🙏</p>
-              <p className="font-decorative text-lg italic relative z-10" style={{ color: "hsl(0 40% 35%)" }}>We look forward to celebrating with you</p>
-              <motion.div className="flex gap-2 mt-2 relative z-10">
+              <p className="font-display text-2xl" style={{ color: "hsl(0 60% 25%)" }}>Thank You, {guestName}! 🙏</p>
+              <p className="font-decorative text-lg italic" style={{ color: "hsl(0 40% 35%)" }}>We look forward to celebrating with you</p>
+              <motion.div className="flex gap-2 mt-2">
                 {["🌸", "✨", "💐", "✨", "🌸"].map((emoji, i) => (
                   <motion.span key={i} className="text-2xl" animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 1.5, delay: i * 0.15, repeat: Infinity }}>{emoji}</motion.span>
