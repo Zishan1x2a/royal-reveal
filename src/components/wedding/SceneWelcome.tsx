@@ -189,9 +189,23 @@ const SceneWelcome = ({ onNext }: Props) => {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
-      style={{ background: "linear-gradient(180deg, hsl(220 25% 10%) 0%, hsl(220 20% 14%) 40%, hsl(220 25% 10%) 100%)" }}
-    >
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
+      {/* Animated background image */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ scale: 1.15, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 3, ease: "easeOut" }}
+      >
+        <motion.img
+          src={welcomeBg}
+          alt=""
+          className="w-full h-full object-cover"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.5) 0%, hsl(0 0% 0% / 0.3) 40%, hsl(0 0% 0% / 0.6) 100%)" }} />
+      </motion.div>
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {sparkles.map((s) => (
