@@ -223,8 +223,9 @@ const Separator = () => (
   >:</motion.span>
 );
 
-const SceneCountdown = ({ onNext }: Props) => {
+const SceneCountdown = ({ onNext, guestName }: Props) => {
   const { days, hours, minutes, seconds } = useCountdown();
+  const [submitted, setSubmitted] = useState(false);
 
   const rings = useMemo(() => Array.from({ length: 10 }, (_, i) => ({
     id: i, x: Math.random() * 100, y: Math.random() * 100, size: 12 + Math.random() * 35, delay: Math.random() * 6,
