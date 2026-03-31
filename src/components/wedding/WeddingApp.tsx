@@ -60,7 +60,6 @@ const WeddingApp = () => {
       case "welcome": return <SceneWelcome {...props} guestName={guestName} onGuestNameChange={setGuestName} />;
       case "hero": return <SceneHero {...props} />;
       case "events": return <SceneEvents {...props} />;
-      case "family": return <SceneFamily {...props} />;
       case "gallery": return <SceneGallery {...props} />;
       case "countdown": return <SceneCountdown {...props} />;
       case "rsvp": return <SceneRSVP guestName={guestName} />;
