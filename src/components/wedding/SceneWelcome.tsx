@@ -201,10 +201,25 @@ const SceneWelcome = ({ onNext }: Props) => {
           src={welcomeBg}
           alt=""
           className="w-full h-full object-cover"
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          style={{ imageRendering: "auto", filter: "brightness(1.1) contrast(1.05) saturate(1.15)" }}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.5) 0%, hsl(0 0% 0% / 0.3) 40%, hsl(0 0% 0% / 0.6) 100%)" }} />
+        {/* Lighter overlay to keep image vivid */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.25) 0%, hsl(0 0% 0% / 0.1) 30%, hsl(0 0% 0% / 0.15) 60%, hsl(0 0% 0% / 0.4) 100%)" }} />
+        {/* Animated spotlight glow effects */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: "radial-gradient(ellipse at 30% 40%, hsl(43 72% 55% / 0.08) 0%, transparent 60%)" }}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: "radial-gradient(ellipse at 70% 60%, hsl(0 70% 45% / 0.06) 0%, transparent 50%)" }}
+          animate={{ opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        />
       </motion.div>
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
