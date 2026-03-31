@@ -8,12 +8,16 @@ import groomFamilyImg from "@/assets/groom-family.jpg";
 interface Props { onNext: () => void; }
 
 const brideFamily = [
-  { relation: "Father of the Bride", name: "Shri Ramesh Sharma" },
-  { relation: "Mother of the Bride", name: "Smt. Sunita Sharma" },
+  { relation: "Father", name: "Shri Ramesh Sharma", icon: "👨‍💼" },
+  { relation: "Mother", name: "Smt. Sunita Sharma", icon: "👩‍💼" },
+  { relation: "Brother", name: "Arjun Sharma", icon: "🧑" },
+  { relation: "Sister", name: "Priya Sharma", icon: "👧" },
 ];
 const groomFamily = [
-  { relation: "Father of the Groom", name: "Shri Vikram Mehta" },
-  { relation: "Mother of the Groom", name: "Smt. Anjali Mehta" },
+  { relation: "Father", name: "Shri Vikram Mehta", icon: "👨‍💼" },
+  { relation: "Mother", name: "Smt. Anjali Mehta", icon: "👩‍💼" },
+  { relation: "Brother", name: "Rohit Mehta", icon: "🧑" },
+  { relation: "Sister", name: "Neha Mehta", icon: "👧" },
 ];
 
 /* Corner ornament */
@@ -76,7 +80,7 @@ const FamilyFlipCard = ({
 }: {
   title: string;
   image: string;
-  members: { relation: string; name: string }[];
+  members: { relation: string; name: string; icon: string }[];
   delay: number;
 }) => {
   const [flipped, setFlipped] = useState(false);
@@ -233,36 +237,77 @@ const FamilyFlipCard = ({
                     transition={{ delay: 0.4, duration: 0.5 }}
                   />
 
-                  {members.map((m, i) => (
-                    <motion.div
-                      key={m.name}
-                      className="text-center py-3 relative z-20"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + i * 0.15 }}
-                    >
-                      <p
-                        className="font-body text-xs uppercase tracking-[0.2em]"
-                        style={{ color: "hsl(0 25% 50%)" }}
-                      >
-                        {m.relation}
-                      </p>
-                      <motion.p
-                        className="font-decorative text-xl mt-1"
-                        style={{ color: "hsl(0 60% 25%)" }}
-                        animate={{
-                          textShadow: [
-                            "0 0 0px transparent",
-                            "0 0 8px hsl(43 72% 55% / 0.3)",
-                            "0 0 0px transparent",
-                          ],
+                  <div className="grid grid-cols-2 gap-3 w-full relative z-20">
+                    {members.map((m, i) => (
+                      <motion.div
+                        key={m.name}
+                        className="relative rounded-xl p-4 text-center overflow-hidden group/card"
+                        style={{
+                          background: "linear-gradient(145deg, hsl(0 30% 97% / 0.9), hsl(0 35% 93% / 0.85))",
+                          border: "1px solid hsl(43 72% 55% / 0.3)",
+                          boxShadow: "0 4px 15px hsl(0 40% 30% / 0.08)",
                         }}
-                        transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
+                        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ delay: 0.4 + i * 0.12, type: "spring", stiffness: 200 }}
+                        whileHover={{
+                          scale: 1.05,
+                          boxShadow: "0 8px 25px hsl(43 72% 55% / 0.25)",
+                          border: "1px solid hsl(43 72% 55% / 0.6)",
+                        }}
                       >
-                        {m.name}
-                      </motion.p>
-                    </motion.div>
-                  ))}
+                        {/* Mini animated border on hover */}
+                        <motion.div
+                          className="absolute -inset-[1px] rounded-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"
+                          style={{
+                            background: "linear-gradient(270deg, hsl(43 72% 55% / 0.5), hsl(340 50% 65% / 0.3), hsl(43 72% 55% / 0.5))",
+                            backgroundSize: "200% 200%",
+                          }}
+                          animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        />
+
+                        {/* Glow */}
+                        <motion.div
+                          className="absolute inset-0 pointer-events-none rounded-xl"
+                          style={{ background: "radial-gradient(circle at 50% 30%, hsl(43 72% 55% / 0.08), transparent 70%)" }}
+                        />
+
+                        {/* Icon */}
+                        <motion.div
+                          className="text-2xl mb-1 relative z-10"
+                          animate={{ y: [0, -3, 0] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                        >
+                          {m.icon}
+                        </motion.div>
+
+                        {/* Relation */}
+                        <p
+                          className="font-body text-[10px] uppercase tracking-[0.2em] relative z-10"
+                          style={{ color: "hsl(0 25% 50%)" }}
+                        >
+                          {m.relation}
+                        </p>
+
+                        {/* Name */}
+                        <motion.p
+                          className="font-decorative text-sm mt-1 relative z-10 leading-tight"
+                          style={{ color: "hsl(0 60% 25%)" }}
+                          animate={{
+                            textShadow: [
+                              "0 0 0px transparent",
+                              "0 0 6px hsl(43 72% 55% / 0.3)",
+                              "0 0 0px transparent",
+                            ],
+                          }}
+                          transition={{ duration: 3, repeat: Infinity, delay: i * 0.4 }}
+                        >
+                          {m.name}
+                        </motion.p>
+                      </motion.div>
+                    ))}
+                  </div>
 
                   <motion.p
                     className="font-body text-xs mt-4 uppercase tracking-[0.25em] relative z-20"
