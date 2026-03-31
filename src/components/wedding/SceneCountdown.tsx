@@ -232,11 +232,6 @@ const SceneCountdown = ({ onNext }: Props) => {
 
   return (
     <SectionBackground className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center relative">
-      {/* Corner ornaments */}
-      <CornerOrnament position="top-left" />
-      <CornerOrnament position="top-right" />
-      <CornerOrnament position="bottom-left" />
-      <CornerOrnament position="bottom-right" />
 
       {/* Floating rings */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
