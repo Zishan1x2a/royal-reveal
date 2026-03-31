@@ -23,8 +23,6 @@ const galleryItems = [
   { src: candidImg, label: "Together Forever", caption: "Walking into forever" },
   { src: pherasImg, label: "Sacred Pheras", caption: "Seven vows, one destiny" },
   { src: bridalImg, label: "The Bride", caption: "Grace personified" },
-  { src: receptionImg, label: "Celebration", caption: "Dancing under the stars" },
-  { src: sunsetImg, label: "Eternal Love", caption: "A love story begins" },
 ];
 
 /* Decorative animated corner */
