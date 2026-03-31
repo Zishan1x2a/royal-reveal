@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import GoldButton from "./GoldButton";
+import SectionBackground from "./SectionBackground";
 
 interface Props { onNext: () => void; }
 
@@ -33,7 +34,7 @@ const fadeUp = {
 };
 
 const SceneEvents = ({ onNext }: Props) => (
-  <div className="relative flex min-h-screen flex-col items-center justify-center bg-cream px-6 py-16 overflow-hidden">
+  <SectionBackground className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
     <motion.div
       className="relative z-10 flex flex-col items-center gap-10 w-full max-w-4xl"
       initial="hidden"
@@ -41,14 +42,16 @@ const SceneEvents = ({ onNext }: Props) => (
       variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
     >
       <motion.h2
-        className="font-display text-3xl md:text-4xl text-maroon"
+        className="font-display text-3xl md:text-4xl"
+        style={{ color: "hsl(0 60% 25%)" }}
         variants={fadeUp}
       >
         Wedding Events
       </motion.h2>
 
       <motion.div
-        className="h-px w-20 bg-gold"
+        className="h-px w-20"
+        style={{ background: "hsl(43 72% 50%)" }}
         variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
       />
 
@@ -61,29 +64,33 @@ const SceneEvents = ({ onNext }: Props) => (
             variants={fadeUp}
             transition={{ delay: bi * 0.15 }}
           >
-            {/* Block header */}
             <motion.div
-              className="text-center py-2 rounded-sm border-b-2 border-gold/40"
+              className="text-center py-2 rounded-sm"
+              style={{ borderBottom: "2px solid hsl(43 72% 50% / 0.4)" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 + bi * 0.2 }}
             >
-              <h3 className="font-decorative text-lg text-gold tracking-widest uppercase">{block.title}</h3>
+              <h3 className="font-decorative text-lg tracking-widest uppercase" style={{ color: "hsl(43 72% 50%)" }}>{block.title}</h3>
             </motion.div>
 
-            {/* Event cards in block */}
             {block.events.map((e, ei) => (
               <motion.div
                 key={e.name}
-                className="rounded-sm border border-gold/30 bg-ivory p-5 text-center shadow-gold"
+                className="rounded-sm p-5 text-center shadow-lg"
+                style={{
+                  border: "1px solid hsl(43 72% 50% / 0.3)",
+                  background: "hsl(0 30% 97% / 0.8)",
+                  backdropFilter: "blur(8px)",
+                }}
                 variants={fadeUp}
                 transition={{ delay: bi * 0.15 + ei * 0.1 }}
                 whileHover={{ scale: 1.03, boxShadow: "0 8px 30px hsl(43 72% 55% / 0.15)" }}
               >
                 <span className="text-3xl">{e.icon}</span>
-                <h4 className="font-display text-lg text-maroon mt-2">{e.name}</h4>
-                <p className="font-decorative text-base text-gold mt-1">{e.date}</p>
-                <p className="font-body text-xs text-muted-foreground mt-1">{e.venue}</p>
+                <h4 className="font-display text-lg mt-2" style={{ color: "hsl(0 60% 25%)" }}>{e.name}</h4>
+                <p className="font-decorative text-base mt-1" style={{ color: "hsl(43 72% 45%)" }}>{e.date}</p>
+                <p className="font-body text-xs mt-1" style={{ color: "hsl(0 25% 45%)" }}>{e.venue}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -94,7 +101,7 @@ const SceneEvents = ({ onNext }: Props) => (
         <GoldButton onClick={onNext}>Meet the Families</GoldButton>
       </motion.div>
     </motion.div>
-  </div>
+  </SectionBackground>
 );
 
 export default SceneEvents;

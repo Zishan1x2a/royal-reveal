@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import GoldButton from "./GoldButton";
+import SectionBackground from "./SectionBackground";
 
 import haldiImg from "@/assets/gallery/haldi.jpg";
 import mehndiImg from "@/assets/gallery/mehndi.jpg";
@@ -25,30 +26,6 @@ const galleryItems = [
   { src: receptionImg, label: "Celebration", caption: "Dancing under the stars" },
   { src: sunsetImg, label: "Eternal Love", caption: "A love story begins" },
 ];
-
-/* Floating sparkle particles */
-const Sparkle = ({ delay, x, y, size }: { delay: number; x: number; y: number; size: number }) => (
-  <motion.div
-    className="absolute rounded-full pointer-events-none"
-    style={{
-      width: size,
-      height: size,
-      left: `${x}%`,
-      top: `${y}%`,
-      background: `radial-gradient(circle, hsl(43 80% 75%), transparent)`,
-    }}
-    animate={{
-      opacity: [0, 1, 0],
-      scale: [0, 1, 0],
-    }}
-    transition={{
-      duration: 2.5 + Math.random() * 2,
-      delay,
-      repeat: Infinity,
-      repeatDelay: Math.random() * 3,
-    }}
-  />
-);
 
 /* Decorative animated corner */
 const AnimatedCorner = ({ position }: { position: "tl" | "tr" | "bl" | "br" }) => {
@@ -92,7 +69,8 @@ const Lightbox = ({
   <AnimatePresence>
     {image && (
       <motion.div
-        className="fixed inset-0 z-[300] flex items-center justify-center bg-foreground/80 backdrop-blur-md p-4 cursor-pointer"
+        className="fixed inset-0 z-[300] flex items-center justify-center p-4 cursor-pointer"
+        style={{ background: "hsl(0 20% 5% / 0.8)", backdropFilter: "blur(12px)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -115,12 +93,13 @@ const Lightbox = ({
           />
           <div className="absolute bottom-0 left-0 right-0 p-6 rounded-b-2xl"
             style={{ background: "linear-gradient(transparent, hsla(0, 20%, 5%, 0.8))" }}>
-            <p className="font-display text-xl text-primary-foreground">{image.label}</p>
-            <p className="font-decorative text-sm text-primary-foreground/70 mt-1">{image.caption}</p>
+            <p className="font-display text-xl" style={{ color: "hsl(0 0% 95%)" }}>{image.label}</p>
+            <p className="font-decorative text-sm mt-1" style={{ color: "hsl(0 0% 80%)" }}>{image.caption}</p>
           </div>
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 w-10 h-10 rounded-full bg-foreground/50 backdrop-blur-sm flex items-center justify-center text-primary-foreground text-lg hover:bg-foreground/70 transition-colors"
+            className="absolute top-3 right-3 w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors"
+            style={{ background: "hsl(0 20% 15% / 0.5)", color: "hsl(0 0% 95%)" }}
           >
             ✕
           </button>
@@ -148,17 +127,14 @@ const GalleryCard = ({
     transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
     onClick={onClick}
   >
-    {/* Animated gradient border wrapper */}
     <div className="relative p-[2px] rounded-[22px] overflow-hidden gallery-border-glow">
-      {/* Glassmorphic card */}
-      <div className="relative rounded-[20px] overflow-hidden bg-card/40 backdrop-blur-xl shadow-lg group-hover:shadow-gold transition-shadow duration-700">
-        {/* Decorative corners */}
+      <div className="relative rounded-[20px] overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-700"
+        style={{ background: "hsl(0 30% 97% / 0.4)", backdropFilter: "blur(16px)" }}>
         <AnimatedCorner position="tl" />
         <AnimatedCorner position="tr" />
         <AnimatedCorner position="bl" />
         <AnimatedCorner position="br" />
 
-        {/* Image container */}
         <div className="relative aspect-square overflow-hidden rounded-[20px]">
           <motion.img
             src={item.src}
@@ -168,39 +144,18 @@ const GalleryCard = ({
             height={800}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.15]"
           />
-
-          {/* Vignette overlay */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: "radial-gradient(ellipse at center, transparent 50%, hsla(0, 20%, 5%, 0.25) 100%)",
-            }}
-          />
-
-          {/* Hover glow effect */}
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-            style={{
-              background: "radial-gradient(circle at center, hsl(43 72% 55% / 0.12) 0%, transparent 70%)",
-            }}
-          />
-
-          {/* Hover overlay with label */}
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: "radial-gradient(ellipse at center, transparent 50%, hsla(0, 20%, 5%, 0.25) 100%)" }} />
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+            style={{ background: "radial-gradient(circle at center, hsl(43 72% 55% / 0.12) 0%, transparent 70%)" }} />
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-end pb-6 px-4"
-            style={{
-              background: "linear-gradient(transparent 40%, hsla(0, 20%, 5%, 0.65) 100%)",
-            }}
-            initial={false}
+            style={{ background: "linear-gradient(transparent 40%, hsla(0, 20%, 5%, 0.65) 100%)" }}
           >
-            <motion.p
-              className="font-display text-lg text-primary-foreground opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0"
-            >
+            <motion.p className="font-display text-lg opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0" style={{ color: "hsl(0 0% 95%)" }}>
               {item.label}
             </motion.p>
-            <motion.p
-              className="font-decorative text-xs text-primary-foreground/70 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-75 translate-y-2 group-hover:translate-y-0 mt-1"
-            >
+            <motion.p className="font-decorative text-xs opacity-0 group-hover:opacity-100 transition-all duration-500 delay-75 translate-y-2 group-hover:translate-y-0 mt-1" style={{ color: "hsl(0 0% 80%)" }}>
               {item.caption}
             </motion.p>
           </motion.div>
@@ -213,63 +168,33 @@ const GalleryCard = ({
 const SceneGallery = ({ onNext }: Props) => {
   const [lightboxImage, setLightboxImage] = useState<(typeof galleryItems)[0] | null>(null);
 
-  const sparkles = useMemo(
-    () =>
-      Array.from({ length: 25 }, (_, i) => ({
-        id: i,
-        delay: Math.random() * 4,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: 3 + Math.random() * 5,
-      })),
-    []
-  );
-
   return (
     <>
-      <div className="relative flex min-h-screen flex-col items-center justify-start bg-ivory px-4 md:px-8 py-16 overflow-hidden">
-        {/* Floating sparkle particles */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {sparkles.map((s) => (
-            <Sparkle key={s.id} {...s} />
-          ))}
-        </div>
-
-        {/* Cinematic vignette */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 60%, hsl(var(--ivory) / 0.5) 100%)",
-          }}
-        />
-
+      <SectionBackground className="flex min-h-screen flex-col items-center justify-start px-4 md:px-8 py-16">
         <motion.div
           className="relative z-10 flex flex-col items-center gap-10 w-full max-w-6xl"
           initial="hidden"
           animate="visible"
           variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
         >
-          {/* Section header */}
           <motion.div
             className="text-center space-y-4"
             variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
           >
-            <p className="font-body text-xs uppercase tracking-[0.4em] text-muted-foreground">
+            <p className="font-body text-xs uppercase tracking-[0.4em]" style={{ color: "hsl(0 25% 45%)" }}>
               Precious Moments
             </p>
-            <h2 className="font-display text-4xl md:text-5xl text-maroon">Our Gallery</h2>
+            <h2 className="font-display text-4xl md:text-5xl" style={{ color: "hsl(0 60% 25%)" }}>Our Gallery</h2>
             <div className="flex items-center justify-center gap-3">
-              <div className="h-px w-16 bg-gold opacity-50" />
-              <span className="text-gold text-xl">✦</span>
-              <div className="h-px w-16 bg-gold opacity-50" />
+              <div className="h-px w-16 opacity-50" style={{ background: "hsl(43 72% 50%)" }} />
+              <span style={{ color: "hsl(43 72% 50%)" }} className="text-xl">✦</span>
+              <div className="h-px w-16 opacity-50" style={{ background: "hsl(43 72% 50%)" }} />
             </div>
-            <p className="font-decorative text-lg text-maroon-light/70 max-w-md mx-auto">
+            <p className="font-decorative text-lg max-w-md mx-auto" style={{ color: "hsl(0 40% 35% / 0.7)" }}>
               A journey of love captured in timeless frames
             </p>
           </motion.div>
 
-          {/* Gallery grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
             {galleryItems.map((item, i) => (
               <GalleryCard
@@ -281,7 +206,6 @@ const SceneGallery = ({ onNext }: Props) => {
             ))}
           </div>
 
-          {/* CTA */}
           <motion.div
             className="mt-4"
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
@@ -289,7 +213,7 @@ const SceneGallery = ({ onNext }: Props) => {
             <GoldButton onClick={onNext}>Countdown</GoldButton>
           </motion.div>
         </motion.div>
-      </div>
+      </SectionBackground>
 
       <Lightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />
     </>

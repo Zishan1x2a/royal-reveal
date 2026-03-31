@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import SectionBackground from "./SectionBackground";
 import floralCorner from "@/assets/floral-corner.png";
 
 const SceneRSVP = () => {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-cream px-6 py-16 text-center overflow-hidden">
-      <img src={floralCorner} alt="" className="absolute top-4 right-4 w-28 md:w-36 opacity-50" loading="lazy" width={512} height={512} />
-      <img src={floralCorner} alt="" className="absolute bottom-4 left-4 w-28 md:w-36 opacity-50 rotate-180" loading="lazy" width={512} height={512} />
+    <SectionBackground className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
+      <img src={floralCorner} alt="" className="absolute top-4 right-4 w-28 md:w-36 opacity-40 z-10" loading="lazy" width={512} height={512} />
+      <img src={floralCorner} alt="" className="absolute bottom-4 left-4 w-28 md:w-36 opacity-40 rotate-180 z-10" loading="lazy" width={512} height={512} />
 
       <motion.div
         className="relative z-10 flex flex-col items-center gap-6 max-w-md w-full"
@@ -17,13 +18,14 @@ const SceneRSVP = () => {
         variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
       >
         <motion.h2
-          className="font-display text-3xl md:text-4xl text-maroon"
+          className="font-display text-3xl md:text-4xl"
+          style={{ color: "hsl(0 60% 25%)" }}
           variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
         >
           {submitted ? "Thank You!" : "RSVP & Contact"}
         </motion.h2>
 
-        <motion.div className="h-px w-20 bg-gold" variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }} />
+        <motion.div className="h-px w-20" style={{ background: "hsl(43 72% 50%)" }} variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }} />
 
         {!submitted ? (
           <motion.form
@@ -35,15 +37,30 @@ const SceneRSVP = () => {
               type="text"
               placeholder="Your Name"
               required
-              className="w-full border border-gold/30 bg-ivory px-4 py-3 rounded-sm font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-gold transition-colors"
+              className="w-full px-4 py-3 rounded-sm font-body text-sm focus:outline-none transition-colors"
+              style={{
+                border: "1px solid hsl(43 72% 50% / 0.3)",
+                background: "hsl(0 30% 97% / 0.8)",
+                color: "hsl(0 60% 20%)",
+              }}
             />
             <input
               type="tel"
               placeholder="Phone Number"
-              className="w-full border border-gold/30 bg-ivory px-4 py-3 rounded-sm font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-gold transition-colors"
+              className="w-full px-4 py-3 rounded-sm font-body text-sm focus:outline-none transition-colors"
+              style={{
+                border: "1px solid hsl(43 72% 50% / 0.3)",
+                background: "hsl(0 30% 97% / 0.8)",
+                color: "hsl(0 60% 20%)",
+              }}
             />
             <select
-              className="w-full border border-gold/30 bg-ivory px-4 py-3 rounded-sm font-body text-sm text-foreground focus:outline-none focus:border-gold transition-colors"
+              className="w-full px-4 py-3 rounded-sm font-body text-sm focus:outline-none transition-colors"
+              style={{
+                border: "1px solid hsl(43 72% 50% / 0.3)",
+                background: "hsl(0 30% 97% / 0.8)",
+                color: "hsl(0 60% 20%)",
+              }}
               defaultValue=""
             >
               <option value="" disabled>Will you attend?</option>
@@ -52,8 +69,12 @@ const SceneRSVP = () => {
             </select>
             <motion.button
               type="submit"
-              className="font-decorative text-lg tracking-widest uppercase px-10 py-4 rounded-sm border-2 border-gold text-gold bg-transparent
-                hover:bg-gold hover:text-foreground transition-colors duration-500 mt-2"
+              className="font-decorative text-lg tracking-widest uppercase px-10 py-4 rounded-sm border-2 transition-colors duration-500 mt-2"
+              style={{
+                borderColor: "hsl(43 72% 50%)",
+                color: "hsl(43 72% 45%)",
+                background: "transparent",
+              }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -62,7 +83,8 @@ const SceneRSVP = () => {
           </motion.form>
         ) : (
           <motion.p
-            className="font-decorative text-xl text-maroon-light"
+            className="font-decorative text-xl"
+            style={{ color: "hsl(0 40% 35%)" }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
           >
@@ -74,12 +96,12 @@ const SceneRSVP = () => {
           className="mt-6 space-y-3"
           variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
         >
-          <p className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">Contact Us</p>
+          <p className="font-body text-xs uppercase tracking-[0.2em]" style={{ color: "hsl(0 25% 45%)" }}>Contact Us</p>
           <div className="flex justify-center gap-4">
-            <a href="tel:+919876543210" className="border border-gold/30 rounded-sm px-5 py-2 font-body text-sm text-maroon hover:bg-gold/10 transition-colors">
+            <a href="tel:+919876543210" className="rounded-sm px-5 py-2 font-body text-sm transition-colors" style={{ border: "1px solid hsl(43 72% 50% / 0.3)", color: "hsl(0 60% 25%)" }}>
               📞 Call
             </a>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="border border-gold/30 rounded-sm px-5 py-2 font-body text-sm text-maroon hover:bg-gold/10 transition-colors">
+            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="rounded-sm px-5 py-2 font-body text-sm transition-colors" style={{ border: "1px solid hsl(43 72% 50% / 0.3)", color: "hsl(0 60% 25%)" }}>
               💬 WhatsApp
             </a>
           </div>
@@ -87,25 +109,27 @@ const SceneRSVP = () => {
             href="https://maps.google.com/?q=The+Grand+Palace+Jaipur"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block border border-gold/30 rounded-sm px-5 py-2 font-body text-sm text-maroon hover:bg-gold/10 transition-colors"
+            className="inline-block rounded-sm px-5 py-2 font-body text-sm transition-colors"
+            style={{ border: "1px solid hsl(43 72% 50% / 0.3)", color: "hsl(0 60% 25%)" }}
           >
             📍 View Venue on Map
           </a>
         </motion.div>
 
         <motion.div
-          className="mt-8 pt-6 border-t border-gold/20 w-full"
+          className="mt-8 pt-6 w-full"
+          style={{ borderTop: "1px solid hsl(43 72% 50% / 0.2)" }}
           variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
         >
-          <p className="font-decorative text-lg text-gold italic">
+          <p className="font-decorative text-lg italic" style={{ color: "hsl(43 72% 45%)" }}>
             "May your blessings shower upon us like the petals of sacred flowers"
           </p>
-          <p className="font-body text-xs text-muted-foreground mt-3 tracking-wide">
-            With love, Priya & Arjun's Families
+          <p className="font-body text-xs mt-3 tracking-wide" style={{ color: "hsl(0 25% 45%)" }}>
+            With love, Rajveer & Ishita's Families
           </p>
         </motion.div>
       </motion.div>
-    </div>
+    </SectionBackground>
   );
 };
 
