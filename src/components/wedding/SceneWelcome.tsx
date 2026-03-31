@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { useMemo } from "react";
 import ganeshImg from "@/assets/ganesh.png";
 import welcomeBg from "@/assets/welcome-bg.jpg";
-import GoldButton from "./GoldButton";
 
 interface Props {
   onNext: () => void;
@@ -32,90 +31,88 @@ const Sparkle = ({ delay, x, y, size }: { delay: number; x: number; y: number; s
   />
 );
 
-/* Corner mandala decoration */
-const CornerMandala = ({ position }: { position: "top-left" | "top-right" | "bottom-left" | "bottom-right" }) => {
-  const posClasses: Record<string, string> = {
-    "top-left": "top-0 left-0",
-    "top-right": "top-0 right-0 -scale-x-100",
-    "bottom-left": "bottom-0 left-0 -scale-y-100",
-    "bottom-right": "bottom-0 right-0 -scale-x-100 -scale-y-100",
-  };
-
-  return (
+/* Animated border frame */
+const AnimatedBorder = () => (
+  <>
+    {/* Top border */}
     <motion.div
-      className={`absolute ${posClasses[position]} w-24 h-24 md:w-36 md:h-36 pointer-events-none z-10`}
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-    >
-      <svg viewBox="0 0 120 120" className="w-full h-full">
-        <defs>
-          <linearGradient id={`corner-grad-${position}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(43 72% 55%)" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="hsl(43 72% 65%)" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="hsl(43 72% 55%)" stopOpacity="0.2" />
-          </linearGradient>
-        </defs>
-        {/* Corner lines */}
-        <path d="M0,0 L60,0 Q40,5 30,15 Q20,25 15,40 L0,40 Z" fill="none" stroke={`url(#corner-grad-${position})`} strokeWidth="0.5" opacity="0.6" />
-        <path d="M0,0 L45,0 Q30,8 22,18 Q14,28 10,45 L0,45" fill="none" stroke={`url(#corner-grad-${position})`} strokeWidth="0.3" opacity="0.4" />
-        {/* Corner dot pattern */}
-        <circle cx="5" cy="5" r="2" fill="hsl(43 72% 55%)" opacity="0.7" />
-        <circle cx="15" cy="3" r="1" fill="hsl(43 72% 55%)" opacity="0.5" />
-        <circle cx="3" cy="15" r="1" fill="hsl(43 72% 55%)" opacity="0.5" />
-        {/* Decorative mandala arc */}
-        <path d="M8,50 Q8,8 50,8" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.5" opacity="0.3" />
-        <path d="M12,60 Q12,12 60,12" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.3" opacity="0.2" />
-        {/* Small decorative elements */}
-        {[0, 1, 2, 3, 4].map((i) => (
-          <motion.circle
-            key={i}
-            cx={10 + i * 8}
-            cy={10 + i * 8}
-            r="0.8"
-            fill="hsl(43 72% 55%)"
-            animate={{ opacity: [0.2, 0.8, 0.2] }}
-            transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }}
-          />
-        ))}
-      </svg>
-    </motion.div>
-  );
-};
+      className="absolute top-3 left-3 right-3 h-px z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
+      initial={{ scaleX: 0 }}
+      animate={{ scaleX: 1, opacity: [0.3, 0.8, 0.3] }}
+      transition={{ scaleX: { duration: 2, delay: 0.5 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" } }}
+    />
+    {/* Bottom border */}
+    <motion.div
+      className="absolute bottom-3 left-3 right-3 h-px z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
+      initial={{ scaleX: 0 }}
+      animate={{ scaleX: 1, opacity: [0.3, 0.8, 0.3] }}
+      transition={{ scaleX: { duration: 2, delay: 0.7 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 } }}
+    />
+    {/* Left border */}
+    <motion.div
+      className="absolute top-3 bottom-3 left-3 w-px z-30 pointer-events-none"
+      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), transparent)" }}
+      initial={{ scaleY: 0 }}
+      animate={{ scaleY: 1, opacity: [0.3, 0.8, 0.3] }}
+      transition={{ scaleY: { duration: 2, delay: 0.6 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
+    />
+    {/* Right border */}
+    <motion.div
+      className="absolute top-3 bottom-3 right-3 w-px z-30 pointer-events-none"
+      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), transparent)" }}
+      initial={{ scaleY: 0 }}
+      animate={{ scaleY: 1, opacity: [0.3, 0.8, 0.3] }}
+      transition={{ scaleY: { duration: 2, delay: 0.8 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 } }}
+    />
 
-/* Side mandala decoration */
-const SideMandala = ({ side }: { side: "left" | "right" }) => (
-  <motion.div
-    className={`absolute top-1/2 -translate-y-1/2 ${side === "left" ? "left-4 md:left-8" : "right-4 md:right-8"} w-16 h-16 md:w-24 md:h-24 pointer-events-none z-10`}
-    initial={{ opacity: 0, rotate: side === "left" ? -90 : 90 }}
-    animate={{ opacity: 0.6, rotate: 0 }}
-    transition={{ duration: 2, delay: 1 }}
-  >
-    <svg viewBox="0 0 80 80" className="w-full h-full">
-      <defs>
-        <radialGradient id={`side-grad-${side}`}>
-          <stop offset="0%" stopColor="hsl(43 72% 55%)" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="hsl(43 72% 55%)" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      {[...Array(8)].map((_, i) => (
-        <motion.line
-          key={i}
-          x1="40" y1="40"
-          x2={40 + 30 * Math.cos((i * Math.PI) / 4)}
-          y2={40 + 30 * Math.sin((i * Math.PI) / 4)}
-          stroke="hsl(43 72% 55%)"
-          strokeWidth="0.5"
-          opacity="0.4"
-          animate={{ opacity: [0.2, 0.6, 0.2] }}
-          transition={{ duration: 3, delay: i * 0.2, repeat: Infinity }}
-        />
-      ))}
-      <circle cx="40" cy="40" r="5" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.5" opacity="0.5" />
-      <circle cx="40" cy="40" r="12" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.3" opacity="0.3" />
-      <circle cx="40" cy="40" r="2" fill={`url(#side-grad-${side})`} />
-    </svg>
-  </motion.div>
+    {/* Animated corner ornaments */}
+    {[
+      { pos: "top-2 left-2", rotate: 0 },
+      { pos: "top-2 right-2", rotate: 90 },
+      { pos: "bottom-2 right-2", rotate: 180 },
+      { pos: "bottom-2 left-2", rotate: 270 },
+    ].map((corner, i) => (
+      <motion.div
+        key={i}
+        className={`absolute ${corner.pos} w-8 h-8 z-30 pointer-events-none`}
+        style={{ rotate: `${corner.rotate}deg` }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 1 + i * 0.2 }}
+      >
+        <svg viewBox="0 0 32 32" className="w-full h-full">
+          <motion.path
+            d="M0,0 L12,0" stroke="hsl(43 72% 55%)" strokeWidth="1.5" fill="none"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+          />
+          <motion.path
+            d="M0,0 L0,12" stroke="hsl(43 72% 55%)" strokeWidth="1.5" fill="none"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 + 0.5 }}
+          />
+          <motion.circle
+            cx="0" cy="0" r="2" fill="hsl(43 72% 55%)"
+            animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.2 }}
+          />
+        </svg>
+      </motion.div>
+    ))}
+
+    {/* Traveling light dot on border */}
+    <motion.div
+      className="absolute top-3 left-3 w-2 h-2 rounded-full z-30 pointer-events-none"
+      style={{ background: "hsl(43 72% 65%)", boxShadow: "0 0 10px hsl(43 72% 55%), 0 0 20px hsl(43 72% 55% / 0.5)" }}
+      animate={{
+        x: ["0vw", "calc(100vw - 30px)", "calc(100vw - 30px)", "0vw", "0vw"],
+        y: ["0vh", "0vh", "calc(100vh - 30px)", "calc(100vh - 30px)", "0vh"],
+      }}
+      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+    />
+  </>
 );
 
 /* Radiating mandala rays behind Ganesh */
@@ -126,7 +123,7 @@ const MandalaRays = () => (
     animate={{ opacity: 1, scale: 1, rotate: 0 }}
     transition={{ duration: 2, ease: "easeOut" }}
   >
-    <svg viewBox="0 0 400 400" className="w-[320px] h-[320px] md:w-[420px] md:h-[420px]">
+    <svg viewBox="0 0 400 400" className="w-[280px] h-[280px] md:w-[380px] md:h-[380px]">
       <defs>
         <radialGradient id="ray-grad">
           <stop offset="0%" stopColor="hsl(43 72% 55%)" stopOpacity="0.3" />
@@ -189,38 +186,33 @@ const SceneWelcome = ({ onNext }: Props) => {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
-      {/* Animated background image */}
+    <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden">
+      {/* Animated background image - full visibility */}
       <motion.div
         className="absolute inset-0 z-0"
-        initial={{ scale: 1.15, opacity: 0 }}
+        initial={{ scale: 1.1, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 3, ease: "easeOut" }}
+        transition={{ duration: 2.5, ease: "easeOut" }}
       >
         <motion.img
           src={welcomeBg}
           alt=""
           className="w-full h-full object-cover"
-          style={{ imageRendering: "auto", filter: "brightness(1.1) contrast(1.05) saturate(1.15)" }}
-          animate={{ scale: [1, 1.03, 1] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+          style={{ filter: "brightness(1.05) contrast(1.08) saturate(1.2)" }}
+          animate={{ scale: [1, 1.02, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Lighter overlay to keep image vivid */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.25) 0%, hsl(0 0% 0% / 0.1) 30%, hsl(0 0% 0% / 0.15) 60%, hsl(0 0% 0% / 0.4) 100%)" }} />
-        {/* Animated spotlight glow effects */}
+        {/* Very subtle overlay - keeping image highly visible */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.15) 0%, hsl(0 0% 0% / 0.05) 40%, hsl(0 0% 0% / 0.05) 60%, hsl(0 0% 0% / 0.25) 100%)" }} />
+        {/* Animated golden spotlight */}
         <motion.div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 30% 40%, hsl(43 72% 55% / 0.08) 0%, transparent 60%)" }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
+          style={{ background: "radial-gradient(ellipse at 50% 50%, hsl(43 72% 55% / 0.06) 0%, transparent 60%)" }}
+          animate={{ opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 70% 60%, hsl(0 70% 45% / 0.06) 0%, transparent 50%)" }}
-          animate={{ opacity: [0.3, 0.8, 0.3] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        />
       </motion.div>
+
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {sparkles.map((s) => (
@@ -228,33 +220,12 @@ const SceneWelcome = ({ onNext }: Props) => {
         ))}
       </div>
 
-      {/* Corner decorations */}
-      <CornerMandala position="top-left" />
-      <CornerMandala position="top-right" />
-      <CornerMandala position="bottom-left" />
-      <CornerMandala position="bottom-right" />
-
-      {/* Side mandalas */}
-      <SideMandala side="left" />
-      <SideMandala side="right" />
-
-      {/* Top decorative arch */}
-      <motion.div
-        className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none z-10"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 0.5, y: 0 }}
-        transition={{ duration: 1.5, delay: 0.3 }}
-      >
-        <svg viewBox="0 0 200 40" className="w-40 md:w-56 h-auto">
-          <path d="M10,35 Q100,0 190,35" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.8" opacity="0.6" />
-          <path d="M30,35 Q100,8 170,35" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.5" opacity="0.4" />
-          <circle cx="100" cy="12" r="2" fill="hsl(43 72% 55%)" opacity="0.6" />
-        </svg>
-      </motion.div>
+      {/* Animated border frame */}
+      <AnimatedBorder />
 
       {/* Main content */}
       <motion.div
-        className="relative z-20 flex flex-col items-center gap-4 md:gap-5 max-w-2xl px-6 py-12 text-center"
+        className="relative z-20 flex flex-col items-center gap-3 md:gap-4 max-w-2xl px-6 py-8 text-center"
         initial="hidden"
         animate="visible"
         variants={stagger}
@@ -277,11 +248,10 @@ const SceneWelcome = ({ onNext }: Props) => {
         </motion.div>
 
         {/* Ganesh Ji with mandala rays */}
-        <motion.div className="relative w-48 h-48 md:w-56 md:h-56 flex items-center justify-center" variants={scaleIn}>
+        <motion.div className="relative w-40 h-40 md:w-48 md:h-48 flex items-center justify-center" variants={scaleIn}>
           <MandalaRays />
-          {/* Golden glow circle */}
           <motion.div
-            className="absolute w-36 h-36 md:w-44 md:h-44 rounded-full"
+            className="absolute w-28 h-28 md:w-36 md:h-36 rounded-full"
             style={{
               background: "radial-gradient(circle, hsl(43 72% 55% / 0.3) 0%, hsl(43 72% 45% / 0.1) 50%, transparent 70%)",
               boxShadow: "0 0 60px hsl(43 72% 55% / 0.3), 0 0 120px hsl(43 72% 55% / 0.15)",
@@ -289,23 +259,22 @@ const SceneWelcome = ({ onNext }: Props) => {
             animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
-          {/* Circular border */}
           <motion.div
-            className="absolute w-32 h-32 md:w-40 md:h-40 rounded-full border border-gold/30"
+            className="absolute w-24 h-24 md:w-32 md:h-32 rounded-full border border-gold/30"
             animate={{ rotate: 360 }}
             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           />
           <img
             src={ganeshImg}
             alt="Lord Ganesha"
-            className="relative z-10 w-28 h-28 md:w-36 md:h-36 object-contain animate-float drop-shadow-lg"
+            className="relative z-10 w-20 h-20 md:w-28 md:h-28 object-contain animate-float drop-shadow-lg"
             style={{ filter: "drop-shadow(0 0 25px hsl(43 72% 55% / 0.5))" }}
           />
         </motion.div>
 
         {/* ॐ symbol */}
         <motion.p
-          className="font-decorative text-2xl"
+          className="font-decorative text-xl"
           style={{ color: "hsl(43 72% 65% / 0.7)" }}
           variants={fadeIn}
         >
@@ -314,7 +283,7 @@ const SceneWelcome = ({ onNext }: Props) => {
 
         {/* Sanskrit shloka - single line */}
         <motion.p
-          className="font-decorative text-sm md:text-base tracking-wide whitespace-nowrap"
+          className="font-decorative text-[10px] md:text-sm tracking-wide whitespace-nowrap"
           style={{ color: "hsl(43 72% 65% / 0.8)" }}
           variants={fadeUp}
         >
@@ -323,7 +292,7 @@ const SceneWelcome = ({ onNext }: Props) => {
 
         {/* Divider */}
         <motion.div
-          className="h-px w-24 opacity-30"
+          className="h-px w-20 opacity-30"
           style={{ background: "hsl(43 72% 55%)" }}
           variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1, transition: { duration: 0.8 } } }}
         />
@@ -337,7 +306,7 @@ const SceneWelcome = ({ onNext }: Props) => {
           Dear
         </motion.p>
 
-        {/* Guest Name with shimmer animation */}
+        {/* Guest Name with premium glow */}
         <motion.div className="relative" variants={fadeUp}>
           <motion.p
             className="font-decorative text-3xl md:text-4xl italic relative"
@@ -345,29 +314,26 @@ const SceneWelcome = ({ onNext }: Props) => {
             animate={{
               textShadow: [
                 "0 0 8px hsl(43 72% 55% / 0.3)",
-                "0 0 25px hsl(43 72% 55% / 0.6), 0 0 50px hsl(43 72% 55% / 0.3)",
+                "0 0 30px hsl(43 72% 55% / 0.7), 0 0 60px hsl(43 72% 55% / 0.4), 0 0 90px hsl(43 72% 55% / 0.2)",
                 "0 0 8px hsl(43 72% 55% / 0.3)",
               ],
             }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
             <motion.span
-              animate={{ opacity: [0.7, 1, 0.7] }}
+              animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              ✦{" "}
-            </motion.span>
+              className="inline-block text-sm"
+            >✦ </motion.span>
             {"{Guest Name}"}
             <motion.span
-              animate={{ opacity: [0.7, 1, 0.7] }}
+              animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            >
-              {" "}✦
-            </motion.span>
+              className="inline-block text-sm"
+            > ✦</motion.span>
           </motion.p>
-          {/* Underline glow */}
           <motion.div
-            className="mx-auto mt-2 h-px w-32 rounded-full"
+            className="mx-auto mt-1 h-px w-32 rounded-full"
             style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55% / 0.6), transparent)" }}
             animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -385,11 +351,11 @@ const SceneWelcome = ({ onNext }: Props) => {
 
         {/* Couple names */}
         <motion.h1
-          className="font-display text-5xl md:text-7xl font-light leading-tight"
-          style={{ color: "hsl(40 30% 85%)" }}
+          className="font-display text-4xl md:text-6xl font-light leading-tight"
+          style={{ color: "hsl(40 30% 88%)" }}
           variants={fadeUp}
         >
-          Arjun <span className="font-decorative italic text-4xl md:text-6xl" style={{ color: "hsl(43 72% 60%)" }}>&</span> Ananya
+          Rajveer <span className="font-decorative italic text-3xl md:text-5xl" style={{ color: "hsl(43 72% 60%)" }}>&</span> Ishita
         </motion.h1>
 
         {/* Tagline */}
@@ -403,93 +369,85 @@ const SceneWelcome = ({ onNext }: Props) => {
 
         {/* Date */}
         <motion.p
-          className="font-decorative text-base md:text-lg italic tracking-wider"
+          className="font-decorative text-sm md:text-base italic tracking-wider"
           style={{ color: "hsl(43 72% 60% / 0.8)" }}
           variants={fadeUp}
         >
           12 December 2026
         </motion.p>
 
-        {/* CTA Button - Premium redesign */}
-        <motion.div className="mt-6" variants={fadeUp}>
+        {/* Premium Open Invitation Button */}
+        <motion.div className="mt-4" variants={fadeUp}>
           <motion.button
             onClick={onNext}
-            className="group relative font-decorative text-lg md:text-xl tracking-[0.25em] uppercase px-14 py-5 overflow-hidden"
-            style={{
-              color: "hsl(43 72% 65%)",
-              border: "none",
-              background: "transparent",
-            }}
+            className="group relative px-12 py-4 overflow-hidden"
+            style={{ background: "transparent" }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {/* Animated border frame */}
+            {/* Outer glowing border */}
             <motion.span
-              className="absolute inset-0 rounded-sm"
+              className="absolute inset-0"
               style={{
-                border: "1.5px solid hsl(43 72% 55% / 0.5)",
+                border: "1px solid hsl(43 72% 55% / 0.4)",
+                borderRadius: "50px",
               }}
               animate={{
                 boxShadow: [
-                  "0 0 15px hsl(43 72% 55% / 0.1), inset 0 0 15px hsl(43 72% 55% / 0.05)",
-                  "0 0 30px hsl(43 72% 55% / 0.25), inset 0 0 30px hsl(43 72% 55% / 0.1)",
-                  "0 0 15px hsl(43 72% 55% / 0.1), inset 0 0 15px hsl(43 72% 55% / 0.05)",
+                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
+                  "0 0 25px hsl(43 72% 55% / 0.3), inset 0 0 25px hsl(43 72% 55% / 0.08)",
+                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
                 ],
               }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             />
-            {/* Corner accents */}
-            {["top-0 left-0", "top-0 right-0 rotate-90", "bottom-0 right-0 rotate-180", "bottom-0 left-0 -rotate-90"].map((pos, i) => (
-              <span key={i} className={`absolute ${pos} w-4 h-4 pointer-events-none`}>
-                <span className="absolute top-0 left-0 w-full h-px" style={{ background: "hsl(43 72% 55%)" }} />
-                <span className="absolute top-0 left-0 h-full w-px" style={{ background: "hsl(43 72% 55%)" }} />
-              </span>
-            ))}
+            {/* Inner gradient fill */}
+            <motion.span
+              className="absolute inset-[1px] rounded-[50px]"
+              style={{
+                background: "linear-gradient(135deg, hsl(43 72% 55% / 0.08), hsl(43 72% 45% / 0.15), hsl(43 72% 55% / 0.08))",
+              }}
+              animate={{
+                background: [
+                  "linear-gradient(135deg, hsl(43 72% 55% / 0.08), hsl(43 72% 45% / 0.15), hsl(43 72% 55% / 0.08))",
+                  "linear-gradient(135deg, hsl(43 72% 55% / 0.15), hsl(43 72% 45% / 0.08), hsl(43 72% 55% / 0.15))",
+                  "linear-gradient(135deg, hsl(43 72% 55% / 0.08), hsl(43 72% 45% / 0.15), hsl(43 72% 55% / 0.08))",
+                ],
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
             {/* Shimmer sweep */}
             <motion.span
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 rounded-[50px] pointer-events-none"
               style={{
-                background: "linear-gradient(105deg, transparent 40%, hsl(43 72% 55% / 0.15) 50%, transparent 60%)",
+                background: "linear-gradient(105deg, transparent 35%, hsl(43 72% 65% / 0.2) 50%, transparent 65%)",
               }}
-              animate={{ x: ["-100%", "200%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }}
+              animate={{ x: ["-200%", "200%"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.5 }}
             />
             {/* Text */}
-            <span className="relative z-10 flex items-center gap-3">
+            <span className="relative z-10 flex items-center gap-3 font-decorative text-sm md:text-base tracking-[0.25em] uppercase" style={{ color: "hsl(43 72% 65%)" }}>
               <motion.span
-                className="text-xs"
+                className="text-[10px]"
                 animate={{ rotate: [0, 360] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
               >✦</motion.span>
               Open Invitation
               <motion.span
-                className="text-xs"
+                className="text-[10px]"
                 animate={{ rotate: [360, 0] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
               >✦</motion.span>
             </span>
           </motion.button>
         </motion.div>
       </motion.div>
 
-      {/* Bottom decorative arch */}
-      <motion.div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none z-10 rotate-180"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
-      >
-        <svg viewBox="0 0 200 30" className="w-32 md:w-48 h-auto">
-          <path d="M10,25 Q100,0 190,25" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.6" opacity="0.5" />
-          <circle cx="100" cy="8" r="1.5" fill="hsl(43 72% 55%)" opacity="0.5" />
-        </svg>
-      </motion.div>
-
-      {/* Lighter vignette overlay */}
+      {/* Subtle vignette */}
       <div
         className="absolute inset-0 pointer-events-none z-30"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 60%, hsl(0 0% 0% / 0.35) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 55%, hsl(0 0% 0% / 0.3) 100%)",
         }}
       />
     </div>
