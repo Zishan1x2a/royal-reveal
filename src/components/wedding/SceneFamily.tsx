@@ -8,12 +8,16 @@ import groomFamilyImg from "@/assets/groom-family.jpg";
 interface Props { onNext: () => void; }
 
 const brideFamily = [
-  { relation: "Father of the Bride", name: "Shri Ramesh Sharma" },
-  { relation: "Mother of the Bride", name: "Smt. Sunita Sharma" },
+  { relation: "Father", name: "Shri Ramesh Sharma", icon: "👨‍💼" },
+  { relation: "Mother", name: "Smt. Sunita Sharma", icon: "👩‍💼" },
+  { relation: "Brother", name: "Arjun Sharma", icon: "🧑" },
+  { relation: "Sister", name: "Priya Sharma", icon: "👧" },
 ];
 const groomFamily = [
-  { relation: "Father of the Groom", name: "Shri Vikram Mehta" },
-  { relation: "Mother of the Groom", name: "Smt. Anjali Mehta" },
+  { relation: "Father", name: "Shri Vikram Mehta", icon: "👨‍💼" },
+  { relation: "Mother", name: "Smt. Anjali Mehta", icon: "👩‍💼" },
+  { relation: "Brother", name: "Rohit Mehta", icon: "🧑" },
+  { relation: "Sister", name: "Neha Mehta", icon: "👧" },
 ];
 
 /* Corner ornament */
