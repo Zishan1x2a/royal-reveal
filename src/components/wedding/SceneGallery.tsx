@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import GoldButton from "./GoldButton";
 import SectionBackground from "./SectionBackground";
+import SceneFamily from "./SceneFamily";
 
 import haldiImg from "@/assets/gallery/haldi.jpg";
 import mehndiImg from "@/assets/gallery/mehndi.jpg";
@@ -166,6 +167,10 @@ const SceneGallery = ({ onNext }: Props) => {
 
   return (
     <>
+      {/* Family Section */}
+      <SceneFamily />
+
+      {/* Gallery Section */}
       <SectionBackground className="flex min-h-screen flex-col items-center justify-start px-4 md:px-8 py-16">
         <motion.div
           className="relative z-10 flex flex-col items-center gap-10 w-full max-w-6xl"

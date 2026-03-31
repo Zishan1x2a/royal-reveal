@@ -372,10 +372,6 @@ const SceneFamily = ({ onNext }: Props) => (
           delay={0.2}
         />
       </div>
-
-      <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-        <GoldButton onClick={onNext}>View Gallery</GoldButton>
-      </motion.div>
     </motion.div>
   </SectionBackground>
 );
