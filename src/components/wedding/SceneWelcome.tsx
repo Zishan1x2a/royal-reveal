@@ -297,18 +297,13 @@ const SceneWelcome = ({ onNext }: Props) => {
           ॐ
         </motion.p>
 
-        {/* Sanskrit shloka */}
+        {/* Sanskrit shloka - single line */}
         <motion.p
-          className="font-decorative text-sm md:text-base tracking-wide max-w-md"
+          className="font-decorative text-sm md:text-base tracking-wide whitespace-nowrap"
           style={{ color: "hsl(43 72% 65% / 0.8)" }}
           variants={fadeUp}
         >
           वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
-        </motion.p>
-      </motion.div>
-    );
-  // Force single line for shloka
-  // Already single line in JSX - handled via CSS below
         </motion.p>
 
         {/* Divider */}
