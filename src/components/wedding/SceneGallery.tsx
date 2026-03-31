@@ -9,8 +9,6 @@ import varmalaImg from "@/assets/gallery/varmala.jpg";
 import candidImg from "@/assets/gallery/candid.jpg";
 import pherasImg from "@/assets/gallery/pheras.jpg";
 import bridalImg from "@/assets/gallery/bridal.jpg";
-import receptionImg from "@/assets/gallery/reception.jpg";
-import sunsetImg from "@/assets/gallery/sunset.jpg";
 
 interface Props {
   onNext: () => void;
@@ -23,8 +21,6 @@ const galleryItems = [
   { src: candidImg, label: "Together Forever", caption: "Walking into forever" },
   { src: pherasImg, label: "Sacred Pheras", caption: "Seven vows, one destiny" },
   { src: bridalImg, label: "The Bride", caption: "Grace personified" },
-  { src: receptionImg, label: "Celebration", caption: "Dancing under the stars" },
-  { src: sunsetImg, label: "Eternal Love", caption: "A love story begins" },
 ];
 
 /* Decorative animated corner */
@@ -195,7 +191,7 @@ const SceneGallery = ({ onNext }: Props) => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
             {galleryItems.map((item, i) => (
               <GalleryCard
                 key={item.label}
