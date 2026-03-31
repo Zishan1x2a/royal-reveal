@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import ganeshImg from "@/assets/ganesh.png";
-import welcomeBg from "@/assets/welcome-bg.jpg";
+import SectionBackground from "./SectionBackground";
 
 interface Props {
   onNext: () => void;
@@ -230,39 +230,7 @@ const SceneWelcome = ({ onNext }: Props) => {
   };
 
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden">
-      {/* Background image - full clarity */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 2.5, ease: "easeOut" }}
-      >
-        <motion.img
-          src={welcomeBg}
-          alt=""
-          className="w-full h-full object-cover"
-          style={{ filter: "brightness(1.05) contrast(1.08) saturate(1.2)" }}
-          animate={{ scale: [1, 1.03, 1] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-        />
-        {/* Light overlay for text readability */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.15) 0%, hsl(0 0% 0% / 0.05) 40%, hsl(0 0% 0% / 0.05) 60%, hsl(0 0% 0% / 0.2) 100%)" }} />
-        {/* Animated red/golden spotlight */}
-        <motion.div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 50% 40%, hsl(0 60% 50% / 0.08) 0%, transparent 50%)" }}
-          animate={{ opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 50% 50%, hsl(43 72% 55% / 0.05) 0%, transparent 60%)" }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
-
+    <SectionBackground className="relative flex h-screen flex-col items-center justify-center">
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {sparkles.map((s) => (
@@ -359,78 +327,22 @@ const SceneWelcome = ({ onNext }: Props) => {
           Dear
         </motion.p>
 
-        {/* Guest Name with premium shimmer animation */}
-        <motion.div className="relative" variants={fadeUp}>
-          <motion.div className="relative px-10 py-3 overflow-hidden">
-            <motion.span
-              className="absolute inset-0"
-              style={{
-                border: "1px solid hsl(43 72% 55% / 0.4)",
-                borderRadius: "50px",
-              }}
-              animate={{
-                boxShadow: [
-                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
-                  "0 0 30px hsl(43 72% 55% / 0.4), inset 0 0 30px hsl(43 72% 55% / 0.1)",
-                  "0 0 10px hsl(43 72% 55% / 0.1), inset 0 0 10px hsl(43 72% 55% / 0.03)",
-                ],
-              }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.span
-              className="absolute inset-[1px] rounded-[50px]"
-              style={{
-                background: "linear-gradient(135deg, hsl(43 72% 55% / 0.06), hsl(43 72% 45% / 0.12), hsl(43 72% 55% / 0.06))",
-              }}
-              animate={{
-                background: [
-                  "linear-gradient(135deg, hsl(43 72% 55% / 0.06), hsl(43 72% 45% / 0.12), hsl(43 72% 55% / 0.06))",
-                  "linear-gradient(135deg, hsl(43 72% 55% / 0.12), hsl(43 72% 45% / 0.06), hsl(43 72% 55% / 0.12))",
-                  "linear-gradient(135deg, hsl(43 72% 55% / 0.06), hsl(43 72% 45% / 0.12), hsl(43 72% 55% / 0.06))",
-                ],
-              }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.span
-              className="absolute inset-0 rounded-[50px] pointer-events-none"
-              style={{
-                background: "linear-gradient(105deg, transparent 35%, hsl(43 72% 65% / 0.25) 50%, transparent 65%)",
-              }}
-              animate={{ x: ["-200%", "200%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
-            />
-            {[
-              { cls: "top-0 left-0", rot: 0 },
-              { cls: "top-0 right-0", rot: 90 },
-              { cls: "bottom-0 right-0", rot: 180 },
-              { cls: "bottom-0 left-0", rot: 270 },
-            ].map((c, i) => (
-              <motion.svg
-                key={i}
-                className={`absolute ${c.cls} w-4 h-4`}
-                viewBox="0 0 16 16"
-                style={{ rotate: `${c.rot}deg` }}
-                animate={{ opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-              >
-                <path d="M0,0 L6,0" stroke="hsl(43 72% 65%)" strokeWidth="1" fill="none" />
-                <path d="M0,0 L0,6" stroke="hsl(43 72% 65%)" strokeWidth="1" fill="none" />
-              </motion.svg>
-            ))}
-            <span className="relative z-10 flex items-center gap-3 font-decorative text-3xl md:text-4xl italic" style={{ color: "hsl(43 72% 65%)" }}>
-              <motion.span
-                className="text-[10px]"
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              >✦</motion.span>
-              {"{Guest Name}"}
-              <motion.span
-                className="text-[10px]"
-                animate={{ rotate: [360, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              >✦</motion.span>
-            </span>
-          </motion.div>
+        {/* Guest Name - simple elegant text */}
+        <motion.div variants={fadeUp}>
+          <motion.span
+            className="font-decorative text-3xl md:text-4xl italic"
+            style={{ color: "hsl(43 72% 65%)" }}
+            animate={{
+              textShadow: [
+                "0 0 10px hsl(43 72% 55% / 0.3)",
+                "0 0 30px hsl(43 72% 55% / 0.6)",
+                "0 0 10px hsl(43 72% 55% / 0.3)",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {"{Guest Name}"}
+          </motion.span>
         </motion.div>
 
         {/* Invitation text */}
@@ -512,7 +424,7 @@ const SceneWelcome = ({ onNext }: Props) => {
         className="absolute inset-0 pointer-events-none z-30"
         style={{ background: "radial-gradient(ellipse at center, transparent 55%, hsl(0 0% 0% / 0.3) 100%)" }}
       />
-    </div>
+    </SectionBackground>
   );
 };
 
