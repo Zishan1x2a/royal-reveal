@@ -5,7 +5,7 @@ import SectionBackground from "./SectionBackground";
 import brideFamilyImg from "@/assets/bride-family.jpg";
 import groomFamilyImg from "@/assets/groom-family.jpg";
 
-interface Props { onNext: () => void; }
+interface Props { onNext?: () => void; }
 
 const brideFamily = [
   { relation: "Father", name: "Shri Ramesh Sharma", icon: "👨‍💼" },
@@ -372,10 +372,6 @@ const SceneFamily = ({ onNext }: Props) => (
           delay={0.2}
         />
       </div>
-
-      <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-        <GoldButton onClick={onNext}>View Gallery</GoldButton>
-      </motion.div>
     </motion.div>
   </SectionBackground>
 );

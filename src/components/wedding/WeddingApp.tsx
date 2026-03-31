@@ -4,7 +4,7 @@ import SceneOpeningAnimation from "./SceneOpeningAnimation";
 import SceneWelcome from "./SceneWelcome";
 import SceneHero from "./SceneHero";
 import SceneEvents from "./SceneEvents";
-import SceneFamily from "./SceneFamily";
+
 import SceneGallery from "./SceneGallery";
 import SceneCountdown from "./SceneCountdown";
 import SceneRSVP from "./SceneRSVP";
@@ -16,7 +16,6 @@ const SCENES = [
   "hero",
   "events",
   "gallery",
-  "family",
   "countdown",
   "rsvp",
 ] as const;
@@ -61,7 +60,6 @@ const WeddingApp = () => {
       case "welcome": return <SceneWelcome {...props} guestName={guestName} onGuestNameChange={setGuestName} />;
       case "hero": return <SceneHero {...props} />;
       case "events": return <SceneEvents {...props} />;
-      case "family": return <SceneFamily {...props} />;
       case "gallery": return <SceneGallery {...props} />;
       case "countdown": return <SceneCountdown {...props} />;
       case "rsvp": return <SceneRSVP guestName={guestName} />;
