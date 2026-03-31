@@ -9,8 +9,6 @@ import varmalaImg from "@/assets/gallery/varmala.jpg";
 import candidImg from "@/assets/gallery/candid.jpg";
 import pherasImg from "@/assets/gallery/pheras.jpg";
 import bridalImg from "@/assets/gallery/bridal.jpg";
-import receptionImg from "@/assets/gallery/reception.jpg";
-import sunsetImg from "@/assets/gallery/sunset.jpg";
 
 interface Props {
   onNext: () => void;
