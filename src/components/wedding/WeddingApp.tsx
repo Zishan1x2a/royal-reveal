@@ -15,8 +15,8 @@ const SCENES = [
   "welcome",
   "hero",
   "events",
-  "family",
   "gallery",
+  "family",
   "countdown",
   "rsvp",
 ] as const;
