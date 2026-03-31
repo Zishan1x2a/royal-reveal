@@ -346,20 +346,8 @@ const SceneWelcome = ({ onNext, guestName, onGuestNameChange }: Props) => {
           Dear
         </motion.p>
 
-        {/* Guest Name - simple elegant text */}
+        {/* Guest Name - editable input */}
         <motion.div variants={fadeUp}>
-          <motion.span
-            className="font-decorative text-3xl md:text-4xl italic"
-            style={{ color: "hsl(43 72% 65%)" }}
-            animate={{
-              textShadow: [
-                "0 0 10px hsl(43 72% 55% / 0.3)",
-                "0 0 30px hsl(43 72% 55% / 0.6)",
-                "0 0 10px hsl(43 72% 55% / 0.3)",
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
             <motion.input
               type="text"
               value={guestName}
