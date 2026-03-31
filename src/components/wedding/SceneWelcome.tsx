@@ -174,7 +174,7 @@ const SceneWelcome = ({ onNext }: Props) => {
 
   const fadeUp = {
     hidden: { opacity: 0, y: 25 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } },
   };
 
   const fadeIn = {
@@ -184,7 +184,7 @@ const SceneWelcome = ({ onNext }: Props) => {
 
   const scaleIn = {
     hidden: { opacity: 0, scale: 0.6 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 1.2, ease: "easeOut" } },
+    visible: { opacity: 1, scale: 1, transition: { duration: 1.2, ease: "easeOut" as const } },
   };
 
   return (
