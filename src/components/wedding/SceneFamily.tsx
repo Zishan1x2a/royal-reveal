@@ -99,8 +99,7 @@ const FamilyFlipCard = ({
       style={{ perspective: 1200 }}
       variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } }}
       transition={{ delay, duration: 0.6 }}
-      onClick={() => setFlipped(!flipped)}
-      whileHover={{ y: -8 }}
+      onClick={() => setFlipped((prev) => !prev)}
     >
       {/* Animated border glow */}
       <motion.div
@@ -113,11 +112,14 @@ const FamilyFlipCard = ({
         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
       />
 
-      <motion.div
-        className="relative w-full rounded-2xl overflow-hidden"
-        style={{ minHeight: 380, transformStyle: "preserve-3d" }}
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+      <div
+        className="relative w-full rounded-2xl"
+        style={{
+          minHeight: 380,
+          transformStyle: "preserve-3d",
+          transform: `rotateY(${flipped ? 180 : 0}deg)`,
+          transition: "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
       >
         {/* FRONT - Family Photo */}
         <div
