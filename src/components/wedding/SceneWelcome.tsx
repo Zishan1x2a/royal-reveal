@@ -360,8 +360,26 @@ const SceneWelcome = ({ onNext, guestName, onGuestNameChange }: Props) => {
             }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
-            {"{Guest Name}"}
-          </motion.span>
+            <motion.input
+              type="text"
+              value={guestName}
+              onChange={(e) => onGuestNameChange(e.target.value)}
+              className="font-decorative text-3xl md:text-4xl italic text-center bg-transparent border-none outline-none w-full"
+              style={{
+                color: "hsl(43 72% 65%)",
+                borderBottom: "1px solid hsl(43 72% 55% / 0.3)",
+                paddingBottom: "4px",
+              }}
+              placeholder="Enter Your Name"
+              animate={{
+                textShadow: [
+                  "0 0 10px hsl(43 72% 55% / 0.3)",
+                  "0 0 30px hsl(43 72% 55% / 0.6)",
+                  "0 0 10px hsl(43 72% 55% / 0.3)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
         </motion.div>
 
         {/* Invitation text */}
