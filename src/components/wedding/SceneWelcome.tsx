@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import ganeshImg from "@/assets/ganesh.png";
+import welcomeBg from "@/assets/welcome-bg.jpg";
 import SectionBackground from "./SectionBackground";
 
 interface Props {
@@ -230,7 +231,23 @@ const SceneWelcome = ({ onNext }: Props) => {
   };
 
   return (
-    <SectionBackground className="relative flex h-screen flex-col items-center justify-center">
+    <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden">
+      {/* Background image */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ scale: 1.1 }}
+        animate={{ scale: [1.1, 1.15, 1.1] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <img
+          src={welcomeBg}
+          alt=""
+          className="w-full h-full object-cover"
+          style={{ filter: "brightness(0.45) contrast(1.1) saturate(1.2)" }}
+        />
+      </motion.div>
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.3) 0%, hsl(0 0% 0% / 0.15) 40%, hsl(0 0% 0% / 0.4) 100%)" }} />
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {sparkles.map((s) => (
@@ -424,7 +441,7 @@ const SceneWelcome = ({ onNext }: Props) => {
         className="absolute inset-0 pointer-events-none z-30"
         style={{ background: "radial-gradient(ellipse at center, transparent 55%, hsl(0 0% 0% / 0.3) 100%)" }}
       />
-    </SectionBackground>
+    </div>
   );
 };
 
