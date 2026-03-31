@@ -485,11 +485,11 @@ const SceneWelcome = ({ onNext }: Props) => {
         </svg>
       </motion.div>
 
-      {/* Vignette overlay */}
+      {/* Lighter vignette overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-30"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 50%, hsl(220 25% 8% / 0.6) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 60%, hsl(0 0% 0% / 0.35) 100%)",
         }}
       />
     </div>
