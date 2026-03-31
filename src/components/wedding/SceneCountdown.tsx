@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import GoldButton from "./GoldButton";
 import SectionBackground from "./SectionBackground";
 
-interface Props { onNext: () => void; }
+interface Props { onNext: () => void; guestName: string; }
 
 const WEDDING_DATE = new Date("2026-12-15T19:00:00");
 
@@ -223,8 +223,9 @@ const Separator = () => (
   >:</motion.span>
 );
 
-const SceneCountdown = ({ onNext }: Props) => {
+const SceneCountdown = ({ onNext, guestName }: Props) => {
   const { days, hours, minutes, seconds } = useCountdown();
+  const [submitted, setSubmitted] = useState(false);
 
   const rings = useMemo(() => Array.from({ length: 10 }, (_, i) => ({
     id: i, x: Math.random() * 100, y: Math.random() * 100, size: 12 + Math.random() * 35, delay: Math.random() * 6,
@@ -311,9 +312,86 @@ const SceneCountdown = ({ onNext }: Props) => {
           </p>
         </motion.div>
 
+        {/* Blessing Form */}
+        <motion.div className="w-full max-w-md"
+          variants={{ hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0 } }}
+          transition={{ delay: 0.8 }}
+        >
+          {!submitted ? (
+            <motion.div
+              className="relative rounded-xl p-6 backdrop-blur-sm overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.7), hsl(0 35% 87% / 0.5))",
+                backdropFilter: "blur(12px)",
+                border: "1px solid hsl(43 72% 55% / 0.35)",
+                boxShadow: "0 6px 30px hsl(43 72% 55% / 0.12), inset 0 1px 0 hsl(43 72% 70% / 0.25)",
+              }}
+            >
+              <motion.div className="absolute inset-0 pointer-events-none"
+                style={{ background: "linear-gradient(105deg, transparent 40%, hsl(43 72% 70% / 0.15) 50%, transparent 60%)" }}
+                animate={{ x: ["-100%", "200%"] }}
+                transition={{ duration: 3, repeat: Infinity, repeatDelay: 4 }}
+              />
+              <form className="flex flex-col gap-4 relative z-10" onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+                <p className="font-body text-xs uppercase tracking-[0.2em]" style={{ color: "hsl(0 25% 45%)" }}>
+                  Your Blessings, {guestName}
+                </p>
+                <motion.textarea
+                  placeholder="Your Blessings & Wishes (optional)"
+                  className="w-full px-4 py-3 rounded-lg font-body text-sm focus:outline-none transition-all duration-300 focus:ring-2 min-h-[100px] resize-none"
+                  style={{
+                    border: "1px solid hsl(43 72% 50% / 0.3)",
+                    background: "hsl(0 30% 97% / 0.8)",
+                    color: "hsl(0 60% 20%)",
+                  }}
+                  whileFocus={{ boxShadow: "0 0 0 2px hsl(43 72% 55% / 0.4), 0 4px 12px hsl(43 72% 55% / 0.15)" }}
+                />
+                <motion.button
+                  type="submit"
+                  className="font-decorative text-lg tracking-widest uppercase px-10 py-4 rounded-lg border-2 transition-all duration-500 relative overflow-hidden"
+                  style={{ borderColor: "hsl(43 72% 50%)", color: "hsl(43 72% 45%)", background: "transparent" }}
+                  whileHover={{
+                    scale: 1.03,
+                    background: "linear-gradient(135deg, hsl(43 72% 55%), hsl(43 80% 65%))",
+                    color: "hsl(0 60% 15%)",
+                    boxShadow: "0 8px 30px hsl(43 72% 55% / 0.4)",
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Send Blessings ✉
+                </motion.button>
+              </form>
+            </motion.div>
+          ) : (
+            <motion.div
+              className="relative rounded-xl p-6 backdrop-blur-sm overflow-hidden flex flex-col items-center gap-4"
+              style={{
+                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.7), hsl(0 35% 87% / 0.5))",
+                border: "1px solid hsl(43 72% 55% / 0.35)",
+                boxShadow: "0 6px 30px hsl(43 72% 55% / 0.12)",
+              }}
+              initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", damping: 15 }}
+            >
+              <motion.div className="text-5xl"
+                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.5, repeat: 2 }}
+              >🎉</motion.div>
+              <p className="font-display text-2xl" style={{ color: "hsl(0 60% 25%)" }}>Thank You, {guestName}! 🙏</p>
+              <p className="font-decorative text-lg italic" style={{ color: "hsl(0 40% 35%)" }}>We look forward to celebrating with you</p>
+              <motion.div className="flex gap-2 mt-2">
+                {["🌸", "✨", "💐", "✨", "🌸"].map((emoji, i) => (
+                  <motion.span key={i} className="text-2xl" animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 1.5, delay: i * 0.15, repeat: Infinity }}>{emoji}</motion.span>
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
+        </motion.div>
+
         <motion.div variants={{ hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0 } }}
-          transition={{ delay: 0.8 }}>
-          <GoldButton onClick={onNext}>RSVP</GoldButton>
+          transition={{ delay: 1 }}>
+          <GoldButton onClick={onNext}>Continue</GoldButton>
         </motion.div>
       </motion.div>
     </SectionBackground>

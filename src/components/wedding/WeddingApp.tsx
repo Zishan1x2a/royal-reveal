@@ -61,7 +61,7 @@ const WeddingApp = () => {
       case "hero": return <SceneHero {...props} />;
       case "events": return <SceneEvents {...props} />;
       case "gallery": return <SceneGallery {...props} />;
-      case "countdown": return <SceneCountdown {...props} />;
+      case "countdown": return <SceneCountdown {...props} guestName={guestName} />;
       case "rsvp": return <SceneRSVP guestName={guestName} />;
     }
   };
