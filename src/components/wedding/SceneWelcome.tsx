@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import ganeshImg from "@/assets/ganesh.png";
+import welcomeBg from "@/assets/welcome-bg.jpg";
 import GoldButton from "./GoldButton";
 
 interface Props {
@@ -188,9 +189,23 @@ const SceneWelcome = ({ onNext }: Props) => {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
-      style={{ background: "linear-gradient(180deg, hsl(220 25% 10%) 0%, hsl(220 20% 14%) 40%, hsl(220 25% 10%) 100%)" }}
-    >
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
+      {/* Animated background image */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ scale: 1.15, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 3, ease: "easeOut" }}
+      >
+        <motion.img
+          src={welcomeBg}
+          alt=""
+          className="w-full h-full object-cover"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.5) 0%, hsl(0 0% 0% / 0.3) 40%, hsl(0 0% 0% / 0.6) 100%)" }} />
+      </motion.div>
       {/* Sparkle particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {sparkles.map((s) => (
@@ -282,9 +297,9 @@ const SceneWelcome = ({ onNext }: Props) => {
           ॐ
         </motion.p>
 
-        {/* Sanskrit shloka */}
+        {/* Sanskrit shloka - single line */}
         <motion.p
-          className="font-decorative text-sm md:text-base tracking-wide max-w-md"
+          className="font-decorative text-sm md:text-base tracking-wide whitespace-nowrap"
           style={{ color: "hsl(43 72% 65% / 0.8)" }}
           variants={fadeUp}
         >
