@@ -35,129 +35,266 @@ const Sparkle = ({ delay, x, y, size }: { delay: number; x: number; y: number; s
 );
 
 /* Animated border frame with ball traveling full border using offset-path */
+/* Ornate mandala corner ornament SVG */
+const CornerOrnament = ({ delay }: { delay: number }) => (
+  <motion.svg
+    viewBox="0 0 120 120"
+    className="w-full h-full"
+    initial={{ opacity: 0, scale: 0, rotate: -90 }}
+    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+    transition={{ duration: 1.5, delay, ease: "easeOut" }}
+  >
+    <defs>
+      <radialGradient id={`cg-${delay}`} cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10,10) scale(100)">
+        <stop offset="0%" stopColor="hsl(43 80% 65%)" />
+        <stop offset="100%" stopColor="hsl(43 60% 40%)" />
+      </radialGradient>
+      <filter id={`glow-${delay}`}>
+        <feGaussianBlur stdDeviation="2" result="blur" />
+        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+      </filter>
+    </defs>
+    {/* Main curved flourish */}
+    <motion.path
+      d="M5,5 Q5,60 60,60 Q35,60 35,35 Q35,15 5,5Z"
+      fill={`url(#cg-${delay})`}
+      opacity="0.15"
+      animate={{ opacity: [0.1, 0.25, 0.1] }}
+      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.path
+      d="M5,5 C5,45 15,55 60,60"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="1.5"
+      fill="none"
+      filter={`url(#glow-${delay})`}
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1, opacity: [0.6, 1, 0.6] }}
+      transition={{ pathLength: { duration: 2, delay: delay + 0.3 }, opacity: { duration: 3, repeat: Infinity } }}
+    />
+    <motion.path
+      d="M5,5 C45,5 55,15 60,60"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="1.5"
+      fill="none"
+      filter={`url(#glow-${delay})`}
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1, opacity: [0.6, 1, 0.6] }}
+      transition={{ pathLength: { duration: 2, delay: delay + 0.5 }, opacity: { duration: 3, repeat: Infinity, delay: 0.5 } }}
+    />
+    {/* Inner decorative curves */}
+    <motion.path
+      d="M8,20 Q20,40 40,42"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.8"
+      fill="none"
+      opacity="0.5"
+      animate={{ opacity: [0.3, 0.7, 0.3] }}
+      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.2 }}
+    />
+    <motion.path
+      d="M20,8 Q40,20 42,40"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.8"
+      fill="none"
+      opacity="0.5"
+      animate={{ opacity: [0.3, 0.7, 0.3] }}
+      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.7 }}
+    />
+    {/* Mandala-style circular arcs */}
+    {[16, 28, 40].map((r, i) => (
+      <motion.circle
+        key={i}
+        cx="5" cy="5" r={r}
+        stroke="hsl(43 72% 55%)"
+        strokeWidth="0.4"
+        fill="none"
+        strokeDasharray="4 8"
+        opacity="0.2"
+        animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
+        transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "linear" }}
+        style={{ transformOrigin: "5px 5px" }}
+      />
+    ))}
+    {/* Decorative dots */}
+    {[
+      [15, 5], [5, 15], [25, 10], [10, 25], [35, 18], [18, 35], [45, 30], [30, 45],
+    ].map(([cx, cy], i) => (
+      <motion.circle
+        key={`d-${i}`}
+        cx={cx} cy={cy} r={1.2}
+        fill="hsl(43 72% 60%)"
+        animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.8, 1.3, 0.8] }}
+        transition={{ duration: 2 + i * 0.3, repeat: Infinity, delay: delay + i * 0.15 }}
+      />
+    ))}
+    {/* Leaf/petal shapes */}
+    <motion.path
+      d="M10,10 Q20,5 30,12 Q20,18 10,10Z"
+      fill="hsl(43 72% 55%)"
+      opacity="0.12"
+      animate={{ opacity: [0.08, 0.2, 0.08], scale: [0.95, 1.05, 0.95] }}
+      transition={{ duration: 3, repeat: Infinity, delay: delay + 0.4 }}
+    />
+    <motion.path
+      d="M10,10 Q5,20 12,30 Q18,20 10,10Z"
+      fill="hsl(43 72% 55%)"
+      opacity="0.12"
+      animate={{ opacity: [0.08, 0.2, 0.08], scale: [0.95, 1.05, 0.95] }}
+      transition={{ duration: 3, repeat: Infinity, delay: delay + 0.8 }}
+    />
+  </motion.svg>
+);
+
 const AnimatedBorder = () => (
   <>
-    {/* Top border */}
+    {/* Outer border lines */}
+    {/* Top */}
     <motion.div
-      className="absolute top-3 left-3 right-3 h-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
+      className="absolute top-4 left-16 right-16 h-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), hsl(43 72% 55%), transparent)" }}
       initial={{ scaleX: 0 }}
-      animate={{ scaleX: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleX: { duration: 2, delay: 0.5 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" } }}
+      animate={{ scaleX: 1 }}
+      transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
     />
-    {/* Bottom border */}
     <motion.div
-      className="absolute bottom-3 left-3 right-3 h-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
+      className="absolute top-[18px] left-16 right-16 h-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55% / 0.4), hsl(43 72% 55% / 0.4), transparent)" }}
       initial={{ scaleX: 0 }}
-      animate={{ scaleX: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleX: { duration: 2, delay: 0.7 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 } }}
+      animate={{ scaleX: 1 }}
+      transition={{ duration: 2, delay: 0.7, ease: "easeOut" }}
     />
-    {/* Left border */}
+    {/* Bottom */}
     <motion.div
-      className="absolute top-3 bottom-3 left-3 w-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), transparent)" }}
-      initial={{ scaleY: 0 }}
-      animate={{ scaleY: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleY: { duration: 2, delay: 0.6 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
+      className="absolute bottom-4 left-16 right-16 h-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), hsl(43 72% 55%), transparent)" }}
+      initial={{ scaleX: 0 }}
+      animate={{ scaleX: 1 }}
+      transition={{ duration: 2, delay: 0.6, ease: "easeOut" }}
     />
-    {/* Right border */}
     <motion.div
-      className="absolute top-3 bottom-3 right-3 w-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), transparent)" }}
+      className="absolute bottom-[18px] left-16 right-16 h-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55% / 0.4), hsl(43 72% 55% / 0.4), transparent)" }}
+      initial={{ scaleX: 0 }}
+      animate={{ scaleX: 1 }}
+      transition={{ duration: 2, delay: 0.8, ease: "easeOut" }}
+    />
+    {/* Left */}
+    <motion.div
+      className="absolute top-16 bottom-16 left-4 w-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), hsl(43 72% 55%), transparent)" }}
       initial={{ scaleY: 0 }}
-      animate={{ scaleY: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleY: { duration: 2, delay: 0.8 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 } }}
+      animate={{ scaleY: 1 }}
+      transition={{ duration: 2, delay: 0.6, ease: "easeOut" }}
+    />
+    <motion.div
+      className="absolute top-16 bottom-16 left-[18px] w-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55% / 0.4), hsl(43 72% 55% / 0.4), transparent)" }}
+      initial={{ scaleY: 0 }}
+      animate={{ scaleY: 1 }}
+      transition={{ duration: 2, delay: 0.8, ease: "easeOut" }}
+    />
+    {/* Right */}
+    <motion.div
+      className="absolute top-16 bottom-16 right-4 w-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), hsl(43 72% 55%), transparent)" }}
+      initial={{ scaleY: 0 }}
+      animate={{ scaleY: 1 }}
+      transition={{ duration: 2, delay: 0.7, ease: "easeOut" }}
+    />
+    <motion.div
+      className="absolute top-16 bottom-16 right-[18px] w-[1px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55% / 0.4), hsl(43 72% 55% / 0.4), transparent)" }}
+      initial={{ scaleY: 0 }}
+      animate={{ scaleY: 1 }}
+      transition={{ duration: 2, delay: 0.9, ease: "easeOut" }}
     />
 
-    {/* Corner ornaments */}
+    {/* Glowing pulse on borders */}
+    <motion.div
+      className="absolute top-4 left-16 right-16 h-[2px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 65% / 0.8), transparent)" }}
+      animate={{ x: ["-100%", "100%"] }}
+      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }}
+    />
+    <motion.div
+      className="absolute bottom-4 left-16 right-16 h-[2px] z-30 pointer-events-none"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 65% / 0.8), transparent)" }}
+      animate={{ x: ["100%", "-100%"] }}
+      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 2, delay: 1.5 }}
+    />
+
+    {/* Corner ornaments - large mandala style */}
     {[
-      { pos: "top-2 left-2", rotate: 0 },
-      { pos: "top-2 right-2", rotate: 90 },
-      { pos: "bottom-2 right-2", rotate: 180 },
-      { pos: "bottom-2 left-2", rotate: 270 },
+      { pos: "top-0 left-0", rotate: 0, delay: 0.3 },
+      { pos: "top-0 right-0", rotate: 90, delay: 0.5 },
+      { pos: "bottom-0 right-0", rotate: 180, delay: 0.7 },
+      { pos: "bottom-0 left-0", rotate: 270, delay: 0.9 },
     ].map((corner, i) => (
-      <motion.div
+      <div
         key={i}
-        className={`absolute ${corner.pos} w-8 h-8 z-30 pointer-events-none`}
-        style={{ rotate: `${corner.rotate}deg` }}
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, delay: 1 + i * 0.2 }}
+        className={`absolute ${corner.pos} w-16 h-16 md:w-20 md:h-20 z-30 pointer-events-none`}
+        style={{ transform: `rotate(${corner.rotate}deg)` }}
       >
-        <svg viewBox="0 0 32 32" className="w-full h-full">
+        <CornerOrnament delay={corner.delay} />
+      </div>
+    ))}
+
+    {/* Side center ornaments (small mandala motifs like the reference) */}
+    {[
+      { pos: "top-1/2 left-1 -translate-y-1/2", rotate: 270, size: "w-8 h-8" },
+      { pos: "top-1/2 right-1 -translate-y-1/2", rotate: 90, size: "w-8 h-8" },
+    ].map((side, i) => (
+      <motion.div
+        key={`side-${i}`}
+        className={`absolute ${side.pos} ${side.size} z-30 pointer-events-none`}
+        style={{ transform: `translateY(-50%) rotate(${side.rotate}deg)` }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: [0.4, 0.8, 0.4], scale: 1 }}
+        transition={{ opacity: { duration: 3, repeat: Infinity }, scale: { duration: 1, delay: 1.5 } }}
+      >
+        <svg viewBox="0 0 40 40" className="w-full h-full">
           <motion.path
-            d="M0,0 L12,0" stroke="hsl(43 72% 55%)" strokeWidth="1.5" fill="none"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+            d="M20,5 Q30,15 25,20 Q30,25 20,35 Q10,25 15,20 Q10,15 20,5Z"
+            fill="none"
+            stroke="hsl(43 72% 55%)"
+            strokeWidth="0.8"
+            animate={{ opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
           />
-          <motion.path
-            d="M0,0 L0,12" stroke="hsl(43 72% 55%)" strokeWidth="1.5" fill="none"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 + 0.5 }}
-          />
-          <motion.circle
-            cx="0" cy="0" r="2" fill="hsl(43 72% 55%)"
-            animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
-            transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.2 }}
+          <motion.circle cx="20" cy="20" r="2" fill="hsl(43 72% 60%)"
+            animate={{ scale: [0.8, 1.3, 0.8], opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 2, repeat: Infinity }}
           />
         </svg>
       </motion.div>
     ))}
 
-    {/* Ball 1 - clockwise: top-left → top-right → bottom-right → bottom-left → top-left */}
+    {/* Ball 1 - clockwise golden orb */}
     <motion.div
-      className="absolute w-3 h-3 rounded-full z-30 pointer-events-none"
+      className="absolute w-2.5 h-2.5 rounded-full z-30 pointer-events-none"
       style={{
-        background: "radial-gradient(circle, hsl(43 72% 75%), hsl(43 72% 55%))",
-        boxShadow: "0 0 12px hsl(43 72% 55%), 0 0 24px hsl(43 72% 55% / 0.6), 0 0 40px hsl(43 72% 55% / 0.3)",
+        background: "radial-gradient(circle, hsl(43 80% 80%), hsl(43 72% 55%))",
+        boxShadow: "0 0 12px hsl(43 72% 55%), 0 0 24px hsl(43 72% 55% / 0.5), 0 0 40px hsl(43 72% 55% / 0.2)",
       }}
       animate={{
-        left: ["12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px"],
-        top: ["12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px"],
+        left: ["16px", "calc(100% - 24px)", "calc(100% - 24px)", "16px", "16px"],
+        top: ["16px", "16px", "calc(100% - 24px)", "calc(100% - 24px)", "16px"],
       }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "linear",
-        times: [0, 0.25, 0.5, 0.75, 1],
-      }}
+      transition={{ duration: 10, repeat: Infinity, ease: "linear", times: [0, 0.25, 0.5, 0.75, 1] }}
     />
     {/* Ball 2 - counter-clockwise */}
     <motion.div
       className="absolute w-2 h-2 rounded-full z-30 pointer-events-none"
       style={{
-        background: "radial-gradient(circle, hsl(43 72% 80%), hsl(43 72% 60%))",
-        boxShadow: "0 0 8px hsl(43 72% 55%), 0 0 16px hsl(43 72% 55% / 0.4)",
+        background: "radial-gradient(circle, hsl(43 72% 75%), hsl(43 60% 50%))",
+        boxShadow: "0 0 8px hsl(43 72% 55%), 0 0 16px hsl(43 72% 55% / 0.3)",
       }}
       animate={{
-        left: ["12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px"],
-        top: ["12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px"],
+        left: ["16px", "16px", "calc(100% - 24px)", "calc(100% - 24px)", "16px"],
+        top: ["16px", "calc(100% - 24px)", "calc(100% - 24px)", "16px", "16px"],
       }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "linear",
-        times: [0, 0.25, 0.5, 0.75, 1],
-      }}
-    />
-    {/* Ball 3 - smaller, faster */}
-    <motion.div
-      className="absolute w-1.5 h-1.5 rounded-full z-30 pointer-events-none"
-      style={{
-        background: "radial-gradient(circle, hsl(0 60% 70%), hsl(0 50% 55%))",
-        boxShadow: "0 0 8px hsl(0 60% 55%), 0 0 16px hsl(0 60% 55% / 0.4)",
-      }}
-      animate={{
-        left: ["calc(50% - 6px)", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px", "calc(50% - 6px)"],
-        top: ["12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px"],
-      }}
-      transition={{
-        duration: 12,
-        repeat: Infinity,
-        ease: "linear",
-        times: [0, 0.15, 0.4, 0.65, 0.9, 1],
-      }}
+      transition={{ duration: 10, repeat: Infinity, ease: "linear", times: [0, 0.25, 0.5, 0.75, 1] }}
     />
   </>
 );
