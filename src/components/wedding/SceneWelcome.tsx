@@ -328,7 +328,7 @@ const AnimatedBorder = () => (
     ].map((corner, i) => (
       <div
         key={i}
-        className={`absolute ${corner.pos} w-16 h-16 md:w-20 md:h-20 z-30 pointer-events-none`}
+        className={`absolute ${corner.pos} w-28 h-28 md:w-36 md:h-36 z-30 pointer-events-none`}
         style={{ transform: `rotate(${corner.rotate}deg)` }}
       >
         <CornerOrnament delay={corner.delay} />
