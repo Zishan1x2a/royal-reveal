@@ -38,110 +38,205 @@ const Sparkle = ({ delay, x, y, size }: { delay: number; x: number; y: number; s
 /* Ornate mandala corner ornament SVG */
 const CornerOrnament = ({ delay }: { delay: number }) => (
   <motion.svg
-    viewBox="0 0 120 120"
+    viewBox="0 0 200 200"
     className="w-full h-full"
-    initial={{ opacity: 0, scale: 0, rotate: -90 }}
+    initial={{ opacity: 0, scale: 0, rotate: -120 }}
     animate={{ opacity: 1, scale: 1, rotate: 0 }}
-    transition={{ duration: 1.5, delay, ease: "easeOut" }}
+    transition={{ duration: 2, delay, ease: "easeOut" }}
   >
     <defs>
-      <radialGradient id={`cg-${delay}`} cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10,10) scale(100)">
-        <stop offset="0%" stopColor="hsl(43 80% 65%)" />
-        <stop offset="100%" stopColor="hsl(43 60% 40%)" />
+      <radialGradient id={`cg-${delay}`} cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10,10) scale(180)">
+        <stop offset="0%" stopColor="hsl(43 85% 70%)" />
+        <stop offset="50%" stopColor="hsl(43 72% 55%)" />
+        <stop offset="100%" stopColor="hsl(43 50% 35%)" />
       </radialGradient>
       <filter id={`glow-${delay}`}>
-        <feGaussianBlur stdDeviation="2" result="blur" />
+        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+      </filter>
+      <filter id={`glow2-${delay}`}>
+        <feGaussianBlur stdDeviation="5" result="blur" />
         <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
       </filter>
     </defs>
-    {/* Main curved flourish */}
+
+    {/* Large filled flourish area */}
     <motion.path
-      d="M5,5 Q5,60 60,60 Q35,60 35,35 Q35,15 5,5Z"
+      d="M5,5 Q5,90 95,95 Q55,95 45,65 Q40,40 5,5Z"
       fill={`url(#cg-${delay})`}
-      opacity="0.15"
-      animate={{ opacity: [0.1, 0.25, 0.1] }}
-      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      opacity="0.1"
+      animate={{ opacity: [0.06, 0.18, 0.06] }}
+      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
     />
     <motion.path
-      d="M5,5 C5,45 15,55 60,60"
+      d="M5,5 Q5,50 30,80 Q50,95 95,95"
+      fill="none"
       stroke="hsl(43 72% 55%)"
-      strokeWidth="1.5"
+      opacity="0.08"
+      strokeWidth="25"
+      strokeLinecap="round"
+      animate={{ opacity: [0.04, 0.12, 0.04] }}
+      transition={{ duration: 5, repeat: Infinity }}
+    />
+
+    {/* Main outer curves */}
+    <motion.path
+      d="M5,5 C5,70 25,88 95,95"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="2"
       fill="none"
       filter={`url(#glow-${delay})`}
       initial={{ pathLength: 0 }}
       animate={{ pathLength: 1, opacity: [0.6, 1, 0.6] }}
-      transition={{ pathLength: { duration: 2, delay: delay + 0.3 }, opacity: { duration: 3, repeat: Infinity } }}
+      transition={{ pathLength: { duration: 2.5, delay: delay + 0.2 }, opacity: { duration: 3, repeat: Infinity } }}
     />
     <motion.path
-      d="M5,5 C45,5 55,15 60,60"
+      d="M5,5 C70,5 88,25 95,95"
       stroke="hsl(43 72% 55%)"
-      strokeWidth="1.5"
+      strokeWidth="2"
       fill="none"
       filter={`url(#glow-${delay})`}
       initial={{ pathLength: 0 }}
       animate={{ pathLength: 1, opacity: [0.6, 1, 0.6] }}
-      transition={{ pathLength: { duration: 2, delay: delay + 0.5 }, opacity: { duration: 3, repeat: Infinity, delay: 0.5 } }}
+      transition={{ pathLength: { duration: 2.5, delay: delay + 0.4 }, opacity: { duration: 3, repeat: Infinity, delay: 0.5 } }}
     />
-    {/* Inner decorative curves */}
+
+    {/* Secondary inner curves */}
     <motion.path
-      d="M8,20 Q20,40 40,42"
+      d="M8,8 C8,55 20,70 75,78"
       stroke="hsl(43 72% 55%)"
-      strokeWidth="0.8"
+      strokeWidth="1.2"
       fill="none"
       opacity="0.5"
-      animate={{ opacity: [0.3, 0.7, 0.3] }}
-      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.2 }}
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1, opacity: [0.3, 0.6, 0.3] }}
+      transition={{ pathLength: { duration: 2, delay: delay + 0.6 }, opacity: { duration: 3, repeat: Infinity } }}
     />
     <motion.path
-      d="M20,8 Q40,20 42,40"
+      d="M8,8 C55,8 70,20 78,75"
       stroke="hsl(43 72% 55%)"
-      strokeWidth="0.8"
+      strokeWidth="1.2"
       fill="none"
       opacity="0.5"
-      animate={{ opacity: [0.3, 0.7, 0.3] }}
-      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.7 }}
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1, opacity: [0.3, 0.6, 0.3] }}
+      transition={{ pathLength: { duration: 2, delay: delay + 0.8 }, opacity: { duration: 3, repeat: Infinity, delay: 0.3 } }}
     />
-    {/* Mandala-style circular arcs */}
-    {[16, 28, 40].map((r, i) => (
+
+    {/* Tertiary fine curves */}
+    <motion.path
+      d="M12,12 C12,40 18,52 55,58"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.6"
+      fill="none"
+      animate={{ opacity: [0.2, 0.5, 0.2] }}
+      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.3 }}
+    />
+    <motion.path
+      d="M12,12 C40,12 52,18 58,55"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.6"
+      fill="none"
+      animate={{ opacity: [0.2, 0.5, 0.2] }}
+      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.6 }}
+    />
+
+    {/* Mandala concentric arcs */}
+    {[20, 35, 50, 65, 80, 95].map((r, i) => (
       <motion.circle
         key={i}
         cx="5" cy="5" r={r}
         stroke="hsl(43 72% 55%)"
-        strokeWidth="0.4"
+        strokeWidth={i % 2 === 0 ? "0.6" : "0.3"}
         fill="none"
-        strokeDasharray="4 8"
-        opacity="0.2"
+        strokeDasharray={i % 3 === 0 ? "3 6" : i % 3 === 1 ? "6 4 2 4" : "1 8"}
+        opacity="0.15"
         animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
-        transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 18 + i * 4, repeat: Infinity, ease: "linear" }}
         style={{ transformOrigin: "5px 5px" }}
       />
     ))}
-    {/* Decorative dots */}
+
+    {/* Petal/leaf shapes along diagonal */}
     {[
-      [15, 5], [5, 15], [25, 10], [10, 25], [35, 18], [18, 35], [45, 30], [30, 45],
+      { d: "M12,12 Q22,6 32,14 Q22,22 12,12Z", del: 0.3 },
+      { d: "M12,12 Q6,22 14,32 Q22,22 12,12Z", del: 0.6 },
+      { d: "M28,28 Q40,20 50,30 Q40,40 28,28Z", del: 0.9 },
+      { d: "M28,28 Q20,40 30,50 Q40,40 28,28Z", del: 1.1 },
+      { d: "M50,50 Q62,42 70,52 Q62,62 50,50Z", del: 1.3 },
+      { d: "M50,50 Q42,62 52,70 Q62,62 50,50Z", del: 1.5 },
+    ].map((p, i) => (
+      <motion.path
+        key={`petal-${i}`}
+        d={p.d}
+        fill="hsl(43 72% 55%)"
+        opacity="0.1"
+        animate={{ opacity: [0.05, 0.2, 0.05], scale: [0.95, 1.08, 0.95] }}
+        transition={{ duration: 3, repeat: Infinity, delay: delay + p.del }}
+      />
+    ))}
+
+    {/* Scroll/spiral flourish */}
+    <motion.path
+      d="M70,80 Q80,70 85,55 Q88,45 82,38 Q76,32 68,36 Q62,40 65,48"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.8"
+      fill="none"
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1, opacity: [0.2, 0.5, 0.2] }}
+      transition={{ pathLength: { duration: 3, delay: delay + 1 }, opacity: { duration: 3, repeat: Infinity } }}
+    />
+    <motion.path
+      d="M80,70 Q70,80 55,85 Q45,88 38,82 Q32,76 36,68 Q40,62 48,65"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.8"
+      fill="none"
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1, opacity: [0.2, 0.5, 0.2] }}
+      transition={{ pathLength: { duration: 3, delay: delay + 1.2 }, opacity: { duration: 3, repeat: Infinity, delay: 0.5 } }}
+    />
+
+    {/* Decorative dots - more spread out */}
+    {[
+      [15, 5], [5, 15], [25, 8], [8, 25], [38, 14], [14, 38],
+      [50, 22], [22, 50], [62, 32], [32, 62], [75, 45], [45, 75],
+      [85, 60], [60, 85], [90, 78], [78, 90],
     ].map(([cx, cy], i) => (
       <motion.circle
         key={`d-${i}`}
-        cx={cx} cy={cy} r={1.2}
+        cx={cx} cy={cy} r={i % 3 === 0 ? 1.8 : 1}
         fill="hsl(43 72% 60%)"
-        animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.8, 1.3, 0.8] }}
-        transition={{ duration: 2 + i * 0.3, repeat: Infinity, delay: delay + i * 0.15 }}
+        filter={i % 4 === 0 ? `url(#glow2-${delay})` : undefined}
+        animate={{ opacity: [0.15, 0.9, 0.15], scale: [0.7, 1.4, 0.7] }}
+        transition={{ duration: 2 + (i % 4) * 0.4, repeat: Infinity, delay: delay + i * 0.12 }}
       />
     ))}
-    {/* Leaf/petal shapes */}
+
+    {/* Center diamond motif at corner */}
     <motion.path
-      d="M10,10 Q20,5 30,12 Q20,18 10,10Z"
-      fill="hsl(43 72% 55%)"
-      opacity="0.12"
-      animate={{ opacity: [0.08, 0.2, 0.08], scale: [0.95, 1.05, 0.95] }}
-      transition={{ duration: 3, repeat: Infinity, delay: delay + 0.4 }}
+      d="M5,5 L15,0 L25,5 L15,10Z"
+      fill="none"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.5"
+      animate={{ opacity: [0.3, 0.7, 0.3], scale: [0.9, 1.1, 0.9] }}
+      transition={{ duration: 2.5, repeat: Infinity, delay }}
     />
     <motion.path
-      d="M10,10 Q5,20 12,30 Q18,20 10,10Z"
-      fill="hsl(43 72% 55%)"
-      opacity="0.12"
-      animate={{ opacity: [0.08, 0.2, 0.08], scale: [0.95, 1.05, 0.95] }}
-      transition={{ duration: 3, repeat: Infinity, delay: delay + 0.8 }}
+      d="M5,5 L0,15 L5,25 L10,15Z"
+      fill="none"
+      stroke="hsl(43 72% 55%)"
+      strokeWidth="0.5"
+      animate={{ opacity: [0.3, 0.7, 0.3], scale: [0.9, 1.1, 0.9] }}
+      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.3 }}
+    />
+
+    {/* Glowing center point */}
+    <motion.circle
+      cx="5" cy="5" r="3"
+      fill="hsl(43 80% 65%)"
+      filter={`url(#glow2-${delay})`}
+      animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.5, 0.8] }}
+      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.svg>
 );
@@ -233,7 +328,7 @@ const AnimatedBorder = () => (
     ].map((corner, i) => (
       <div
         key={i}
-        className={`absolute ${corner.pos} w-16 h-16 md:w-20 md:h-20 z-30 pointer-events-none`}
+        className={`absolute ${corner.pos} w-28 h-28 md:w-36 md:h-36 z-30 pointer-events-none`}
         style={{ transform: `rotate(${corner.rotate}deg)` }}
       >
         <CornerOrnament delay={corner.delay} />
