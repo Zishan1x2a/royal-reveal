@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
+import welcomeHeroBg from "@/assets/welcome-hero-bg.png";
 import ganeshImg from "@/assets/ganesh.png";
-import welcomeBg from "@/assets/welcome-bg.jpg";
-import SectionBackground from "./SectionBackground";
 
 interface Props {
   onNext: () => void;
@@ -10,428 +9,354 @@ interface Props {
   onGuestNameChange?: (name: string) => void;
 }
 
-/* Floating sparkle particle */
-const Sparkle = ({ delay, x, y, size }: { delay: number; x: number; y: number; size: number }) => (
+/* ── Floating gold particle ── */
+const GoldParticle = ({ delay, x, size, dur }: { delay: number; x: number; size: number; dur: number }) => (
   <motion.div
-    className="absolute rounded-full"
+    className="absolute rounded-full pointer-events-none"
     style={{
       left: `${x}%`,
-      top: `${y}%`,
+      bottom: "-5%",
       width: size,
       height: size,
-      background: `radial-gradient(circle, hsl(43 72% 65% / 0.9), transparent)`,
+      background: `radial-gradient(circle, hsl(43 74% 65% / 0.9), hsl(43 74% 49%) 40%, transparent 70%)`,
+      boxShadow: `0 0 ${size * 2}px hsl(43 74% 49% / 0.6)`,
     }}
     animate={{
-      opacity: [0, 1, 0.5, 1, 0],
-      scale: [0, 1, 0.8, 1.2, 0],
+      y: [0, -window.innerHeight * 1.2],
+      x: [0, (Math.random() - 0.5) * 120],
+      opacity: [0, 1, 1, 0],
+      scale: [0.3, 1, 0.8, 0.2],
     }}
-    transition={{
-      duration: 3 + Math.random() * 2,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut",
-    }}
+    transition={{ duration: dur, delay, repeat: Infinity, ease: "easeOut" }}
   />
 );
 
-/* Animated border frame with ball traveling full border using offset-path */
-const AnimatedBorder = () => (
+/* ── Animated golden border frame ── */
+const GoldenFrame = () => (
   <>
-    {/* Top border */}
-    <motion.div
-      className="absolute top-3 left-3 right-3 h-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
-      initial={{ scaleX: 0 }}
-      animate={{ scaleX: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleX: { duration: 2, delay: 0.5 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" } }}
-    />
-    {/* Bottom border */}
-    <motion.div
-      className="absolute bottom-3 left-3 right-3 h-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
-      initial={{ scaleX: 0 }}
-      animate={{ scaleX: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleX: { duration: 2, delay: 0.7 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 } }}
-    />
-    {/* Left border */}
-    <motion.div
-      className="absolute top-3 bottom-3 left-3 w-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), transparent)" }}
-      initial={{ scaleY: 0 }}
-      animate={{ scaleY: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleY: { duration: 2, delay: 0.6 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
-    />
-    {/* Right border */}
-    <motion.div
-      className="absolute top-3 bottom-3 right-3 w-px z-30 pointer-events-none"
-      style={{ background: "linear-gradient(180deg, transparent, hsl(43 72% 55%), transparent)" }}
-      initial={{ scaleY: 0 }}
-      animate={{ scaleY: 1, opacity: [0.3, 0.8, 0.3] }}
-      transition={{ scaleY: { duration: 2, delay: 0.8 }, opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 } }}
-    />
-
+    {/* Border lines */}
+    {(["top", "bottom", "left", "right"] as const).map((side) => {
+      const isH = side === "top" || side === "bottom";
+      return (
+        <motion.div
+          key={side}
+          className="absolute z-30 pointer-events-none"
+          style={{
+            [side]: 12,
+            ...(isH
+              ? { left: 12, right: 12, height: 1, background: "linear-gradient(90deg, transparent, #D4AF37 30%, #D4AF37 70%, transparent)" }
+              : { top: 12, bottom: 12, width: 1, background: "linear-gradient(180deg, transparent, #D4AF37 30%, #D4AF37 70%, transparent)" }),
+            opacity: 0.5,
+          }}
+          initial={{ [isH ? "scaleX" : "scaleY"]: 0 }}
+          animate={{ [isH ? "scaleX" : "scaleY"]: 1 }}
+          transition={{ duration: 1.5, delay: 0.3 }}
+        />
+      );
+    })}
     {/* Corner ornaments */}
     {[
-      { pos: "top-2 left-2", rotate: 0 },
-      { pos: "top-2 right-2", rotate: 90 },
-      { pos: "bottom-2 right-2", rotate: 180 },
-      { pos: "bottom-2 left-2", rotate: 270 },
-    ].map((corner, i) => (
+      { t: 6, l: 6 },
+      { t: 6, r: 6 },
+      { b: 6, r: 6 },
+      { b: 6, l: 6 },
+    ].map((pos, i) => (
       <motion.div
         key={i}
-        className={`absolute ${corner.pos} w-8 h-8 z-30 pointer-events-none`}
-        style={{ rotate: `${corner.rotate}deg` }}
+        className="absolute w-10 h-10 z-30 pointer-events-none"
+        style={{
+          ...Object.fromEntries(Object.entries(pos).map(([k, v]) => [k === "t" ? "top" : k === "b" ? "bottom" : k === "l" ? "left" : "right", v])),
+        }}
         initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, delay: 1 + i * 0.2 }}
+        animate={{ opacity: 0.7, scale: 1 }}
+        transition={{ duration: 0.8, delay: 1 + i * 0.15 }}
       >
-        <svg viewBox="0 0 32 32" className="w-full h-full">
-          <motion.path
-            d="M0,0 L12,0" stroke="hsl(43 72% 55%)" strokeWidth="1.5" fill="none"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-          />
-          <motion.path
-            d="M0,0 L0,12" stroke="hsl(43 72% 55%)" strokeWidth="1.5" fill="none"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 + 0.5 }}
-          />
-          <motion.circle
-            cx="0" cy="0" r="2" fill="hsl(43 72% 55%)"
-            animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
-            transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.2 }}
-          />
+        <svg viewBox="0 0 40 40" className="w-full h-full" style={{ transform: `rotate(${i * 90}deg)` }}>
+          <path d="M2,2 L14,2" stroke="#D4AF37" strokeWidth="1.5" fill="none" />
+          <path d="M2,2 L2,14" stroke="#D4AF37" strokeWidth="1.5" fill="none" />
+          {/* small mandala ornament */}
+          <circle cx="2" cy="2" r="2" fill="#D4AF37" opacity="0.8" />
+          <path d="M6,2 Q10,6 6,10" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.5" />
         </svg>
       </motion.div>
     ))}
-
-    {/* Ball 1 - clockwise: top-left → top-right → bottom-right → bottom-left → top-left */}
-    <motion.div
-      className="absolute w-3 h-3 rounded-full z-30 pointer-events-none"
-      style={{
-        background: "radial-gradient(circle, hsl(43 72% 75%), hsl(43 72% 55%))",
-        boxShadow: "0 0 12px hsl(43 72% 55%), 0 0 24px hsl(43 72% 55% / 0.6), 0 0 40px hsl(43 72% 55% / 0.3)",
-      }}
-      animate={{
-        left: ["12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px"],
-        top: ["12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px"],
-      }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "linear",
-        times: [0, 0.25, 0.5, 0.75, 1],
-      }}
-    />
-    {/* Ball 2 - counter-clockwise */}
-    <motion.div
-      className="absolute w-2 h-2 rounded-full z-30 pointer-events-none"
-      style={{
-        background: "radial-gradient(circle, hsl(43 72% 80%), hsl(43 72% 60%))",
-        boxShadow: "0 0 8px hsl(43 72% 55%), 0 0 16px hsl(43 72% 55% / 0.4)",
-      }}
-      animate={{
-        left: ["12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px"],
-        top: ["12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px"],
-      }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "linear",
-        times: [0, 0.25, 0.5, 0.75, 1],
-      }}
-    />
-    {/* Ball 3 - smaller, faster */}
-    <motion.div
-      className="absolute w-1.5 h-1.5 rounded-full z-30 pointer-events-none"
-      style={{
-        background: "radial-gradient(circle, hsl(0 60% 70%), hsl(0 50% 55%))",
-        boxShadow: "0 0 8px hsl(0 60% 55%), 0 0 16px hsl(0 60% 55% / 0.4)",
-      }}
-      animate={{
-        left: ["calc(50% - 6px)", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px", "calc(50% - 6px)"],
-        top: ["12px", "12px", "calc(100% - 24px)", "calc(100% - 24px)", "12px", "12px"],
-      }}
-      transition={{
-        duration: 12,
-        repeat: Infinity,
-        ease: "linear",
-        times: [0, 0.15, 0.4, 0.65, 0.9, 1],
-      }}
-    />
   </>
 );
 
-/* Radiating mandala rays behind Ganesh */
-const MandalaRays = () => (
+/* ── Typewriter text ── */
+const TypewriterText = ({ text, delay = 0, className, style }: { text: string; delay?: number; className?: string; style?: React.CSSProperties }) => {
+  const [displayed, setDisplayed] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      let i = 0;
+      const interval = setInterval(() => {
+        setDisplayed(text.slice(0, i + 1));
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, 60);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [text, delay]);
+  return (
+    <motion.span className={className} style={style} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: delay / 1000 }}>
+      {displayed}
+      <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.6, repeat: Infinity }}>|</motion.span>
+    </motion.span>
+  );
+};
+
+/* ── Mandala SVG behind Ganesh ── */
+const GoldenMandala = () => (
   <motion.div
     className="absolute inset-0 flex items-center justify-center pointer-events-none"
-    initial={{ opacity: 0, scale: 0.5, rotate: -30 }}
+    initial={{ opacity: 0, scale: 0.3, rotate: -60 }}
     animate={{ opacity: 1, scale: 1, rotate: 0 }}
-    transition={{ duration: 2, ease: "easeOut" }}
+    transition={{ duration: 2.5, ease: "easeOut" }}
   >
-    <svg viewBox="0 0 400 400" className="w-[280px] h-[280px] md:w-[380px] md:h-[380px]">
-      <defs>
-        <radialGradient id="ray-grad">
-          <stop offset="0%" stopColor="hsl(43 72% 55%)" stopOpacity="0.3" />
-          <stop offset="60%" stopColor="hsl(43 72% 45%)" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      {[...Array(24)].map((_, i) => {
-        const angle = (i * 15 * Math.PI) / 180;
-        const x2 = 200 + 190 * Math.cos(angle);
-        const y2 = 200 + 190 * Math.sin(angle);
+    <svg viewBox="0 0 400 400" className="w-[240px] h-[240px] md:w-[320px] md:h-[320px]">
+      {/* Outer petal ring */}
+      {[...Array(16)].map((_, i) => {
+        const angle = (i * 22.5 * Math.PI) / 180;
         return (
-          <motion.line
-            key={i}
-            x1="200" y1="200" x2={x2} y2={y2}
-            stroke="hsl(43 72% 55%)"
-            strokeWidth={i % 2 === 0 ? "1.5" : "0.5"}
-            opacity={i % 2 === 0 ? 0.25 : 0.12}
-            animate={{ opacity: i % 2 === 0 ? [0.15, 0.3, 0.15] : [0.08, 0.18, 0.08] }}
-            transition={{ duration: 4, delay: i * 0.1, repeat: Infinity, ease: "easeInOut" }}
+          <motion.ellipse
+            key={`petal-${i}`}
+            cx={200 + 130 * Math.cos(angle)}
+            cy={200 + 130 * Math.sin(angle)}
+            rx="18"
+            ry="8"
+            fill="none"
+            stroke="#D4AF37"
+            strokeWidth="0.8"
+            opacity="0.4"
+            transform={`rotate(${i * 22.5} ${200 + 130 * Math.cos(angle)} ${200 + 130 * Math.sin(angle)})`}
+            animate={{ opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 3, delay: i * 0.15, repeat: Infinity }}
           />
         );
       })}
-      <circle cx="200" cy="200" r="80" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.5" opacity="0.2" />
-      <circle cx="200" cy="200" r="120" fill="none" stroke="hsl(43 72% 55%)" strokeWidth="0.3" opacity="0.1" />
+      {/* Ray lines */}
+      {[...Array(32)].map((_, i) => {
+        const angle = (i * 11.25 * Math.PI) / 180;
+        return (
+          <motion.line
+            key={`ray-${i}`}
+            x1="200" y1="200"
+            x2={200 + 170 * Math.cos(angle)}
+            y2={200 + 170 * Math.sin(angle)}
+            stroke="#D4AF37"
+            strokeWidth={i % 2 === 0 ? "0.8" : "0.3"}
+            opacity="0.15"
+            animate={{ opacity: [0.08, 0.22, 0.08] }}
+            transition={{ duration: 4, delay: i * 0.08, repeat: Infinity }}
+          />
+        );
+      })}
+      {/* Concentric circles */}
+      {[60, 90, 120, 155].map((r, i) => (
+        <circle key={r} cx="200" cy="200" r={r} fill="none" stroke="#D4AF37" strokeWidth={i === 0 ? "1" : "0.4"} opacity={0.3 - i * 0.05} />
+      ))}
     </svg>
   </motion.div>
 );
 
-const SceneWelcome = ({ onNext, guestName, onGuestNameChange }: Props) => {
-  const sparkles = useMemo(
-    () =>
-      Array.from({ length: 40 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: 1.5 + Math.random() * 3,
-        delay: Math.random() * 4,
-      })),
+/* ── Red rose glow center ── */
+const RoseGlow = () => (
+  <motion.div
+    className="absolute rounded-full"
+    style={{
+      width: 120,
+      height: 120,
+      background: "radial-gradient(circle, hsl(0 70% 45% / 0.7) 0%, hsl(0 60% 35% / 0.4) 40%, transparent 70%)",
+      boxShadow: "0 0 80px hsl(0 70% 40% / 0.5), 0 0 140px hsl(43 74% 49% / 0.3)",
+    }}
+    animate={{ scale: [1, 1.08, 1], opacity: [0.7, 1, 0.7] }}
+    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+  />
+);
+
+const SceneWelcome = ({ onNext, guestName }: Props) => {
+  const particles = useMemo(
+    () => Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      size: 1.5 + Math.random() * 4,
+      delay: Math.random() * 6,
+      dur: 5 + Math.random() * 5,
+    })),
     []
   );
 
-  const stagger = {
-    visible: { transition: { staggerChildren: 0.25 } },
-  };
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: 25 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } },
-  };
-
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 1 } },
-  };
-
-  const scaleIn = {
-    hidden: { opacity: 0, scale: 0.6 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 1.2, ease: "easeOut" as const } },
-  };
+  const displayName = guestName || "Guest Name";
 
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden">
+    <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden" style={{ background: "#1A0D2E" }}>
       {/* Background image */}
       <motion.div
         className="absolute inset-0 z-0"
-        initial={{ scale: 1.1 }}
-        animate={{ scale: [1.1, 1.15, 1.1] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        initial={{ scale: 1.05 }}
+        animate={{ scale: [1.05, 1.08, 1.05] }}
+        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
       >
-        <img
-          src={welcomeBg}
-          alt=""
-          className="w-full h-full object-cover"
-          style={{ filter: "brightness(0.45) contrast(1.1) saturate(1.2)" }}
-        />
+        <img src={welcomeHeroBg} alt="" className="w-full h-full object-cover" style={{ opacity: 0.85 }} />
       </motion.div>
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(180deg, hsl(0 0% 0% / 0.3) 0%, hsl(0 0% 0% / 0.15) 40%, hsl(0 0% 0% / 0.4) 100%)" }} />
-      {/* Sparkle particles */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {sparkles.map((s) => (
-          <Sparkle key={s.id} x={s.x} y={s.y} size={s.size} delay={s.delay} />
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(180deg, hsl(270 50% 8% / 0.4) 0%, hsl(270 50% 5% / 0.2) 40%, hsl(270 50% 8% / 0.5) 100%)" }} />
+
+      {/* Floating gold particles */}
+      <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden">
+        {particles.map((p) => (
+          <GoldParticle key={p.id} x={p.x} size={p.size} delay={p.delay} dur={p.dur} />
         ))}
       </div>
 
-      {/* Animated border frame */}
-      <AnimatedBorder />
+      {/* Golden border frame */}
+      <GoldenFrame />
 
       {/* Main content */}
       <motion.div
-        className="relative z-20 flex flex-col items-center gap-3 md:gap-4 max-w-2xl px-6 py-8 text-center"
+        className="relative z-20 flex flex-col items-center gap-2 md:gap-3 max-w-2xl px-6 text-center"
         initial="hidden"
         animate="visible"
-        variants={stagger}
+        variants={{ visible: { transition: { staggerChildren: 0.3 } } }}
       >
         {/* शुभ विवाह */}
-        <motion.div className="flex items-center gap-3" variants={fadeIn}>
-          <motion.span
-            className="text-xs"
-            style={{ color: "hsl(43 72% 65%)" }}
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >✦</motion.span>
-          <span className="font-decorative text-lg md:text-xl tracking-[0.3em]" style={{ color: "hsl(43 72% 65%)" }}>
-            शुभ विवाह
-          </span>
-          <motion.span
-            className="text-xs"
-            style={{ color: "hsl(43 72% 65%)" }}
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-          >✦</motion.span>
-        </motion.div>
+        <motion.h2
+          className="text-3xl md:text-5xl font-bold tracking-wide"
+          style={{
+            fontFamily: "'Noto Sans Devanagari', serif",
+            color: "#D4AF37",
+            textShadow: "0 0 30px hsl(43 74% 49% / 0.6), 0 0 60px hsl(43 74% 49% / 0.3), 0 4px 8px hsl(0 0% 0% / 0.5)",
+          }}
+          variants={{ hidden: { opacity: 0, y: -30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2 } } }}
+        >
+          शुभ विवाह
+        </motion.h2>
 
-        {/* Ganesh Ji with mandala rays */}
-        <motion.div className="relative w-40 h-40 md:w-48 md:h-48 flex items-center justify-center" variants={scaleIn}>
-          <MandalaRays />
-          <motion.div
-            className="absolute w-28 h-28 md:w-36 md:h-36 rounded-full"
-            style={{
-              background: "radial-gradient(circle, hsl(43 72% 55% / 0.3) 0%, hsl(43 72% 45% / 0.1) 50%, transparent 70%)",
-              boxShadow: "0 0 60px hsl(43 72% 55% / 0.3), 0 0 120px hsl(43 72% 55% / 0.15)",
-            }}
-            animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute w-24 h-24 md:w-32 md:h-32 rounded-full"
-            style={{ border: "1px solid hsl(43 72% 55% / 0.3)" }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          />
+        {/* Ganesh mandala + rose glow */}
+        <motion.div
+          className="relative w-44 h-44 md:w-56 md:h-56 flex items-center justify-center my-2"
+          variants={{ hidden: { opacity: 0, scale: 0.4 }, visible: { opacity: 1, scale: 1, transition: { duration: 1.5, ease: "easeOut" } } }}
+        >
+          <GoldenMandala />
+          <RoseGlow />
           <img
             src={ganeshImg}
             alt="Lord Ganesha"
-            className="relative z-10 w-20 h-20 md:w-28 md:h-28 object-contain animate-float drop-shadow-lg"
-            style={{ filter: "drop-shadow(0 0 25px hsl(43 72% 55% / 0.5))" }}
+            className="relative z-10 w-20 h-20 md:w-28 md:h-28 object-contain"
+            style={{ filter: "drop-shadow(0 0 20px hsl(43 74% 49% / 0.6))" }}
+          />
+          {/* Rotating ring */}
+          <motion.div
+            className="absolute w-32 h-32 md:w-44 md:h-44 rounded-full"
+            style={{ border: "1px solid hsl(43 74% 49% / 0.25)" }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           />
         </motion.div>
 
-        {/* ॐ symbol */}
+        {/* ॐ */}
         <motion.p
-          className="font-decorative text-xl"
-          style={{ color: "hsl(43 72% 65% / 0.7)" }}
-          variants={fadeIn}
+          className="text-2xl md:text-3xl font-bold"
+          style={{
+            fontFamily: "'Noto Sans Devanagari', serif",
+            color: "#D4AF37",
+            textShadow: "0 0 25px hsl(43 74% 49% / 0.5)",
+          }}
+          variants={{ hidden: { opacity: 0, scale: 0.5 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.8 } } }}
         >
           ॐ
         </motion.p>
 
-        {/* Sanskrit shloka - single line */}
-        <motion.p
-          className="font-decorative text-[10px] md:text-sm tracking-wide whitespace-nowrap"
-          style={{ color: "hsl(43 72% 65% / 0.8)" }}
-          variants={fadeUp}
-        >
-          वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
-        </motion.p>
-
-        {/* Divider */}
+        {/* Dear Guest Name - typewriter */}
         <motion.div
-          className="h-px w-20 opacity-30"
-          style={{ background: "hsl(43 72% 55%)" }}
-          variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1, transition: { duration: 0.8 } } }}
-        />
-
-        {/* Dear */}
-        <motion.p
-          className="font-body text-xs uppercase tracking-[0.4em]"
-          style={{ color: "hsl(0 0% 70%)" }}
-          variants={fadeIn}
+          className="mt-2"
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.5 } } }}
         >
-          Dear
-        </motion.p>
-
-        {/* Guest Name - simple elegant text */}
-        <motion.div variants={fadeUp}>
-          <motion.span
-            className="font-decorative text-3xl md:text-4xl italic"
-            style={{ color: "hsl(43 72% 65%)" }}
-            animate={{
-              textShadow: [
-                "0 0 10px hsl(43 72% 55% / 0.3)",
-                "0 0 30px hsl(43 72% 55% / 0.6)",
-                "0 0 10px hsl(43 72% 55% / 0.3)",
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {"{Guest Name}"}
-          </motion.span>
+          <TypewriterText
+            text={`Dear ${displayName},`}
+            delay={2000}
+            className="font-decorative text-lg md:text-2xl italic"
+            style={{ color: "hsl(40 30% 88%)" }}
+          />
         </motion.div>
 
         {/* Invitation text */}
         <motion.p
-          className="font-body text-[10px] md:text-xs uppercase tracking-[0.3em]"
-          style={{ color: "hsl(0 0% 60%)" }}
-          variants={fadeIn}
+          className="font-body text-xs md:text-sm tracking-wide"
+          style={{ color: "hsl(0 0% 70%)" }}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 1, delay: 0.3 } } }}
         >
           You are cordially invited to the wedding of
         </motion.p>
 
         {/* Couple names */}
         <motion.h1
-          className="font-display text-4xl md:text-6xl font-light leading-tight"
-          style={{ color: "hsl(40 30% 88%)" }}
-          variants={fadeUp}
+          className="font-display text-4xl md:text-7xl font-bold italic leading-tight"
+          style={{
+            color: "#D4AF37",
+            textShadow: "0 0 30px hsl(43 74% 49% / 0.4), 0 4px 12px hsl(0 0% 0% / 0.4)",
+          }}
+          variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1 } } }}
         >
-          Rajveer <span className="font-decorative italic text-3xl md:text-5xl" style={{ color: "hsl(43 72% 60%)" }}>&</span> Ishita
+          Rajveer{" "}
+          <span style={{ color: "hsl(0 60% 55%)" }}>&amp;</span>{" "}
+          Ishita
         </motion.h1>
 
-        {/* Tagline */}
+        {/* Subtitle */}
         <motion.p
           className="font-body text-[10px] md:text-xs uppercase tracking-[0.35em]"
           style={{ color: "hsl(0 0% 55%)" }}
-          variants={fadeIn}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 1 } } }}
         >
           Two Souls, One Journey
         </motion.p>
 
         {/* Date */}
         <motion.p
-          className="font-decorative text-sm md:text-base italic tracking-wider"
-          style={{ color: "hsl(43 72% 60% / 0.8)" }}
-          variants={fadeUp}
+          className="font-decorative text-base md:text-xl italic tracking-wider mt-1"
+          style={{ color: "hsl(40 30% 85%)" }}
+          variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}
         >
           12 December 2026
         </motion.p>
 
         {/* Open Invitation Button */}
-        <motion.div className="mt-4" variants={fadeUp}>
+        <motion.div
+          className="mt-4"
+          variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}
+        >
           <motion.button
             onClick={onNext}
-            className="group relative px-12 py-4 overflow-hidden"
-            style={{ background: "transparent" }}
-            whileHover={{ scale: 1.05 }}
+            className="relative px-10 md:px-14 py-3 md:py-4 rounded-full overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, #D4AF37, #B8962E, #D4AF37)",
+              boxShadow: "0 0 20px hsl(43 74% 49% / 0.4), 0 4px 15px hsl(0 0% 0% / 0.3)",
+            }}
+            whileHover={{ scale: 1.08, boxShadow: "0 0 40px hsl(43 74% 49% / 0.6), 0 4px 20px hsl(0 0% 0% / 0.4)" }}
             whileTap={{ scale: 0.95 }}
+            animate={{
+              boxShadow: [
+                "0 0 20px hsl(43 74% 49% / 0.3), 0 4px 15px hsl(0 0% 0% / 0.3)",
+                "0 0 35px hsl(43 74% 49% / 0.6), 0 4px 20px hsl(0 0% 0% / 0.3)",
+                "0 0 20px hsl(43 74% 49% / 0.3), 0 4px 15px hsl(0 0% 0% / 0.3)",
+              ],
+            }}
+            transition={{ boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" } }}
           >
-            <motion.span
-              className="absolute inset-0 rounded-full"
-              style={{ border: "1px solid hsl(43 72% 55% / 0.5)" }}
-              animate={{
-                boxShadow: [
-                  "0 0 15px hsl(43 72% 55% / 0.15)",
-                  "0 0 30px hsl(43 72% 55% / 0.35)",
-                  "0 0 15px hsl(43 72% 55% / 0.15)",
-                ],
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.span
-              className="absolute inset-[1px] rounded-full"
-              style={{ background: "linear-gradient(135deg, hsl(43 72% 55% / 0.1), hsl(43 72% 45% / 0.18), hsl(43 72% 55% / 0.1))" }}
-            />
+            {/* Shimmer */}
             <motion.span
               className="absolute inset-0 rounded-full pointer-events-none"
-              style={{ background: "linear-gradient(105deg, transparent 35%, hsl(43 72% 65% / 0.3) 50%, transparent 65%)" }}
+              style={{ background: "linear-gradient(105deg, transparent 30%, hsl(0 0% 100% / 0.3) 50%, transparent 70%)" }}
               animate={{ x: ["-200%", "200%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.5 }}
             />
-            <span className="relative z-10 font-decorative text-sm md:text-base tracking-[0.25em] uppercase" style={{ color: "hsl(43 72% 65%)" }}>
+            <span
+              className="relative z-10 font-body text-xs md:text-sm font-semibold tracking-[0.3em] uppercase"
+              style={{ color: "#1A0D2E" }}
+            >
               Open Invitation
             </span>
           </motion.button>
@@ -440,8 +365,8 @@ const SceneWelcome = ({ onNext, guestName, onGuestNameChange }: Props) => {
 
       {/* Vignette */}
       <div
-        className="absolute inset-0 pointer-events-none z-30"
-        style={{ background: "radial-gradient(ellipse at center, transparent 55%, hsl(0 0% 0% / 0.3) 100%)" }}
+        className="absolute inset-0 pointer-events-none z-[25]"
+        style={{ background: "radial-gradient(ellipse at center, transparent 50%, hsl(270 50% 5% / 0.5) 100%)" }}
       />
     </div>
   );
