@@ -42,37 +42,57 @@ const Sparkle = ({ delay, x, y, size, dur }: { delay: number; x: number; y: numb
   />
 );
 
-/* Corner Ornament with glow */
+/* Corner Ornament — each corner faces inward (toward Ganesh center) */
 const RoyalCorner = ({ position, delay }: { position: "top-left" | "top-right" | "bottom-left" | "bottom-right"; delay: number }) => {
-  const rot = { "top-left": 0, "top-right": 90, "bottom-right": 180, "bottom-left": 270 }[position];
-  const posClass = {
-    "top-left": "top-3 left-3 md:top-5 md:left-5",
-    "top-right": "top-3 right-3 md:top-5 md:right-5",
-    "bottom-left": "bottom-3 left-3 md:bottom-5 md:left-5",
-    "bottom-right": "bottom-3 right-3 md:bottom-5 md:right-5",
+  // Rotation so the ornament's "mouth" faces center
+  const rot = {
+    "top-left": 0,       // default orientation points inward ↘
+    "top-right": 90,     // rotated to point inward ↙
+    "bottom-right": 180, // rotated to point inward ↖
+    "bottom-left": 270,  // rotated to point inward ↗
+  }[position];
+
+  // Sit exactly on the border frame (inset-3 / md:inset-5), offset half the ornament size inward
+  const posStyle = {
+    "top-left":     { top: 0, left: 0 },
+    "top-right":    { top: 0, right: 0 },
+    "bottom-left":  { bottom: 0, left: 0 },
+    "bottom-right": { bottom: 0, right: 0 },
   }[position];
 
   return (
     <motion.div
-      className={`absolute ${posClass} w-20 h-20 md:w-28 md:h-28 z-40 pointer-events-none`}
-      style={{ transform: `rotate(${rot}deg)` }}
-      initial={{ scale: 0.92, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 1.1, ease: "easeOut", delay }}
+      className="absolute w-24 h-24 md:w-32 md:h-32 z-40 pointer-events-none"
+      style={{ ...posStyle, transform: `rotate(${rot}deg)`, transformOrigin: "center center" }}
+      initial={{ scale: 0, opacity: 0, rotate: rot - 20 }}
+      animate={{ scale: 1, opacity: 1, rotate: rot }}
+      transition={{ duration: 1.4, ease: "easeOut", delay, type: "spring", stiffness: 80, damping: 14 }}
     >
+      {/* Glow behind ornament */}
       <motion.div
         className="absolute inset-0 rounded-full blur-xl"
-        style={{ background: "radial-gradient(circle, hsl(43 72% 55% / 0.24) 0%, transparent 72%)" }}
-        animate={{ opacity: [0.35, 0.55, 0.35], scale: [0.96, 1.06, 0.96] }}
-        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay }}
+        style={{ background: "radial-gradient(circle, hsl(43 72% 55% / 0.3) 0%, transparent 70%)" }}
+        animate={{ opacity: [0.3, 0.65, 0.3], scale: [0.92, 1.1, 0.92] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay }}
       />
+      {/* Sparkle ring */}
+      <motion.div
+        className="absolute inset-2 rounded-full border border-[hsl(43_72%_55%_/_0.15)]"
+        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
+      />
+      {/* Floral corner image */}
       <motion.img
         src={floralCorner}
         alt=""
         className="relative z-10 h-full w-full object-contain"
-        style={{ filter: "drop-shadow(0 2px 6px hsl(0 60% 25% / 0.22)) drop-shadow(0 0 10px hsl(43 72% 55% / 0.28))" }}
-        animate={{ scale: [1, 1.02, 1] }}
-        transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay }}
+        style={{ filter: "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 12px hsl(43 72% 55% / 0.35))" }}
+        animate={{ scale: [1, 1.04, 1], filter: [
+          "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 12px hsl(43 72% 55% / 0.25))",
+          "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 20px hsl(43 72% 55% / 0.5))",
+          "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 12px hsl(43 72% 55% / 0.25))",
+        ] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay }}
       />
     </motion.div>
   );
