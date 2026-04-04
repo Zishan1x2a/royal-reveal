@@ -42,37 +42,57 @@ const Sparkle = ({ delay, x, y, size, dur }: { delay: number; x: number; y: numb
   />
 );
 
-/* Corner Ornament with glow */
+/* Corner Ornament — each corner faces inward (toward Ganesh center) */
 const RoyalCorner = ({ position, delay }: { position: "top-left" | "top-right" | "bottom-left" | "bottom-right"; delay: number }) => {
-  const rot = { "top-left": 0, "top-right": 90, "bottom-right": 180, "bottom-left": 270 }[position];
-  const posClass = {
-    "top-left": "top-3 left-3 md:top-5 md:left-5",
-    "top-right": "top-3 right-3 md:top-5 md:right-5",
-    "bottom-left": "bottom-3 left-3 md:bottom-5 md:left-5",
-    "bottom-right": "bottom-3 right-3 md:bottom-5 md:right-5",
+  // Rotation so the ornament's "mouth" faces center
+  const rot = {
+    "top-left": 0,       // default orientation points inward ↘
+    "top-right": 90,     // rotated to point inward ↙
+    "bottom-right": 180, // rotated to point inward ↖
+    "bottom-left": 270,  // rotated to point inward ↗
+  }[position];
+
+  // Sit exactly on the border frame (inset-3 / md:inset-5), offset half the ornament size inward
+  const posStyle = {
+    "top-left":     { top: 0, left: 0 },
+    "top-right":    { top: 0, right: 0 },
+    "bottom-left":  { bottom: 0, left: 0 },
+    "bottom-right": { bottom: 0, right: 0 },
   }[position];
 
   return (
     <motion.div
-      className={`absolute ${posClass} w-20 h-20 md:w-28 md:h-28 z-40 pointer-events-none`}
-      style={{ transform: `rotate(${rot}deg)` }}
-      initial={{ scale: 0.92, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 1.1, ease: "easeOut", delay }}
+      className="absolute w-24 h-24 md:w-32 md:h-32 z-40 pointer-events-none"
+      style={{ ...posStyle, transform: `rotate(${rot}deg)`, transformOrigin: "center center" }}
+      initial={{ scale: 0, opacity: 0, rotate: rot - 20 }}
+      animate={{ scale: 1, opacity: 1, rotate: rot }}
+      transition={{ duration: 1.4, ease: "easeOut", delay, type: "spring", stiffness: 80, damping: 14 }}
     >
+      {/* Glow behind ornament */}
       <motion.div
         className="absolute inset-0 rounded-full blur-xl"
-        style={{ background: "radial-gradient(circle, hsl(43 72% 55% / 0.24) 0%, transparent 72%)" }}
-        animate={{ opacity: [0.35, 0.55, 0.35], scale: [0.96, 1.06, 0.96] }}
-        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay }}
+        style={{ background: "radial-gradient(circle, hsl(43 72% 55% / 0.3) 0%, transparent 70%)" }}
+        animate={{ opacity: [0.3, 0.65, 0.3], scale: [0.92, 1.1, 0.92] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay }}
       />
+      {/* Sparkle ring */}
+      <motion.div
+        className="absolute inset-2 rounded-full border border-[hsl(43_72%_55%_/_0.15)]"
+        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
+      />
+      {/* Floral corner image */}
       <motion.img
         src={floralCorner}
         alt=""
         className="relative z-10 h-full w-full object-contain"
-        style={{ filter: "drop-shadow(0 2px 6px hsl(0 60% 25% / 0.22)) drop-shadow(0 0 10px hsl(43 72% 55% / 0.28))" }}
-        animate={{ scale: [1, 1.02, 1] }}
-        transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay }}
+        style={{ filter: "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 12px hsl(43 72% 55% / 0.35))" }}
+        animate={{ scale: [1, 1.04, 1], filter: [
+          "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 12px hsl(43 72% 55% / 0.25))",
+          "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 20px hsl(43 72% 55% / 0.5))",
+          "drop-shadow(0 2px 8px hsl(0 60% 25% / 0.25)) drop-shadow(0 0 12px hsl(43 72% 55% / 0.25))",
+        ] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay }}
       />
     </motion.div>
   );
@@ -134,7 +154,7 @@ const SceneWelcome = ({ onNext }: Props) => {
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, rgba(255,245,247,0.85) 30%, rgba(255,228,236,0.6) 70%, transparent 100%)" }} />
       </div>
 
-      {/* Golden border frame */}
+      {/* Golden border frame + Corners inside same container */}
       <div className="absolute inset-3 md:inset-5 z-20 pointer-events-none">
         <svg width="100%" height="100%" className="absolute inset-0" style={{ overflow: 'visible' }}>
           <defs>
@@ -173,13 +193,13 @@ const SceneWelcome = ({ onNext }: Props) => {
             transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
           />
         </svg>
-      </div>
 
-      {/* Corners */}
-      <RoyalCorner position="top-left" delay={0.2} />
-      <RoyalCorner position="top-right" delay={0.4} />
-      <RoyalCorner position="bottom-right" delay={0.6} />
-      <RoyalCorner position="bottom-left" delay={0.8} />
+        {/* Corners — inside border frame so they sit on the border edges */}
+        <RoyalCorner position="top-left" delay={0.2} />
+        <RoyalCorner position="top-right" delay={0.4} />
+        <RoyalCorner position="bottom-right" delay={0.6} />
+        <RoyalCorner position="bottom-left" delay={0.8} />
+      </div>
 
       {/* Falling petals & sparkles */}
       {petals.map((p) => <FallingPetal key={`pt-${p.id}`} {...p} />)}
@@ -231,26 +251,36 @@ const SceneWelcome = ({ onNext }: Props) => {
           वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
         </motion.p>
 
-        {/* Preview Guest - elegant floating text with animations */}
-        <motion.div className="my-5" variants={fadeUp}>
-          <motion.div className="relative flex items-center gap-3">
+        {/* Preview Guest - larger text with rich animation */}
+        <motion.div className="my-6" variants={fadeUp}>
+          <motion.div className="relative flex items-center gap-4">
             <motion.div
-              className="h-[1px] w-8 md:w-12"
-              style={{ background: "linear-gradient(90deg, transparent, #D4AF37)" }}
+              className="h-[1.5px] w-12 md:w-20"
+              style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%))" }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.5, delay: 1.5 }}
             />
             <motion.span
-              className="font-body text-xs md:text-sm uppercase tracking-[0.3em] font-medium text-[#7A1E2C]"
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="font-decorative text-base md:text-lg uppercase tracking-[0.35em] font-semibold"
+              style={{
+                background: "linear-gradient(135deg, hsl(0 60% 25%), hsl(43 72% 55%), hsl(0 60% 25%))",
+                backgroundSize: "200% 100%",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0 1px 3px hsl(43 72% 55% / 0.3))",
+              }}
+              animate={{
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               ✦ Preview Guest ✦
             </motion.span>
             <motion.div
-              className="h-[1px] w-8 md:w-12"
-              style={{ background: "linear-gradient(90deg, #D4AF37, transparent)" }}
+              className="h-[1.5px] w-12 md:w-20"
+              style={{ background: "linear-gradient(90deg, hsl(43 72% 55%), transparent)" }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.5, delay: 1.5 }}
