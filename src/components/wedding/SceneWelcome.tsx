@@ -251,26 +251,36 @@ const SceneWelcome = ({ onNext }: Props) => {
           वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
         </motion.p>
 
-        {/* Preview Guest - elegant floating text with animations */}
-        <motion.div className="my-5" variants={fadeUp}>
-          <motion.div className="relative flex items-center gap-3">
+        {/* Preview Guest - larger text with rich animation */}
+        <motion.div className="my-6" variants={fadeUp}>
+          <motion.div className="relative flex items-center gap-4">
             <motion.div
-              className="h-[1px] w-8 md:w-12"
-              style={{ background: "linear-gradient(90deg, transparent, #D4AF37)" }}
+              className="h-[1.5px] w-12 md:w-20"
+              style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%))" }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.5, delay: 1.5 }}
             />
             <motion.span
-              className="font-body text-xs md:text-sm uppercase tracking-[0.3em] font-medium text-[#7A1E2C]"
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="font-decorative text-base md:text-lg uppercase tracking-[0.35em] font-semibold"
+              style={{
+                background: "linear-gradient(135deg, hsl(0 60% 25%), hsl(43 72% 55%), hsl(0 60% 25%))",
+                backgroundSize: "200% 100%",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0 1px 3px hsl(43 72% 55% / 0.3))",
+              }}
+              animate={{
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               ✦ Preview Guest ✦
             </motion.span>
             <motion.div
-              className="h-[1px] w-8 md:w-12"
-              style={{ background: "linear-gradient(90deg, #D4AF37, transparent)" }}
+              className="h-[1.5px] w-12 md:w-20"
+              style={{ background: "linear-gradient(90deg, hsl(43 72% 55%), transparent)" }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.5, delay: 1.5 }}
