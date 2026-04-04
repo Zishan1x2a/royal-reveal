@@ -46,33 +46,33 @@ const Sparkle = ({ delay, x, y, size, dur }: { delay: number; x: number; y: numb
 const RoyalCorner = ({ position, delay }: { position: "top-left" | "top-right" | "bottom-left" | "bottom-right"; delay: number }) => {
   const rot = { "top-left": 0, "top-right": 90, "bottom-right": 180, "bottom-left": 270 }[position];
   const posClass = {
-    "top-left": "top-2 left-2 md:top-4 md:left-4",
-    "top-right": "top-2 right-2 md:top-4 md:right-4",
-    "bottom-left": "bottom-2 left-2 md:bottom-4 md:left-4",
-    "bottom-right": "bottom-2 right-2 md:bottom-4 md:right-4",
+    "top-left": "top-3 left-3 md:top-5 md:left-5",
+    "top-right": "top-3 right-3 md:top-5 md:right-5",
+    "bottom-left": "bottom-3 left-3 md:bottom-5 md:left-5",
+    "bottom-right": "bottom-3 right-3 md:bottom-5 md:right-5",
   }[position];
 
   return (
     <motion.div
       className={`absolute ${posClass} w-20 h-20 md:w-28 md:h-28 z-40 pointer-events-none`}
       style={{ transform: `rotate(${rot}deg)` }}
-      initial={{ scale: 0, opacity: 0 }}
+      initial={{ scale: 0.92, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 1.5, ease: "easeOut", delay, type: "spring", stiffness: 60, damping: 12 }}
+      transition={{ duration: 1.1, ease: "easeOut", delay }}
     >
       <motion.div
-        className="absolute inset-0 blur-xl rounded-full"
-        style={{ background: "radial-gradient(ellipse at center, rgba(212,175,55,0.35) 0%, transparent 70%)" }}
-        animate={{ opacity: [0.4, 0.8, 0.4], scale: [0.9, 1.15, 0.9] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay }}
+        className="absolute inset-0 rounded-full blur-xl"
+        style={{ background: "radial-gradient(circle, hsl(43 72% 55% / 0.24) 0%, transparent 72%)" }}
+        animate={{ opacity: [0.35, 0.55, 0.35], scale: [0.96, 1.06, 0.96] }}
+        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay }}
       />
       <motion.img
         src={floralCorner}
         alt=""
-        className="w-full h-full object-contain relative z-10"
-        style={{ filter: "drop-shadow(0 2px 6px rgba(122,30,44,0.3)) drop-shadow(0 0 8px rgba(212,175,55,0.3))" }}
-        animate={{ scale: [1, 1.03, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay }}
+        className="relative z-10 h-full w-full object-contain"
+        style={{ filter: "drop-shadow(0 2px 6px hsl(0 60% 25% / 0.22)) drop-shadow(0 0 10px hsl(43 72% 55% / 0.28))" }}
+        animate={{ scale: [1, 1.02, 1] }}
+        transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay }}
       />
     </motion.div>
   );
