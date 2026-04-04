@@ -154,7 +154,7 @@ const SceneWelcome = ({ onNext }: Props) => {
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, rgba(255,245,247,0.85) 30%, rgba(255,228,236,0.6) 70%, transparent 100%)" }} />
       </div>
 
-      {/* Golden border frame */}
+      {/* Golden border frame + Corners inside same container */}
       <div className="absolute inset-3 md:inset-5 z-20 pointer-events-none">
         <svg width="100%" height="100%" className="absolute inset-0" style={{ overflow: 'visible' }}>
           <defs>
@@ -193,13 +193,13 @@ const SceneWelcome = ({ onNext }: Props) => {
             transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
           />
         </svg>
-      </div>
 
-      {/* Corners */}
-      <RoyalCorner position="top-left" delay={0.2} />
-      <RoyalCorner position="top-right" delay={0.4} />
-      <RoyalCorner position="bottom-right" delay={0.6} />
-      <RoyalCorner position="bottom-left" delay={0.8} />
+        {/* Corners — inside border frame so they sit on the border edges */}
+        <RoyalCorner position="top-left" delay={0.2} />
+        <RoyalCorner position="top-right" delay={0.4} />
+        <RoyalCorner position="bottom-right" delay={0.6} />
+        <RoyalCorner position="bottom-left" delay={0.8} />
+      </div>
 
       {/* Falling petals & sparkles */}
       {petals.map((p) => <FallingPetal key={`pt-${p.id}`} {...p} />)}
