@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SceneOpeningAnimation from "./SceneOpeningAnimation";
 import SceneWelcome from "./SceneWelcome";
@@ -28,7 +28,11 @@ const WeddingApp = () => {
   const [doorsClosed, setDoorsClosed] = useState(false);
   const [showPetals, setShowPetals] = useState(false);
   const [useDoor, setUseDoor] = useState(false);
-  const [guestName, setGuestName] = useState("Guest");
+  const [guestName, setGuestName] = useState(() => localStorage.getItem("guestName") || "");
+
+  useEffect(() => {
+    localStorage.setItem("guestName", guestName);
+  }, [guestName]);
 
   const goToNext = useCallback(() => {
     const idx = SCENES.indexOf(currentScene);
@@ -42,6 +46,9 @@ const WeddingApp = () => {
         setTimeout(() => {
           setCurrentScene(SCENES[idx + 1]);
           setDoorsClosed(false);
+          // Trigger the heart and leaf shower!
+          setShowPetals(true);
+          setTimeout(() => setShowPetals(false), 9000);
         }, 600);
       } else {
         // Petal shower for all other transitions
@@ -84,7 +91,20 @@ const WeddingApp = () => {
       </AnimatePresence>
 
       {useDoor && <DoorTransition isOpen={!doorsClosed} />}
-      {showPetals && <PetalOverlay count={25} />}
+      <AnimatePresence>
+        {showPetals && (
+          <motion.div
+            key="petals-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
+            className="fixed inset-0 z-50 pointer-events-none"
+          >
+            <PetalOverlay count={25} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

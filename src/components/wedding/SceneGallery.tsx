@@ -24,7 +24,6 @@ const galleryItems = [
   { src: bridalImg, label: "The Bride", caption: "Grace personified" },
 ];
 
-/* Decorative animated corner */
 const AnimatedCorner = ({ position }: { position: "tl" | "tr" | "bl" | "br" }) => {
   const posClasses: Record<string, string> = {
     tl: "top-2 left-2",
@@ -36,13 +35,23 @@ const AnimatedCorner = ({ position }: { position: "tl" | "tr" | "bl" | "br" }) =
   return (
     <motion.div
       className={`absolute ${posClasses[position]} pointer-events-none z-20`}
-      animate={{ opacity: [0.4, 0.8, 0.4] }}
+      animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.1, 1] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
     >
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <path d="M2 26V8C2 4.68629 4.68629 2 8 2H26" stroke="url(#corner-grad)" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M2 20V12C2 7.58172 5.58172 4 10 4H18" stroke="url(#corner-grad)" strokeWidth="1" strokeLinecap="round" opacity="0.5" />
-        <circle cx="2" cy="26" r="1.5" fill="hsl(43 72% 55%)" opacity="0.7" />
+      <svg width="34" height="34" viewBox="0 0 28 28" fill="none" style={{ filter: "drop-shadow(0 0 8px hsl(43 72% 55%))" }}>
+        <motion.path 
+          d="M2 26V8C2 4.68629 4.68629 2 8 2H26" 
+          stroke="url(#corner-grad)" strokeWidth="1.5" strokeLinecap="round" 
+          initial={{ pathLength: 0 }} animate={{ pathLength: [0, 1, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.path 
+          d="M2 20V12C2 7.58172 5.58172 4 10 4H18" 
+          stroke="url(#corner-grad)" strokeWidth="1" strokeLinecap="round" opacity="0.6" 
+          initial={{ pathLength: 0 }} animate={{ pathLength: [1, 0, 1] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.circle cx="2" cy="26" r="2" fill="hsl(43 72% 55%)" 
+          animate={{ scale: [1, 1.8, 1], opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
+        />
         <defs>
           <linearGradient id="corner-grad" x1="2" y1="26" x2="26" y2="2">
             <stop stopColor="hsl(43 72% 55%)" />
@@ -106,7 +115,6 @@ const Lightbox = ({
   </AnimatePresence>
 );
 
-/* Main Gallery Card */
 const GalleryCard = ({
   item,
   index,
@@ -118,15 +126,26 @@ const GalleryCard = ({
 }) => (
   <motion.div
     className="relative group cursor-pointer"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
+    style={{ perspective: 1200 }}
+    initial={{ opacity: 0, y: 50, scale: 0.9 }}
+    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+    whileHover={{ scale: 1.05, rotateX: 6, rotateY: -6, zIndex: 30 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+    transition={{ type: "spring", stiffness: 300, damping: 20, delay: index * 0.1 }}
     onClick={onClick}
   >
     <div className="relative p-[2px] rounded-[22px] overflow-hidden gallery-border-glow">
-      <div className="relative rounded-[20px] overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-700"
-        style={{ background: "hsl(0 30% 97% / 0.4)", backdropFilter: "blur(16px)" }}>
+      <motion.div 
+        className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{
+          background: "linear-gradient(270deg, hsl(43 72% 55%), hsl(340 50% 65%), hsl(43 72% 55%))",
+          backgroundSize: "200% 200%",
+        }}
+        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+      />
+      <div className="relative rounded-[20px] overflow-hidden shadow-lg group-hover:shadow-[0_20px_40px_hsl(43,72%,55%/0.3)] transition-all duration-700 bg-white"
+        style={{ backdropFilter: "blur(16px)" }}>
         <AnimatedCorner position="tl" />
         <AnimatedCorner position="tr" />
         <AnimatedCorner position="bl" />

@@ -20,7 +20,7 @@ const groomFamily = [
   { relation: "Sister", name: "Neha Mehta", icon: "👧" },
 ];
 
-/* Corner ornament */
+/* Corner ornament with full high animation */
 const CornerOrnament = ({ position }: { position: "top-left" | "top-right" | "bottom-left" | "bottom-right" }) => {
   const posClasses: Record<string, string> = {
     "top-left": "top-2 left-2",
@@ -31,16 +31,28 @@ const CornerOrnament = ({ position }: { position: "top-left" | "top-right" | "bo
   return (
     <motion.div
       className={`absolute ${posClasses[position]} pointer-events-none z-20`}
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 0.7, scale: 1 }}
-      transition={{ duration: 0.8, delay: 0.3 }}
+      initial={{ opacity: 0, scale: 0, rotate: -45 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.2, delay: 0.3, type: "spring", bounce: 0.6 }}
     >
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M2 30 C2 16 16 2 30 2" stroke="hsl(43 72% 55%)" strokeWidth="1.5" fill="none" opacity="0.8" />
-        <path d="M2 22 C2 12 12 2 22 2" stroke="hsl(43 72% 60%)" strokeWidth="1" fill="none" opacity="0.5" />
-        <circle cx="30" cy="2" r="2.5" fill="hsl(43 72% 55%)" opacity="0.9" />
-        <circle cx="2" cy="30" r="2.5" fill="hsl(43 72% 55%)" opacity="0.9" />
-      </svg>
+      <motion.svg width="36" height="36" viewBox="0 0 32 32" fill="none"
+        animate={{ filter: ["drop-shadow(0 0 4px hsl(43 72% 55%))", "drop-shadow(0 0 12px hsl(43 72% 55%))", "drop-shadow(0 0 4px hsl(43 72% 55%))"] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      >
+        <motion.path d="M2 30 C2 12 12 2 30 2" stroke="hsl(43 72% 55%)" strokeWidth="2" strokeLinecap="round" fill="none" 
+          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, ease: "easeOut", delay: 0.5 }}
+        />
+        <motion.path d="M2 22 C2 10 10 2 22 2" stroke="hsl(43 72% 65%)" strokeWidth="1" strokeLinecap="round" strokeDasharray="4 4" fill="none" 
+          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, ease: "easeOut", delay: 0.7 }}
+        />
+        <motion.circle cx="30" cy="2" r="2.5" fill="hsl(43 72% 55%)" 
+          animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}
+        />
+        <motion.circle cx="2" cy="30" r="2.5" fill="hsl(43 72% 55%)" 
+          animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, delay: 1, repeat: Infinity }}
+        />
+      </motion.svg>
     </motion.div>
   );
 };
@@ -174,14 +186,27 @@ const FamilyFlipCard = ({
               >
                 {title}
               </motion.p>
-              <motion.p
-                className="font-body text-xs mt-2 uppercase tracking-[0.25em]"
-                style={{ color: "hsl(43 72% 80% / 0.8)" }}
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
+              <motion.button
+                className="mt-4 font-body text-xs md:text-sm uppercase tracking-[0.2em] px-6 py-3 rounded-full relative overflow-hidden group/btn"
+                style={{
+                  border: "1px solid hsl(43 72% 55%)",
+                  color: "hsl(43 72% 95%)",
+                  boxShadow: "0 4px 20px hsl(43 72% 55% / 0.5)",
+                  background: "linear-gradient(135deg, hsl(43 72% 55% / 0.1), hsl(43 72% 55% / 0))"
+                }}
+                whileHover={{ scale: 1.05, boxShadow: "0 8px 30px hsl(43 72% 55% / 0.8)", border: "1px solid hsl(43 72% 65%)" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={(e) => { e.stopPropagation(); setFlipped(true); }}
               >
-                ✨ Tap to view members ✨
-              </motion.p>
+                <motion.div 
+                   className="absolute inset-0 bg-gradient-to-r from-[hsl(43,72%,55%)] via-[hsl(43,72%,65%)] to-[hsl(43,72%,55%)] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 z-0" 
+                />
+                <span className="relative z-10 font-bold tracking-widest drop-shadow-sm flex items-center justify-center gap-2">
+                  <motion.span animate={{ scale:[1,1.4,1], rotate: [0, 10, -10, 0] }} transition={{duration:1.5, repeat:Infinity}}>✨</motion.span>
+                  Tap to view members
+                  <motion.span animate={{ scale:[1,1.4,1], rotate: [0, -10, 10, 0] }} transition={{duration:1.5, repeat:Infinity}}>✨</motion.span>
+                </span>
+              </motion.button>
             </motion.div>
           </div>
         </div>
@@ -273,13 +298,17 @@ const FamilyFlipCard = ({
                           style={{ background: "radial-gradient(circle at 50% 30%, hsl(43 72% 55% / 0.08), transparent 70%)" }}
                         />
 
-                        {/* Icon */}
+                        {/* Avatar Image replacing Icon */}
                         <motion.div
-                          className="text-2xl mb-1 relative z-10"
-                          animate={{ y: [0, -3, 0] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                          className="w-14 h-14 md:w-16 md:h-16 rounded-full mx-auto mb-2 overflow-hidden border-2 border-[hsl(43,72%,55%)] shadow-[0_0_15px_hsl(43,72%,55%/0.4)] relative z-10 flex items-center justify-center bg-white/50"
+                          animate={{ y: [0, -5, 0] }}
+                          transition={{ duration: 2.5 + i * 0.2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
                         >
-                          {m.icon}
+                           <img 
+                             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(m.name)}&background=random&color=fff&size=128&bold=true`} 
+                             alt={m.name} 
+                             className="w-full h-full object-cover" 
+                           />
                         </motion.div>
 
                         {/* Relation */}

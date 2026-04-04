@@ -226,9 +226,21 @@ const Separator = () => (
 const SceneCountdown = ({ onNext, guestName }: Props) => {
   const { days, hours, minutes, seconds } = useCountdown();
   const [submitted, setSubmitted] = useState(false);
+  const [newMessage, setNewMessage] = useState("");
+  const [messages, setMessages] = useState([
+    { name: "Rahul & Pooja", text: "Wishing you a lifetime of joy and happiness together!" },
+    { name: "Aarav Sharma", text: "May your love bloom brighter every passing day." },
+    { name: "Sneha & Varun", text: "Congratulations on finding your forever!" },
+  ]);
 
   const rings = useMemo(() => Array.from({ length: 10 }, (_, i) => ({
     id: i, x: Math.random() * 100, y: Math.random() * 100, size: 12 + Math.random() * 35, delay: Math.random() * 6,
+  })), []);
+  const formStars = useMemo(() => Array.from({ length: 8 }, (_, i) => ({
+    id: i, x: Math.random() * 100, y: Math.random() * 100, size: 1.5 + Math.random() * 2, delay: Math.random() * 4,
+  })), []);
+  const formBubbles = useMemo(() => Array.from({ length: 5 }, (_, i) => ({
+    id: i, x: 10 + Math.random() * 80, size: 4 + Math.random() * 8, delay: Math.random() * 5, dur: 3.5 + Math.random() * 3,
   })), []);
 
   return (
@@ -335,47 +347,63 @@ const SceneCountdown = ({ onNext, guestName }: Props) => {
         >
           {!submitted ? (
             <motion.div
-              className="relative rounded-xl p-6 backdrop-blur-sm overflow-hidden"
+              className="relative rounded-xl p-6 overflow-hidden group"
               style={{
-                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.7), hsl(0 35% 87% / 0.5))",
-                backdropFilter: "blur(12px)",
-                border: "1px solid hsl(43 72% 55% / 0.35)",
-                boxShadow: "0 6px 30px hsl(43 72% 55% / 0.12), inset 0 1px 0 hsl(43 72% 70% / 0.25)",
+                background: "linear-gradient(135deg, hsl(0 30% 97% / 0.8), hsl(0 35% 87% / 0.6))",
+                backdropFilter: "blur(16px)",
+                border: "1px solid hsl(43 72% 55% / 0.4)",
+                boxShadow: "0 10px 40px hsl(43 72% 55% / 0.15), inset 0 1px 0 hsl(43 72% 70% / 0.3)",
+                perspective: 1000
               }}
+              whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, boxShadow: "0 20px 50px hsl(43 72% 55% / 0.25)" }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
+              {/* Form Stars and Bubbles */}
+              {formStars.map(s => <CardStar key={`fs-${s.id}`} x={s.x} y={s.y} size={s.size} delay={s.delay} />)}
+              {formBubbles.map(b => <CardBubble key={`fb-${b.id}`} x={b.x} size={b.size} delay={b.delay} dur={b.dur} />)}
+
               {/* Shimmer sweep */}
               <motion.div className="absolute inset-0 pointer-events-none"
-                style={{ background: "linear-gradient(105deg, transparent 40%, hsl(43 72% 70% / 0.15) 50%, transparent 60%)" }}
+                style={{ background: "linear-gradient(105deg, transparent 40%, hsl(43 72% 70% / 0.2) 50%, transparent 60%)" }}
                 animate={{ x: ["-100%", "200%"] }}
-                transition={{ duration: 3, repeat: Infinity, repeatDelay: 4 }}
+                transition={{ duration: 4, repeat: Infinity, repeatDelay: 3 }}
               />
-              <form className="flex flex-col gap-4 relative z-10" onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+              <form className="flex flex-col gap-4 relative z-10" onSubmit={(e) => { 
+                e.preventDefault(); 
+                if (newMessage.trim()) {
+                  setMessages((prev) => [{ name: guestName || "Guest", text: newMessage }, ...prev]);
+                }
+                setSubmitted(true); 
+              }}>
                 <p className="font-body text-xs uppercase tracking-[0.2em]" style={{ color: "hsl(0 25% 45%)" }}>
-                  Your Blessings, {guestName}
+                  {guestName ? `Your Blessings, ${guestName}` : "Your Blessings"}
                 </p>
                 <motion.textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Share your blessings & wishes..."
                   className="w-full px-4 py-3 rounded-lg font-body text-sm focus:outline-none transition-all duration-300 focus:ring-2 min-h-[130px] resize-none"
                   style={{
                     border: "1px solid hsl(43 72% 50% / 0.3)",
-                    background: "hsl(0 30% 97% / 0.8)",
+                    background: "transparent",
                     color: "hsl(0 60% 20%)",
                   }}
-                  whileFocus={{ boxShadow: "0 0 0 2px hsl(43 72% 55% / 0.4), 0 4px 12px hsl(43 72% 55% / 0.15)" }}
+                  whileFocus={{ boxShadow: "0 0 0 2px hsl(43 72% 55% / 0.4), 0 4px 12px hsl(43 72% 55% / 0.15)", background: "hsl(0 30% 97% / 0.5)" }}
                 />
                 <motion.button
                   type="submit"
                   className="font-decorative text-lg tracking-widest uppercase px-10 py-4 rounded-full border-2 transition-all duration-500 relative overflow-hidden mx-auto"
                   style={{ borderColor: "hsl(43 72% 50%)", color: "hsl(43 72% 45%)", background: "transparent" }}
                   whileHover={{
-                    scale: 1.03,
+                    scale: 1.05,
                     background: "linear-gradient(135deg, hsl(43 72% 55%), hsl(43 80% 65%))",
                     color: "hsl(0 60% 15%)",
-                    boxShadow: "0 8px 30px hsl(43 72% 55% / 0.4)",
+                    boxShadow: "0 10px 40px hsl(43 72% 55% / 0.5)",
+                    border: "2px solid transparent"
                   }}
-                  whileTap={{ scale: 0.97 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <span className="relative z-10">Send Blessings ✉</span>
+                  <span className="relative z-10 font-bold flex gap-2">Send Blessings <motion.span animate={{x:[0,5,0]}} transition={{repeat:Infinity, duration:1.5}}>✉</motion.span></span>
                 </motion.button>
               </form>
             </motion.div>
@@ -394,16 +422,27 @@ const SceneCountdown = ({ onNext, guestName }: Props) => {
                 animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.2, 1] }}
                 transition={{ duration: 1.5, repeat: 2 }}
               >🎉</motion.div>
-              <p className="font-display text-2xl" style={{ color: "hsl(0 60% 25%)" }}>Thank You, {guestName}! 🙏</p>
+              <p className="font-display text-2xl" style={{ color: "hsl(0 60% 25%)" }}>{guestName ? `Thank You, ${guestName}! 🙏` : "Thank You! 🙏"}</p>
               <p className="font-decorative text-lg italic" style={{ color: "hsl(0 40% 35%)" }}>We look forward to celebrating with you</p>
-              <motion.div className="flex gap-2 mt-2">
-                {["🌸", "✨", "💐", "✨", "🌸"].map((emoji, i) => (
-                  <motion.span key={i} className="text-2xl" animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 1.5, delay: i * 0.15, repeat: Infinity }}>{emoji}</motion.span>
-                ))}
-              </motion.div>
             </motion.div>
           )}
+
+          {/* Auto Scrolling Messages */}
+          <div className="mt-8 relative w-full h-40 overflow-hidden" 
+               style={{ maskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)" }}>
+            <motion.div
+              className="flex flex-col gap-4 absolute w-full"
+              animate={{ y: ["0%", "-50%"] }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            >
+              {[...messages, ...messages].map((msg, i) => (
+                <div key={i} className="bg-white/40 p-4 rounded-xl border border-[hsl(43,72%,55%/0.2)] backdrop-blur-sm shadow-sm text-left">
+                  <p className="font-display text-lg" style={{ color: "hsl(43 72% 40%)" }}>{msg.name}</p>
+                  <p className="font-decorative text-sm mt-1 opacity-80" style={{ color: "hsl(0 60% 15%)" }}>"{msg.text}"</p>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </motion.div>
 
         <motion.div variants={{ hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0 } }}
