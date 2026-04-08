@@ -4,9 +4,9 @@ import SceneOpeningAnimation from "./SceneOpeningAnimation";
 import SceneWelcome from "./SceneWelcome";
 import SceneHero from "./SceneHero";
 import SceneEvents from "./SceneEvents";
-
 import SceneGallery from "./SceneGallery";
 import SceneCountdown from "./SceneCountdown";
+import SceneAcceptInvitation from "./SceneAcceptInvitation";
 import SceneRSVP from "./SceneRSVP";
 import DoorTransition from "./DoorTransition";
 import PetalOverlay from "./PetalOverlay";
@@ -17,6 +17,7 @@ const SCENES = [
   "events",
   "gallery",
   "countdown",
+  "accept",
   "rsvp",
 ] as const;
 
@@ -41,17 +42,14 @@ const WeddingApp = () => {
       setUseDoor(isWelcome);
 
       if (isWelcome) {
-        // Door transition only for welcome -> hero
         setDoorsClosed(true);
         setTimeout(() => {
           setCurrentScene(SCENES[idx + 1]);
           setDoorsClosed(false);
-          // Trigger the heart and leaf shower!
           setShowPetals(true);
           setTimeout(() => setShowPetals(false), 9000);
         }, 600);
       } else {
-        // Petal shower for all other transitions
         setShowPetals(true);
         setCurrentScene(SCENES[idx + 1]);
         setTimeout(() => setShowPetals(false), 8000);
@@ -69,6 +67,7 @@ const WeddingApp = () => {
       case "events": return <SceneEvents {...props} />;
       case "gallery": return <SceneGallery {...props} />;
       case "countdown": return <SceneCountdown {...props} guestName={guestName} />;
+      case "accept": return <SceneAcceptInvitation {...props} guestName={guestName} />;
       case "rsvp": return <SceneRSVP guestName={guestName} />;
     }
   };
@@ -76,7 +75,6 @@ const WeddingApp = () => {
   return (
     <div className="h-screen overflow-hidden">
       {showOpening && <SceneOpeningAnimation onComplete={handleOpeningComplete} />}
-
       <AnimatePresence mode="wait">
         <motion.div
           key={currentScene}
@@ -90,18 +88,11 @@ const WeddingApp = () => {
           {renderScene()}
         </motion.div>
       </AnimatePresence>
-
       {useDoor && <DoorTransition isOpen={!doorsClosed} />}
       <AnimatePresence>
         {showPetals && (
-          <motion.div
-            key="petals-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5 }}
-            className="fixed inset-0 z-50 pointer-events-none"
-          >
+          <motion.div key="petals-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }} className="fixed inset-0 z-50 pointer-events-none">
             <PetalOverlay count={25} />
           </motion.div>
         )}
