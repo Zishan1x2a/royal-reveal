@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import GoldButton from "./GoldButton";
 import SectionBackground from "./SectionBackground";
+import PremiumHeading from "./PremiumHeading";
 
 interface Props { onNext: () => void; guestName: string; }
 
@@ -244,12 +245,7 @@ const SceneCountdown = ({ onNext, guestName }: Props) => {
   })), []);
 
   return (
-    <SectionBackground className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center relative">
-
-      {/* Floating rings */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {rings.map(r => <FloatingRing key={r.id} x={r.x} y={r.y} size={r.size} delay={r.delay} />)}
-      </div>
+    <SectionBackground className="flex min-h-screen flex-col items-center justify-start px-6 py-20 pb-40 text-center relative">
 
       {/* Central pulsing glow */}
       <motion.div className="absolute inset-0 pointer-events-none"
@@ -266,11 +262,11 @@ const SceneCountdown = ({ onNext, guestName }: Props) => {
         <motion.div className="relative"
           variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
         >
-          <motion.h2 className="font-display text-3xl md:text-4xl lg:text-5xl"
-            style={{ color: "hsl(0 60% 25%)", textShadow: "0 2px 12px hsl(0 40% 30% / 0.2)" }}>
-            Counting the Days
-          </motion.h2>
-          <motion.div className="absolute -bottom-2 left-1/2 h-[2px] rounded-full"
+          <PremiumHeading 
+            text="Counting the Days"
+            fontSize="text-4xl md:text-6xl"
+          />
+          <motion.div className="absolute -bottom-2 left-1/2 h-[2px] rounded-full -mt-2"
             style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
             initial={{ width: 0, x: "-50%" }} animate={{ width: "80%", x: "-50%" }}
             transition={{ duration: 1.5, delay: 0.5 }}
@@ -329,11 +325,11 @@ const SceneCountdown = ({ onNext, guestName }: Props) => {
           variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           transition={{ delay: 0.7 }}
         >
-          <motion.h3 className="font-display text-2xl md:text-3xl"
-            style={{ color: "hsl(0 60% 25%)", textShadow: "0 2px 12px hsl(0 40% 30% / 0.2)" }}>
-            Wishing & Blessing
-          </motion.h3>
-          <motion.div className="absolute -bottom-2 left-1/2 h-[2px] rounded-full"
+          <PremiumHeading 
+            text="Wishing & Blessing"
+            fontSize="text-3xl md:text-5xl"
+          />
+          <motion.div className="absolute -bottom-2 left-1/2 h-[2px] rounded-full -mt-2"
             style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%), transparent)" }}
             initial={{ width: 0, x: "-50%" }} animate={{ width: "80%", x: "-50%" }}
             transition={{ duration: 1.5, delay: 0.8 }}

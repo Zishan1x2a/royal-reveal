@@ -123,6 +123,25 @@
   .gradient-gold {
     background: var(--gradient-gold);
   }
+  .hide-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+/* Force hide all scrollbars globally */
+*, html, body {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+*::-webkit-scrollbar, html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Petal animation */

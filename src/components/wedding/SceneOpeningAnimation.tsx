@@ -12,10 +12,15 @@ const Particle = ({ delay, x, y }: { delay: number; x: number; y: number }) => (
     style={{
       width: 2 + Math.random() * 4,
       height: 2 + Math.random() * 4,
-      background: `hsl(${40 + Math.random() * 15} ${70 + Math.random() * 30}% ${60 + Math.random() * 20}%)`,
+      // Mix of Gold (#D4AF37) and Maroon (#7A1E2C)
+      background: Math.random() > 0.5 
+        ? "linear-gradient(135deg, #FFD700, #D4AF37)" 
+        : "linear-gradient(135deg, #7A1E2C, #4A0E17)",
       left: "50%",
       top: "50%",
-      boxShadow: "0 0 10px hsl(43 100% 70%)"
+      boxShadow: Math.random() > 0.5 
+        ? "0 0 10px rgba(212, 175, 55, 0.8)" 
+        : "0 0 10px rgba(122, 30, 44, 0.8)"
     }}
     initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
     animate={{
@@ -61,7 +66,7 @@ const SceneOpeningAnimation = ({ onComplete }: Props) => {
       {phase !== "done" && (
         <motion.div
           className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
-          style={{ background: "radial-gradient(circle at center, hsl(0 20% 8%), hsl(0 40% 2%))" }}
+          style={{ background: "radial-gradient(circle at center, #4A0E17, #1A050A)" }}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -74,8 +79,8 @@ const SceneOpeningAnimation = ({ onComplete }: Props) => {
                 style={{
                   width: 4,
                   height: 4,
-                  background: "#fff",
-                  boxShadow: "0 0 20px 10px hsl(43 90% 60%), 0 0 60px 20px hsl(43 100% 70%)",
+                  background: "#FFF6E8",
+                  boxShadow: "0 0 25px 12px #D4AF37, 0 0 60px 25px rgba(212, 175, 55, 0.4)",
                 }}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: phase === "burst" ? 20 : 1, opacity: phase === "burst" ? 0 : 1 }}
@@ -112,7 +117,7 @@ const SceneOpeningAnimation = ({ onComplete }: Props) => {
                   style={{
                     width: 700,
                     height: 700,
-                    background: "radial-gradient(circle, hsl(43 85% 55% / 0.35) 0%, transparent 65%)",
+                    background: "radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 65%)",
                   }}
                   animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.6, 0.9, 0.6] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}

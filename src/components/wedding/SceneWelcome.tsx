@@ -1,6 +1,6 @@
 import { motion, Variants } from "framer-motion";
 import { useMemo } from "react";
-import ganeshImg from "@/assets/ganesh-divine.png";
+import ganeshImg from "@/assets/ganesh-new.png";
 import floralCorner from "@/assets/floral-corner.png";
 import roseBg from "@/assets/rose-bg.png";
 
@@ -42,6 +42,35 @@ const Sparkle = ({ delay, x, y, size, dur }: { delay: number; x: number; y: numb
   />
 );
 
+/* Floating Love Bubbles (Heart shaped glass bubbles) */
+const FloatingBubble = ({ delay, x, size, dur }: { delay: number; x: number; size: number; dur: number }) => (
+  <motion.div
+    className="absolute bottom-0 pointer-events-none z-10 flex items-center justify-center"
+    style={{
+      left: `${x}%`,
+    }}
+    initial={{ y: "10vh", opacity: 0, scale: 0.5 }}
+    animate={{ 
+      y: "-110vh", 
+      opacity: [0, 0.8, 0.8, 0], 
+      scale: [0.5, 1.2, 1.5],
+      x: [0, Math.random() * 30 - 15, Math.random() * 30 - 15, 0],
+      rotate: [0, Math.random() * 30 - 15, 0]
+    }}
+    transition={{ duration: dur, delay, repeat: Infinity, ease: "linear" }}
+  >
+    <svg 
+      width={size} height={size} viewBox="0 0 24 24" 
+      fill="rgba(255,255,255,0.05)" 
+      stroke="rgba(255,255,255,0.6)" 
+      strokeWidth="0.8" 
+      style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.4))", backdropFilter: "blur(1px)" }}
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    </svg>
+  </motion.div>
+);
+
 /* Corner Ornament — each corner faces inward (toward Ganesh center) */
 const RoyalCorner = ({ position, delay }: { position: "top-left" | "top-right" | "bottom-left" | "bottom-right"; delay: number }) => {
   // Rotation so the ornament's "mouth" faces center
@@ -52,18 +81,18 @@ const RoyalCorner = ({ position, delay }: { position: "top-left" | "top-right" |
     "bottom-left": 270,  // rotated to point inward ↗
   }[position];
 
-  // Sit exactly on the border frame (inset-3 / md:inset-5), offset half the ornament size inward
-  const posStyle = {
-    "top-left":     { top: 0, left: 0 },
-    "top-right":    { top: 0, right: 0 },
-    "bottom-left":  { bottom: 0, left: 0 },
-    "bottom-right": { bottom: 0, right: 0 },
+  // Offset with negative margins so the corners overlap perfectly with the border lines
+  const posClass = {
+    "top-left":     "-top-3 -left-3 md:-top-5 md:-left-5",
+    "top-right":    "-top-3 -right-3 md:-top-5 md:-right-5",
+    "bottom-left":  "-bottom-3 -left-3 md:-bottom-5 md:-left-5",
+    "bottom-right": "-bottom-3 -right-3 md:-bottom-5 md:-right-5",
   }[position];
 
   return (
     <motion.div
-      className="absolute w-24 h-24 md:w-32 md:h-32 z-40 pointer-events-none"
-      style={{ ...posStyle, transform: `rotate(${rot}deg)`, transformOrigin: "center center" }}
+      className={`absolute w-16 h-16 md:w-24 md:h-24 z-40 pointer-events-none ${posClass}`}
+      style={{ transform: `rotate(${rot}deg)`, transformOrigin: "center center" }}
       initial={{ scale: 0, opacity: 0, rotate: rot - 20 }}
       animate={{ scale: 1, opacity: 1, rotate: rot }}
       transition={{ duration: 1.4, ease: "easeOut", delay, type: "spring", stiffness: 80, damping: 14 }}
@@ -105,7 +134,7 @@ const DivineHalo = () => (
     animate={{ rotate: 360 }}
     transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
   >
-    <svg viewBox="0 0 300 300" className="w-[200px] h-[200px] md:w-[280px] md:h-[280px] opacity-50">
+    <svg viewBox="0 0 300 300" className="w-[240px] h-[240px] md:w-[340px] md:h-[340px] opacity-50">
       {[...Array(36)].map((_, i) => {
         const angle = (i * 10 * Math.PI) / 180;
         return (
@@ -129,6 +158,9 @@ const SceneWelcome = ({ onNext }: Props) => {
   const sparkles = useMemo(() => Array.from({ length: 18 }, (_, i) => ({
     id: i, x: Math.random() * 100, y: Math.random() * 100, size: 2 + Math.random() * 4, delay: Math.random() * 5, dur: 3 + Math.random() * 3
   })), []);
+  const bubbles = useMemo(() => Array.from({ length: 15 }, (_, i) => ({
+    id: i, x: Math.random() * 100, size: 10 + Math.random() * 30, delay: Math.random() * 10, dur: 8 + Math.random() * 10
+  })), []);
 
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 30 },
@@ -138,20 +170,23 @@ const SceneWelcome = ({ onNext }: Props) => {
   return (
     <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden">
 
-      {/* Background: soft pink with rose image */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #FFF5F7 0%, #FFE4EC 40%, #FFF0F3 100%)" }} />
-        <motion.img
-          src={roseBg}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.35, mixBlendMode: "multiply" }}
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: [1, 1.03, 1], opacity: 0.35 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        />
-        {/* Soft overlay gradient for readability */}
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, rgba(255,245,247,0.85) 30%, rgba(255,228,236,0.6) 70%, transparent 100%)" }} />
+      {/* Background: Dark Pink Image Theme */}
+      <div className="absolute inset-0 z-0 overflow-hidden bg-[#B8344F]">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#8A1A37] via-[#B8344F] to-[#7A1E2C]" />
+        <motion.div
+           className="absolute inset-0 w-[110%] h-[110%] -left-[5%] -top-[5%]"
+           animate={{ 
+             scale: [1, 1.05, 1],
+             x: ["0%", "-2%", "1%", "0%"],
+             y: ["0%", "1%", "-1%", "0%"]
+           }}
+           transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <img src={roseBg} alt="Welcome Background" className="w-full h-full object-cover object-right md:object-center opacity-60 mix-blend-multiply" />
+        </motion.div>
+        
+        {/* Soft shadow fade on the left to make white text pop out against the pink background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent pointer-events-none" />
       </div>
 
       {/* Golden border frame + Corners inside same container */}
@@ -201,9 +236,10 @@ const SceneWelcome = ({ onNext }: Props) => {
         <RoyalCorner position="bottom-left" delay={0.8} />
       </div>
 
-      {/* Falling petals & sparkles */}
+      {/* Falling petals, sparkles, and love bubbles */}
       {petals.map((p) => <FallingPetal key={`pt-${p.id}`} {...p} />)}
       {sparkles.map((s) => <Sparkle key={`sp-${s.id}`} {...s} />)}
+      {bubbles.map((b) => <FloatingBubble key={`bb-${b.id}`} {...b} />)}
 
       {/* Main Content */}
       <motion.div
@@ -215,71 +251,74 @@ const SceneWelcome = ({ onNext }: Props) => {
         {/* शुभ विवाह */}
         <motion.div className="mb-3" variants={fadeUp}>
           <motion.h2
-            className="font-decorative text-2xl md:text-3xl tracking-[0.2em]"
-            style={{ color: "#D4AF37", textShadow: "0 2px 10px rgba(212,175,55,0.5)" }}
-            animate={{ textShadow: ["0 2px 10px rgba(212,175,55,0.3)", "0 2px 25px rgba(212,175,55,0.8)", "0 2px 10px rgba(212,175,55,0.3)"] }}
+            className="font-decorative text-2xl md:text-3xl tracking-[0.2em] text-white"
+            style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}
+            animate={{ textShadow: ["0 2px 10px rgba(0,0,0,0.2)", "0 2px 25px rgba(0,0,0,0.6)", "0 2px 10px rgba(0,0,0,0.2)"] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
             शुभ विवाह
           </motion.h2>
         </motion.div>
 
-        {/* Ganesh Image */}
+        {/* Ganesh Image with High-Intensity Full Animation */}
         <motion.div
-          className="relative flex items-center justify-center my-1"
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.8, ease: "easeOut", delay: 0.3 }}
+          className="relative flex items-center justify-center my-2"
+          initial={{ opacity: 0, scale: 0, y: -50, rotate: -45 }}
+          animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+          transition={{ duration: 2.5, type: "spring", bounce: 0.5, delay: 0.2 }}
         >
           <DivineHalo />
+          
+          {/* High-intensity Glow layer */}
+          <motion.div 
+            className="absolute z-[5] w-36 h-36 md:w-52 md:h-52 rounded-full pointer-events-none mix-blend-screen"
+            style={{ background: "radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(212,175,55,0.5) 40%, transparent 70%)" }}
+            animate={{ scale: [0.9, 1.6, 0.9], opacity: [0.4, 0.9, 0.4] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* High-intensity Main Image Motion */}
           <motion.img
             src={ganeshImg}
             alt="Lord Ganesha"
-            className="w-28 h-28 md:w-36 md:h-36 object-contain relative z-10"
-            style={{ filter: "drop-shadow(0 8px 20px rgba(212,175,55,0.5))" }}
-            animate={{ y: [-3, 3, -3], filter: ["drop-shadow(0 8px 20px rgba(212,175,55,0.3))", "drop-shadow(0 8px 30px rgba(212,175,55,0.7))", "drop-shadow(0 8px 20px rgba(212,175,55,0.3))"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="w-36 h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 object-contain relative z-10"
+            style={{ filter: "drop-shadow(0 4px 15px rgba(255,255,255,0.4))" }}
+            animate={{ 
+              y: [-10, 10, -10],
+              scale: [0.95, 1.12, 0.95]
+            }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             width={512} height={512}
           />
         </motion.div>
 
-        {/* Mantra - single line */}
         <motion.p
-          className="font-decorative text-[9px] md:text-xs tracking-wider text-[#7A1E2C]/80 mt-3 mb-2 text-center whitespace-nowrap"
+          className="font-decorative text-[9px] sm:text-[10px] md:text-xs tracking-wider text-white/90 font-medium mt-3 mb-2 text-center max-w-[90vw] leading-relaxed"
           variants={fadeUp}
         >
           वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
         </motion.p>
 
         {/* Preview Guest - larger text with rich animation */}
-        <motion.div className="my-6" variants={fadeUp}>
-          <motion.div className="relative flex items-center gap-4">
+        <motion.div className="my-4 md:my-6 w-full" variants={fadeUp}>
+          <motion.div className="relative flex items-center justify-center gap-2 sm:gap-4 px-1 sm:px-4">
             <motion.div
-              className="h-[1.5px] w-12 md:w-20"
+              className="h-[1.5px] w-6 sm:w-12 md:w-20 shrink-0"
               style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 55%))" }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.5, delay: 1.5 }}
             />
             <motion.span
-              className="font-decorative text-base md:text-lg uppercase tracking-[0.35em] font-semibold"
-              style={{
-                background: "linear-gradient(135deg, hsl(0 60% 25%), hsl(43 72% 55%), hsl(0 60% 25%))",
-                backgroundSize: "200% 100%",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                filter: "drop-shadow(0 1px 3px hsl(43 72% 55% / 0.3))",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                scale: [1, 1.05, 1],
-              }}
+              className="font-decorative text-lg sm:text-xl md:text-3xl uppercase tracking-[0.15em] sm:tracking-[0.25em] md:tracking-[0.35em] font-bold text-center shrink mx-1 text-white"
+              style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.3))" }}
+              animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               ✦ Preview Guest ✦
             </motion.span>
             <motion.div
-              className="h-[1.5px] w-12 md:w-20"
+              className="h-[1.5px] w-6 sm:w-12 md:w-20 shrink-0"
               style={{ background: "linear-gradient(90deg, hsl(43 72% 55%), transparent)" }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -288,21 +327,16 @@ const SceneWelcome = ({ onNext }: Props) => {
           </motion.div>
         </motion.div>
 
-        <motion.p className="font-body text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#7A1E2C]/60 mb-3 text-center" variants={fadeUp}>
+        <motion.p className="font-body text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/80 font-medium mb-3 text-center" variants={fadeUp}>
           You are cordially invited to the wedding of
         </motion.p>
 
         {/* Couple Names - new dramatic style */}
-        <motion.div className="flex flex-col items-center" variants={fadeUp}>
-          <div className="flex items-center gap-2 md:gap-4">
+        <motion.div className="flex flex-col items-center w-full" variants={fadeUp}>
+          <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-0 md:gap-4 px-2">
             <motion.span
-              className="font-display text-4xl md:text-6xl lg:text-7xl font-light"
-              style={{
-                background: "linear-gradient(135deg, #7A1E2C, #B8344F, #7A1E2C)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                filter: "drop-shadow(0 4px 8px rgba(122,30,44,0.3))",
-              }}
+              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white"
+              style={{ filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.25))" }}
               initial={{ x: -60, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
@@ -311,23 +345,18 @@ const SceneWelcome = ({ onNext }: Props) => {
             </motion.span>
 
             <motion.span
-              className="font-decorative text-3xl md:text-5xl"
-              style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.5)" }}
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ duration: 1, delay: 1.2, type: "spring", stiffness: 100 }}
+              className="font-serif italic text-4xl sm:text-5xl md:text-6xl font-extralight mx-1 md:mx-3 relative md:top-2 text-white"
+              style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.3))" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.9, ease: "easeOut" }}
             >
               &
             </motion.span>
 
             <motion.span
-              className="font-display text-4xl md:text-6xl lg:text-7xl font-light"
-              style={{
-                background: "linear-gradient(135deg, #7A1E2C, #B8344F, #7A1E2C)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                filter: "drop-shadow(0 4px 8px rgba(122,30,44,0.3))",
-              }}
+              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white"
+              style={{ filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.25))" }}
               initial={{ x: 60, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 1.2, delay: 1, ease: "easeOut" }}
@@ -352,7 +381,7 @@ const SceneWelcome = ({ onNext }: Props) => {
           </motion.div>
         </motion.div>
 
-        <motion.p className="font-decorative text-sm md:text-base italic tracking-wider text-[#A97C25] mb-6" variants={fadeUp}>
+        <motion.p className="font-decorative text-sm md:text-base italic tracking-wider text-white/90 font-medium mb-6" variants={fadeUp}>
           12 December 2026
         </motion.p>
 
@@ -397,9 +426,13 @@ const SceneWelcome = ({ onNext }: Props) => {
               animate={{ scale: [1, 1.3, 1.3], opacity: [0.5, 0, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
             />
-            <span className="relative z-10 font-decorative text-xs md:text-sm tracking-[0.25em] font-bold uppercase text-[#D4AF37] group-hover:text-[#1a1a1a] transition-colors duration-500">
-              View Invitation
-            </span>
+            <motion.span 
+              className="relative z-10 font-decorative text-sm md:text-base tracking-[0.2em] font-black uppercase drop-shadow-md text-white"
+            >
+              <span className="group-hover:text-black transition-colors duration-500">
+                View Invitation
+              </span>
+            </motion.span>
           </motion.button>
         </motion.div>
       </motion.div>

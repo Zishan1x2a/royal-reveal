@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import GoldButton from "./GoldButton";
 import SectionBackground from "./SectionBackground";
+import PremiumHeading from "./PremiumHeading";
 import SceneFamily from "./SceneFamily";
 
 import haldiImg from "@/assets/gallery/haldi.jpg";
@@ -186,26 +187,34 @@ const SceneGallery = ({ onNext }: Props) => {
 
   return (
     <>
-      {/* Family Section */}
-      <SceneFamily />
-
-      {/* Gallery Section */}
-      <SectionBackground className="flex min-h-screen flex-col items-center justify-start px-4 md:px-8 py-16">
+      {/* Combined Family & Gallery Page */}
+      <SectionBackground simple={true} className="flex min-h-screen flex-col items-center justify-start px-4 md:px-8 py-20 pb-32">
         <motion.div
-          className="relative z-10 flex flex-col items-center gap-10 w-full max-w-6xl"
+          className="relative z-10 flex flex-col items-center w-full max-w-6xl"
           initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
+          {/* Family Section */}
+          <SceneFamily />
+
+
+
+          {/* Gallery Header */}
           <motion.div
-            className="text-center space-y-4"
+            className="text-center space-y-4 mb-12"
             variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
           >
             <p className="font-body text-xs uppercase tracking-[0.4em]" style={{ color: "hsl(0 25% 45%)" }}>
               Precious Moments
             </p>
-            <h2 className="font-display text-4xl md:text-5xl" style={{ color: "hsl(0 60% 25%)" }}>Our Gallery</h2>
-            <div className="flex items-center justify-center gap-3">
+            <PremiumHeading 
+              text="Our Gallery"
+              fontSize="text-5xl md:text-7xl"
+              simple={true}
+            />
+            <div className="flex items-center justify-center gap-3 -mt-2">
               <div className="h-px w-16 opacity-50" style={{ background: "hsl(43 72% 50%)" }} />
               <span style={{ color: "hsl(43 72% 50%)" }} className="text-xl">✦</span>
               <div className="h-px w-16 opacity-50" style={{ background: "hsl(43 72% 50%)" }} />
@@ -215,6 +224,7 @@ const SceneGallery = ({ onNext }: Props) => {
             </p>
           </motion.div>
 
+          {/* Gallery Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
             {galleryItems.map((item, i) => (
               <GalleryCard
@@ -227,7 +237,7 @@ const SceneGallery = ({ onNext }: Props) => {
           </div>
 
           <motion.div
-            className="mt-4"
+            className="mt-20"
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
             <GoldButton onClick={onNext}>Countdown</GoldButton>

@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import GoldButton from "./GoldButton";
-import SectionBackground from "./SectionBackground";
+import PremiumHeading from "./PremiumHeading";
 import brideFamilyImg from "@/assets/bride-family.jpg";
 import groomFamilyImg from "@/assets/groom-family.jpg";
 
@@ -357,32 +357,23 @@ const FamilyFlipCard = ({
   );
 };
 
-const SceneFamily = ({ onNext }: Props) => (
-  <SectionBackground className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
+const SceneFamily = () => (
+  <div className="relative z-10 flex flex-col items-center gap-10 max-w-6xl w-full mb-20 px-6">
     <motion.div
-      className="relative z-10 flex flex-col items-center gap-10 max-w-3xl w-full"
+      className="flex flex-col items-center w-full"
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
+      viewport={{ once: true }}
       variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
     >
-      <motion.h2
-        className="font-display text-3xl md:text-4xl"
-        style={{ color: "hsl(0 60% 25%)" }}
-        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-        animate={{
-          textShadow: [
-            "0 0 10px hsl(43 72% 55% / 0)",
-            "0 0 25px hsl(43 72% 55% / 0.3)",
-            "0 0 10px hsl(43 72% 55% / 0)",
-          ],
-        }}
-        transition={{ duration: 3, repeat: Infinity }}
-      >
-        Our Families
-      </motion.h2>
+      <PremiumHeading 
+        text="Our Families"
+        fontSize="text-5xl md:text-7xl"
+        simple={true}
+      />
 
       <motion.div
-        className="h-px w-24"
+        className="h-px w-24 -mt-2 mb-8"
         style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 50%), transparent)" }}
         variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
       />
@@ -402,7 +393,7 @@ const SceneFamily = ({ onNext }: Props) => (
         />
       </div>
     </motion.div>
-  </SectionBackground>
+  </div>
 );
 
 export default SceneFamily;

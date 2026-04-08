@@ -7,21 +7,81 @@ interface GoldButtonProps {
 }
 
 const GoldButton = ({ children, onClick, className = "" }: GoldButtonProps) => (
-  <motion.button
-    onClick={onClick}
-    className={`relative overflow-hidden font-decorative text-lg tracking-widest uppercase px-12 py-4 rounded-full border border-[hsl(43,72%,55%)] text-[hsl(43,72%,55%)] bg-[hsl(43,72%,55%/0.05)] shadow-[0_0_15px_hsl(43,72%,55%/0.2)] group ${className}`}
-    whileHover={{ scale: 1.05, boxShadow: "0 0 30px hsl(43 72% 55% / 0.6)", textShadow: "0 0 8px hsl(43 72% 55% / 0.8)", borderColor: "hsl(43 72% 65%)" }}
-    whileTap={{ scale: 0.95 }}
-    transition={{ duration: 0.4, ease: "easeOut" }}
-  >
-    <motion.div 
-      className="absolute inset-0 bg-gradient-to-r from-[hsl(43,72%,55%)] via-[hsl(43,72%,65%)] to-[hsl(43,72%,55%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" 
+  <div className={`relative flex items-center justify-center rounded-full ${className}`}>
+    {/* Ultra-Animated glowing backdrop shadow */}
+    <motion.div
+      className="absolute inset-0 rounded-full bg-[#fca2c8] opacity-30 blur-2xl pointer-events-none"
+      animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.5, 0.2] }}
+      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
     />
+
+    {/* The Outer Animated Border Container */}
     <motion.div 
-      className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12 group-hover:animate-[shimmer_2s_infinite]" 
-    />
-    <span className="relative z-10 font-bold group-hover:text-[hsl(0,0%,15%)] transition-colors duration-500">{children}</span>
-  </motion.button>
+      className="relative p-[4px] rounded-full overflow-hidden flex items-center justify-center group"
+      animate={{ y: [-5, 5, -5] }}
+      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+    >
+      {/* First Rotating Conic Beam */}
+      <motion.div
+        className="absolute w-[200%] h-[200%]"
+        style={{ background: "conic-gradient(from 0deg, transparent 0%, transparent 35%, #F9D976 45%, #D4AF37 50%, transparent 55%)" }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+      />
+      
+      {/* Second Counter-Rotating Conic Beam */}
+      <motion.div
+        className="absolute w-[200%] h-[200%]"
+        style={{ background: "conic-gradient(from 180deg, transparent 0%, transparent 35%, #D4AF37 45%, #F9D976 50%, transparent 55%)" }}
+        animate={{ rotate: -360 }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }}
+      />
+      
+      {/* The Core Button: Halka Light Pink Liquid Gradient */}
+      <motion.button
+        onClick={onClick}
+        className="relative z-10 font-decorative text-lg tracking-[0.2em] uppercase px-10 py-4 md:px-14 md:py-[18px] rounded-full overflow-hidden shadow-inner cursor-pointer"
+        style={{ 
+          background: "linear-gradient(45deg, hsl(335 85% 93%), hsl(330 95% 98%), hsl(335 80% 88%))",
+          backgroundSize: "200% 200%",
+          boxShadow: "0 10px 30px rgba(212,175,55,0.3), inset 0 5px 10px rgba(255,255,255,0.9), inset 0 -3px 8px rgba(0,0,0,0.05)" 
+        }}
+        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(255,105,180,0.5), inset 0 5px 15px rgba(255,255,255,1)" }}
+        whileTap={{ scale: 0.92 }}
+      >
+        {/* Shimmering glass sweep */}
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent skew-x-12"
+          style={{ width: "50%" }}
+          animate={{ left: ["-100%", "250%"] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.5 }}
+        />
+
+        {/* Text: High contrast deep burgundy/maroon for perfect readability */}
+        <span className="relative z-20 font-bold text-[#5D163D] transition-colors duration-500 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
+           {children}
+        </span>
+        
+        {/* Floating sparkling pink/gold particles inside the button */}
+        {[...Array(3)].map((_, i) => (
+           <motion.div
+             key={`btn-star-${i}`}
+             className="absolute w-2 h-2 rounded-full blur-[1px] pointer-events-none z-10"
+             style={{ background: "radial-gradient(circle, #fff, #F9D976)" }}
+             animate={{ 
+                opacity: [0, 1, 0],
+                scale: [0.5, 1.5, 0.5],
+                x: [(i%3===0?-60:i%3===1?0:60), (i%3===0?60:i%3===1?-60:0)],
+                y: [10, -30]
+             }}
+             transition={{ duration: 2.5 + i, repeat: Infinity, delay: i * 0.7 }}
+           />
+        ))}
+      </motion.button>
+    </motion.div>
+  </div>
 );
 
 export default GoldButton;

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
 import SectionBackground from "./SectionBackground";
+import PremiumHeading from "./PremiumHeading";
 import floralCorner from "@/assets/floral-corner.png";
 
 const cardStyle = {
@@ -103,7 +104,7 @@ const SceneRSVP = ({ guestName }: { guestName: string }) => {
   })), []);
 
   return (
-    <SectionBackground className="flex min-h-screen flex-col items-center justify-center px-4 py-16 text-center">
+    <SectionBackground className="flex min-h-screen flex-col items-center justify-start px-4 py-20 pb-32 text-center relative">
       <img src={floralCorner} alt="" className="absolute top-4 right-4 w-28 md:w-36 opacity-40 z-10" loading="lazy" width={512} height={512} />
       <img src={floralCorner} alt="" className="absolute bottom-4 left-4 w-28 md:w-36 opacity-40 rotate-180 z-10" loading="lazy" width={512} height={512} />
 
@@ -117,13 +118,11 @@ const SceneRSVP = ({ guestName }: { guestName: string }) => {
         <motion.div className="flex flex-col items-center gap-3"
           variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
         >
-          <motion.h2 className="font-display text-3xl md:text-4xl" style={{ color: "hsl(0 60% 25%)" }}
-            animate={{ textShadow: ["0 0 10px hsl(43 72% 55% / 0)", "0 0 20px hsl(43 72% 55% / 0.3)", "0 0 10px hsl(43 72% 55% / 0)"] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            Get In Touch
-          </motion.h2>
-          <motion.div className="h-px w-24" style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 50%), transparent)" }}
+          <PremiumHeading 
+            text="Get In Touch"
+            fontSize="text-3xl md:text-5xl"
+          />
+          <motion.div className="h-px w-24 -mt-2" style={{ background: "linear-gradient(90deg, transparent, hsl(43 72% 50%), transparent)" }}
             variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
           />
           <motion.p className="font-decorative text-base italic" style={{ color: "hsl(0 40% 40%)" }}
